@@ -1,2 +1,7 @@
 .gradle
 reports/
+/bin/
+build/
+.project
+.classpath
+.settings

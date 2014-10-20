@@ -1,15 +1,32 @@
+apply plugin: 'java'
+apply plugin: 'eclipse-wtp'
+apply plugin: 'application'
+
+version = '0.1.0'
 
 project.ext {
     dropwizardVersion = '0.7.1'
+    dropWizardConfig = './src/dist/config/config.yml'
 }
 
-subprojects {
-    version = '0.1.0'
-    apply plugin: 'java'
-    apply plugin: 'eclipse-wtp'
-    repositories {
-        mavenCentral()
-    }
+mainClassName = 'com.kevinm416.report.server.ReportApplication'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile (
+            'io.dropwizard:dropwizard-core:' + dropwizardVersion,
+            'io.dropwizard:dropwizard-hibernate:' + dropwizardVersion,
+            'io.dropwizard:dropwizard-migrations:' + dropwizardVersion,
+            'io.dropwizard:dropwizard-auth:' + dropwizardVersion,
+            'com.h2database:h2:1.3.168'
+    )
+}
+
+run {
+    args = ['server', dropWizardConfig]
 }
 
 task wrapper(type: Wrapper) {
