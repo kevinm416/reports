@@ -23,7 +23,7 @@ public class ResidentResource {
 
     @POST
     public long createResident(@Auth User user, CreateResidentForm form) {
-        return residentDAO.createUser(form.getName(), form.getBirthdate(), form.getHouseId());
+        return residentDAO.createUser(form);
     }
 
     @GET

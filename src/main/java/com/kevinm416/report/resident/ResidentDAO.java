@@ -1,6 +1,7 @@
 package com.kevinm416.report.resident;
 
 import org.skife.jdbi.v2.sqlobject.Bind;
+import org.skife.jdbi.v2.sqlobject.BindBean;
 import org.skife.jdbi.v2.sqlobject.SqlQuery;
 import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapper;
 
@@ -12,10 +13,7 @@ public interface ResidentDAO {
             " VALUES (:name, :birthdate, :houseId) " +
             " RETURNING id "
     )
-    long createUser(
-            @Bind("name") String name,
-            @Bind("birthdate") long birthdate,
-            @Bind("houseId") long houseId);
+    long createUser(@BindBean CreateResidentForm form);
 
     @SqlQuery(
             " SELECT * " +
