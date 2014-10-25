@@ -12,7 +12,6 @@ import org.skife.jdbi.v2.DBI;
 import com.kevinm416.report.resident.ResidentDAO;
 import com.kevinm416.report.resident.ResidentResource;
 import com.kevinm416.report.server.config.ReportServiceConfiguration;
-import com.kevinm416.report.test.TestResouce;
 
 
 public class ReportApplication extends Application<ReportServiceConfiguration> {
@@ -41,10 +40,6 @@ public class ReportApplication extends Application<ReportServiceConfiguration> {
         DBIFactory dbiFactory = new DBIFactory();
         DBI jdbi = dbiFactory.build(environment, configuration.getDataSourceFactory(), "postgres");
         ResidentDAO residentDAO = jdbi.onDemand(ResidentDAO.class);
-
-
-        TestResouce testResouce = new TestResouce();
-        environment.jersey().register(testResouce);
 
         ResidentResource residentResource = new ResidentResource(residentDAO);
         environment.jersey().register(residentResource);
