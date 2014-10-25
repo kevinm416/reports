@@ -16,17 +16,39 @@ repositories {
 }
 
 dependencies {
-    compile (
-            'io.dropwizard:dropwizard-core:' + dropwizardVersion,
-            'io.dropwizard:dropwizard-hibernate:' + dropwizardVersion,
-            'io.dropwizard:dropwizard-migrations:' + dropwizardVersion,
-            'io.dropwizard:dropwizard-auth:' + dropwizardVersion,
-            'com.h2database:h2:1.3.168'
-    )
+    compile 'io.dropwizard:dropwizard-core:' + dropwizardVersion
+    compile 'io.dropwizard:dropwizard-hibernate:' + dropwizardVersion
+    compile 'io.dropwizard:dropwizard-migrations:' + dropwizardVersion
+    compile 'io.dropwizard:dropwizard-auth:' + dropwizardVersion
+    compile 'io.dropwizard:dropwizard-jdbi:' + dropwizardVersion
+    compile 'org.postgresql:postgresql:9.3-1102-jdbc41'
+    compile 'com.h2database:h2:1.3.168'
 }
 
 run {
     args = ['server', dropWizardConfig]
+}
+
+task migrate(type: JavaExec, dependsOn:[classes]) {
+    main = mainClassName
+    args = ['db', 'migrate', dropWizardConfig]
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+task dbStatus(type: JavaExec, dependsOn:[classes]) {
+    main mainClassName
+    args = ['db', 'status', dropWizardConfig]
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+task dbClean(type: JavaExec, dependsOn:[classes]) {
+    main mainClassName
+    args = ['db', 'drop-all', '--confirm-delete-everything', dropWizardConfig]
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+
+task hydrate(dependsOn:[classes, dbClean, migrate]) {
 }
 
 task wrapper(type: Wrapper) {

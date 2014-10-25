@@ -1,1 +1,5 @@
-test: test-value
+database:
+  driverClass: org.postgresql.Driver
+  user: postgres
+  url: jdbc:postgresql://localhost:5432/reports
+  validationQuery: "/* MyService Health Check */ SELECT 1"

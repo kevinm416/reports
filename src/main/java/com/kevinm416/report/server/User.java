@@ -1,26 +1,22 @@
 package com.kevinm416.report.server;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
+public class User {
 
-public class Test {
+    private final String name;
 
-    private final String test;
-
-    @JsonCreator
-    public Test(@JsonProperty("test") String test) {
-        this.test = test;
+    public User(String name) {
+        this.name = name;
     }
 
-    public String getTest() {
-        return test;
+    public String getName() {
+        return name;
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((test == null) ? 0 : test.hashCode());
+        result = prime * result + ((name == null) ? 0 : name.hashCode());
         return result;
     }
 
@@ -35,12 +31,12 @@ public class Test {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        Test other = (Test) obj;
-        if (test == null) {
-            if (other.test != null) {
+        User other = (User) obj;
+        if (name == null) {
+            if (other.name != null) {
                 return false;
             }
-        } else if (!test.equals(other.test)) {
+        } else if (!name.equals(other.name)) {
             return false;
         }
         return true;
@@ -48,7 +44,7 @@ public class Test {
 
     @Override
     public String toString() {
-        return "Test [test=" + test + "]";
+        return "User [name=" + name + "]";
     }
 
 }
