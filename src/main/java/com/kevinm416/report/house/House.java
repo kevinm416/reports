@@ -1,26 +1,20 @@
-package com.kevinm416.report.resident;
+package com.kevinm416.report.house;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.kevinm416.report.common.Identifiable;
 
-public class Resident implements Identifiable {
+public class House implements Identifiable {
 
     private final long id;
     private final String name;
-    private final long birthdate;
-    private final long houseId;
 
     @JsonCreator
-    public Resident(
+    public House(
             @JsonProperty("id") long id,
-            @JsonProperty("name") String name,
-            @JsonProperty("birthdate") long birthdate,
-            @JsonProperty("houseId") long houseId) {
+            @JsonProperty("name") String name) {
         this.id = id;
         this.name = name;
-        this.birthdate = birthdate;
-        this.houseId = houseId;
     }
 
     @Override
@@ -32,20 +26,10 @@ public class Resident implements Identifiable {
         return name;
     }
 
-    public long getBirthdate() {
-        return birthdate;
-    }
-
-    public long getHouseId() {
-        return houseId;
-    }
-
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + (int) (birthdate ^ (birthdate >>> 32));
-        result = prime * result + (int) (houseId ^ (houseId >>> 32));
         result = prime * result + (int) (id ^ (id >>> 32));
         result = prime * result + ((name == null) ? 0 : name.hashCode());
         return result;
@@ -62,13 +46,7 @@ public class Resident implements Identifiable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        Resident other = (Resident) obj;
-        if (birthdate != other.birthdate) {
-            return false;
-        }
-        if (houseId != other.houseId) {
-            return false;
-        }
+        House other = (House) obj;
         if (id != other.id) {
             return false;
         }
@@ -84,8 +62,7 @@ public class Resident implements Identifiable {
 
     @Override
     public String toString() {
-        return "Resident [id=" + id + ", name=" + name + ", birthdate="
-                + birthdate + ", houseId=" + houseId + "]";
+        return "House [id=" + id + ", name=" + name + "]";
     }
 
 }

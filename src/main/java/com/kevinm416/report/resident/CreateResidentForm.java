@@ -2,30 +2,21 @@ package com.kevinm416.report.resident;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.kevinm416.report.common.Identifiable;
 
-public class Resident implements Identifiable {
+public class CreateResidentForm {
 
-    private final long id;
     private final String name;
     private final long birthdate;
     private final long houseId;
 
     @JsonCreator
-    public Resident(
-            @JsonProperty("id") long id,
+    public CreateResidentForm(
             @JsonProperty("name") String name,
             @JsonProperty("birthdate") long birthdate,
             @JsonProperty("houseId") long houseId) {
-        this.id = id;
         this.name = name;
         this.birthdate = birthdate;
         this.houseId = houseId;
-    }
-
-    @Override
-    public long getId() {
-        return id;
     }
 
     public String getName() {
@@ -46,7 +37,6 @@ public class Resident implements Identifiable {
         int result = 1;
         result = prime * result + (int) (birthdate ^ (birthdate >>> 32));
         result = prime * result + (int) (houseId ^ (houseId >>> 32));
-        result = prime * result + (int) (id ^ (id >>> 32));
         result = prime * result + ((name == null) ? 0 : name.hashCode());
         return result;
     }
@@ -62,14 +52,11 @@ public class Resident implements Identifiable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        Resident other = (Resident) obj;
+        CreateResidentForm other = (CreateResidentForm) obj;
         if (birthdate != other.birthdate) {
             return false;
         }
         if (houseId != other.houseId) {
-            return false;
-        }
-        if (id != other.id) {
             return false;
         }
         if (name == null) {
@@ -84,8 +71,8 @@ public class Resident implements Identifiable {
 
     @Override
     public String toString() {
-        return "Resident [id=" + id + ", name=" + name + ", birthdate="
-                + birthdate + ", houseId=" + houseId + "]";
+        return "CreateResidentForm [name=" + name + ", birthdate=" + birthdate
+                + ", houseId=" + houseId + "]";
     }
 
 }
