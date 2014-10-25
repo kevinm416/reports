@@ -1,5 +1,6 @@
 package com.kevinm416.report.server;
 import io.dropwizard.Application;
+import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.auth.basic.BasicAuthProvider;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.jdbi.DBIFactory;
@@ -30,12 +31,15 @@ public class ReportApplication extends Application<ReportServiceConfiguration> {
                 return configuration.getDataSourceFactory();
             }
         });
+        bootstrap.addBundle(new AssetsBundle("/assets", ""));
     }
 
     @Override
     public void run(ReportServiceConfiguration configuration,
             Environment environment) throws Exception {
         setupAuth(environment);
+
+        environment.jersey().setUrlPattern("/api/*");
 
         DBIFactory dbiFactory = new DBIFactory();
         DBI jdbi = dbiFactory.build(environment, configuration.getDataSourceFactory(), "postgres");
