@@ -26,50 +26,41 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js" type="text/javascript"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js" type="text/javascript"></script>
     
-    <script type='text/template' id='createShiftReportTemplate'>
-	    <form class="form-horizontal">
+    <script type='text/template' id='createResidentFormTemplate'>
+	    <form id="createResidentForm" class="form-horizontal">
 			<fieldset>
 			
 			<!-- Form Name -->
-			<legend>Shift Report</legend>
+			<legend>Form Name</legend>
+			
+			<!-- Text input-->
+			<div class="form-group">
+			  <label class="col-md-4 control-label" for="name">Name</label>  
+			  <div class="col-md-4">
+			  <input id="name" name="name" type="text" placeholder="" class="form-control input-md" required="">
+			    
+			  </div>
+			</div>
 			
 			<!-- Select Basic -->
 			<div class="form-group">
 			  <label class="col-md-4 control-label" for="house">House</label>
 			  <div class="col-md-4">
 			    <select id="house" name="house" class="form-control">
-			      <option value="1">1</option>
-			      <option value="2">2</option>
-			      <option value="">3</option>
-			      <option value="">4</option>
+			      <option value="1">House 1</option>
+			      <option value="2">House 2</option>
+			      <option value="3">House 3</option>
 			    </select>
 			  </div>
 			</div>
-			
-			<!-- Select Basic -->
-			<div class="form-group">
-			  <label class="col-md-4 control-label" for="shift">Shift</label>
-			  <div class="col-md-4">
-			    <select id="shift" name="shift" class="form-control">
-			      <option value="1">6am - 4pm</option>
-			      <option value="2">9am - 7pm</option>
-			    </select>
-			  </div>
-			</div>
-			
-			<!-- Textarea -->
-			<div class="form-group">
-			  <label class="col-md-4 control-label" for="resident-1">Resident-1</label>
-			  <div class="col-md-4">                     
-			    <textarea class="form-control" id="resident-1" name="resident-1"></textarea>
-			  </div>
-			</div>
-			
+
 			</fieldset>
-			
-			<button id="createShiftReportButton" class="btn btn-default">Submit</button>
+
+            <button type="submit" class="btn btn-default">Create Resident</button>
 		</form>
     </script>
+    
+    
     
     <script src="script.js" type="text/javascript"></script>
     

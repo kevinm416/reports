@@ -1,5 +1,7 @@
 package com.kevinm416.report.resident;
 
+import java.util.Set;
+
 import org.skife.jdbi.v2.sqlobject.Bind;
 import org.skife.jdbi.v2.sqlobject.BindBean;
 import org.skife.jdbi.v2.sqlobject.SqlQuery;
@@ -21,5 +23,11 @@ public interface ResidentDAO {
             " WHERE id = :id "
     )
     Resident loadResident(@Bind("id") long id);
+
+    @SqlQuery(
+            " SELECT * " +
+            " FROM residents "
+    )
+    Set<Resident> loadResidents();
 
 }

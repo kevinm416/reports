@@ -33,4 +33,21 @@
             </column>
         </createTable>
     </changeSet>
+    
+    <changeSet id="3" author="kmorgan">
+        <createTable tableName="houses">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint 
+                constraintName="resident_house_id" 
+                baseTableName="residents"
+                referencedTableName="houses" 
+                baseColumnNames="house_id"  
+                referencedColumnNames="id"/>
+    </changeSet>
 </databaseChangeLog>

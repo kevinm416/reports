@@ -2,6 +2,8 @@ package com.kevinm416.report.resident;
 
 import io.dropwizard.auth.Auth;
 
+import java.util.Set;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -19,6 +21,11 @@ public class ResidentResource {
 
     public ResidentResource(ResidentDAO residentDAO) {
         this.residentDAO = residentDAO;
+    }
+
+    @GET
+    public Set<Resident> loadResidents(@Auth User user) {
+        return residentDAO.loadResidents();
     }
 
     @POST
