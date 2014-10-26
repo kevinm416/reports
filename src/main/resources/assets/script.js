@@ -1,32 +1,28 @@
 (function($) {
 	alert("working")
-    var a = Backbone.View.extend({
+    var ShiftReportView = Backbone.View.extend({
         el: 'div.abPanel',
+        
+        events: {
+        	'click #createShiftReportButton' : 'sendAjax'
+        },
+        
         template: _.template($('#createShiftReportTemplate').html()),
         initialize: function() {
             _.bindAll(this, 'createShiftReport');
         },
         createShiftReport: function() {
             this.$el.html(this.template());
+        },
+        sendAjax: function() {
+        	alert("sending ajax");
         }
     })
     
-    var b = Backbone.Model.extend({
-    	sync: function(method, model, options) {
-    		if (method === 'create' || method === 'update') {
-    			return $.ajax({
-    				dataType: 'json',
-    				url: '../slkfjlksdjfls;dkfj',
-    				data: {
-    					house: this.get('house'),
-    					shift: this.get('shift')
-    				},
-    				success: function(data) {
-    					alert("success: " + data)
-    				}
-    			})
-    		}
-    	}
+    var ShiftReportModel = Backbone.Model.extend({
     })
     
+    var shiftReportModel = new ShiftReportModel();
+    var shiftReportView = new ShiftReportView({model: shiftReportModel})
+    shiftReportView.createShiftReport()
 })(jQuery)
