@@ -86,8 +86,19 @@
     
     app.addInitializer(function() {
     	var residents = new ResidentsCollection();
-    	residents.fetch();
+    	//residents.fetch();
 
+
+        residents.add({
+            id: 3,
+            name: 'kmorgan',
+            birthdate: 123
+        });
+        residents.add({
+            id: 4,
+            name: 'rmemon',
+            birthdate: 123
+        });
     	var applicationModel = new ApplicationModel();
     	
     	applicationModel.on('change', function() {
