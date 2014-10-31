@@ -1,5 +1,5 @@
 (function($) {
-    
+	
 	var ApplicationModel = Backbone.Model.extend({
 		defaults: {
 			residentId: null
@@ -37,6 +37,11 @@
     
     var SelectedResidentView = Marionette.ItemView.extend({
     	template: Handlebars.compile($('#selected-resident-template').html()),
+    	onRender: function() {
+    		this.$el.find('#birthdate-picker').datepicker({
+				pickTime: false
+            });
+    	}
     });
     
     var ResidentsView = Marionette.CollectionView.extend({
@@ -86,19 +91,8 @@
     
     app.addInitializer(function() {
     	var residents = new ResidentsCollection();
-    	//residents.fetch();
+    	residents.fetch();
 
-
-        residents.add({
-            id: 3,
-            name: 'kmorgan',
-            birthdate: 123
-        });
-        residents.add({
-            id: 4,
-            name: 'rmemon',
-            birthdate: 123
-        });
     	var applicationModel = new ApplicationModel();
     	
     	applicationModel.on('change', function() {
