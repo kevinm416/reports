@@ -5,6 +5,7 @@ import java.util.Set;
 import org.skife.jdbi.v2.sqlobject.Bind;
 import org.skife.jdbi.v2.sqlobject.BindBean;
 import org.skife.jdbi.v2.sqlobject.SqlQuery;
+import org.skife.jdbi.v2.sqlobject.SqlUpdate;
 import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapper;
 
 @RegisterMapper(ResidentDBMapper.class)
@@ -17,6 +18,15 @@ public interface ResidentDAO {
     )
     long createUser(@BindBean CreateResidentForm form);
 
+    @SqlUpdate(
+            " UPDATE residents " +
+            " SET name = :name, " +
+            "     birthdate = :birthdate, " +
+            "     house_id = :houseId " +
+            " WHERE id = :id "
+    )
+    void updateResident(@BindBean Resident resident);
+
     @SqlQuery(
             " SELECT * " +
             " FROM residents " +
@@ -26,7 +36,8 @@ public interface ResidentDAO {
 
     @SqlQuery(
             " SELECT * " +
-            " FROM residents "
+            " FROM residents " +
+            " ORDER BY name ASC "
     )
     Set<Resident> loadResidents();
 

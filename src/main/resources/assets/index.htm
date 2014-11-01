@@ -61,17 +61,27 @@
             <div class='form-group'>
               <label class='col-sm-3 control-label' for='textinput'>Name:</label>
               <div class='col-sm-6'>
-                <input type='text' class='form-control input-md' placeholder='{{name}}'>
+                <input id='name-input'
+                       type='text' 
+                       class='form-control input-md' 
+                       value='{{name}}'>
               </div>
             </div>
             <div class='form-group'>
               <label class='col-sm-3 control-label' for='textinput'>Birthdate:</label>
               <div class='input-group date col-sm-6' id='birthdate-picker'>
-                  <input type='text' class="form-control" data-date-format="DD/MM/YYYY"/ placeholder='{{formatDate 'day' birthdate}}'>
+                  <input id='birthdate-input'
+                         type='text' 
+                         class="form-control" 
+                         data-date-format="DD/MM/YYYY"/ 
+                         value='{{formatDate 'day' birthdate}}'>
                   <span class="input-group-addon">
                     <span class="glyphicon glyphicon-calendar"></span>
                   </span>
               </div>
+            </div>
+            <div class='form-group'>
+                <button type="submit" class="btn btn-default col-sm-1 col-sm-offset-8">Submit</button>
             </div>
           </fieldset>
         </form>

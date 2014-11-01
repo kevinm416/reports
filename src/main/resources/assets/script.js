@@ -27,6 +27,12 @@
     	events: {
     		'click': 'onClick'
     	},
+    	modelEvents: {
+    	    'change': 'onChange'
+    	},
+    	onChange: function(e) {
+    	    this.render();
+    	},
     	onClick: function() {
 			this.options.applicationModel.set('residentId', this.model.id);
     	},
@@ -37,10 +43,22 @@
     
     var SelectedResidentView = Marionette.ItemView.extend({
     	template: Handlebars.compile($('#selected-resident-template').html()),
+    	events: {
+    	   'submit': 'onSubmit'
+    	},
     	onRender: function() {
     		this.$el.find('#birthdate-picker').datepicker({
 				pickTime: false
             });
+    	},
+    	onSubmit: function(e) {
+            var name = this.$('#name-input').val();
+            var birthdate = moment(this.$('#birthdate-input').val(), "MM/DD/YYYY").unix();
+            this.model.set({
+                'name': name,
+                'birthdate': birthdate
+            });
+            this.model.save();
     	}
     });
     
@@ -55,7 +73,13 @@
     
     var ResidentsCollection = Backbone.Collection.extend({
     	model: Resident,
-    	url: '/api/residents'
+    	url: '/api/residents',
+    	events: {
+    	   'all': 'test'
+    	},
+    	test: function(e) {
+    	   console.log('change in residents collection:', e);
+    	}
     })
     
     var ApplicationView = Marionette.LayoutView.extend({
