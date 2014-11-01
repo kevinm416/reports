@@ -10,3 +10,9 @@ Handlebars.registerHelper('formatDate', function(formatKey, datetime) {
 		return '';
 	}
 });
+
+//$(document).ready(function() {
+//	var trailingLink = this.location.href.replace(this.location.origin + '/', "")
+//	console.log(trailingLink)
+//    $('a[href="' + trailingLink + '"]').parent().addClass('active');
+//});

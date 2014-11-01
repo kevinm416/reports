@@ -40,6 +40,12 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+        <addForeignKeyConstraint 
+                constraintName="resident_house_id" 
+                baseTableName="residents"
+                referencedTableName="houses" 
+                baseColumnNames="house_id"  
+                referencedColumnNames="id"/>
         
         <createTable tableName="resident_education_plan">
             <column name="id" type="bigint" autoIncrement="true">
@@ -53,13 +59,6 @@
             </column>
         </createTable>
         
-        <addForeignKeyConstraint 
-                constraintName="resident_house_id" 
-                baseTableName="residents"
-                referencedTableName="houses" 
-                baseColumnNames="house_id"  
-                referencedColumnNames="id"/>
-                
         <createTable tableName="reports">
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>

@@ -83,29 +83,68 @@
     	}
     });
     
-    var app = new Marionette.Application();
-    
-    app.addRegions({
-    	'app': '#app-region'
+    var ShiftReportView = Marionette.ItemView.extend({
+    	template: _.template("<h1>Shift Report View!</h1>")
     });
     
+    var IncidentReportView = Marionette.ItemView.extend({
+    	template: _.template("<h1>Incident Report View!</h1>")
+    });
+    
+    var app = new Marionette.Application({
+    	regions: {
+    		'appRegion': '#app-region'
+    	}
+    });
+    
+    var applicationModel = new ApplicationModel();
+    
     app.addInitializer(function() {
-    	var residents = new ResidentsCollection();
-    	residents.fetch();
 
-    	var applicationModel = new ApplicationModel();
-    	
     	applicationModel.on('change', function() {
     		console.log(this.toJSON())
     	});
     	
-    	var appView = new ApplicationView({
-    		model: applicationModel,
-    		residentsCollection: residents
-    	});
-    	
-    	this.app.show(appView);
     });
+    
+    var AppRouter = Backbone.Router.extend({
+    	routes: {
+    		'residents': 'residentsRoute',
+    		'shiftReport': 'shiftReportRoute',
+    		'incidentReport': 'incidentReportRoute',
+    		'*all': 'residentsRoute'
+    	},
+    	residentsRoute: function() {
+    		var residents = new ResidentsCollection();
+        	residents.fetch();
+    		app.appRegion.show(new ApplicationView({
+    			model: applicationModel,
+    			residentsCollection: residents
+    		}));
+    	},
+    	shiftReportRoute: function() {
+        	app.appRegion.show(new ShiftReportView());
+    	},
+    	incidentReportRoute: function() {
+    		app.appRegion.show(new IncidentReportView());
+    	},
+    });
+    
+    var appRouter = new AppRouter();
+    appRouter.on('route', function() {
+    	var navbarItems = $('ul.nav li');
+    	navbarItems.removeClass('active');
+    	var location = document.location;
+    	var trailingLink = location.href.replace(location.origin + '/', "")
+    	var trailingLinkItems = navbarItems.find('a[href="' + trailingLink + '"]')
+    	if (trailingLinkItems.length > 0) {
+    		trailingLinkItems.parent().addClass('active')
+    	} else {
+    		navbarItems.first().addClass('active');
+    	}
+    });
+    
+    Backbone.history.start();
     
     $(function() {
     	app.start();	
