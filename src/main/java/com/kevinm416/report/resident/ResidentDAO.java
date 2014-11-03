@@ -1,6 +1,6 @@
 package com.kevinm416.report.resident;
 
-import java.util.Set;
+import java.util.List;
 
 import org.skife.jdbi.v2.sqlobject.Bind;
 import org.skife.jdbi.v2.sqlobject.BindBean;
@@ -39,6 +39,6 @@ public interface ResidentDAO {
             " FROM residents " +
             " ORDER BY name ASC "
     )
-    Set<Resident> loadResidents();
+    List<Resident> loadResidents();
 
 }

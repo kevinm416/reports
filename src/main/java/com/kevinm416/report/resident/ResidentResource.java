@@ -1,6 +1,6 @@
 package com.kevinm416.report.resident;
 
-import java.util.Set;
+import java.util.List;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -25,7 +25,7 @@ public class ResidentResource {
     }
 
     @GET
-    public Set<Resident> loadResidents(@Auth User user) {
+    public List<Resident> loadResidents(@Auth User user) {
         return residentDAO.loadResidents();
     }
 

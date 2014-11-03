@@ -1,21 +1,29 @@
 (function($) {
 	
-	var ApplicationModel = Backbone.Model.extend({
-		defaults: {
-			residentId: null
-		},
-		getResidentId: function() {
-			return this.get('residentId');
-		}
+	var House = Backbone.Model.extend({
+	   defaults: {
+	       id: null,
+	       name: null
+	   }
 	});
-    
+	
+	var HousesCollection = Backbone.Collection.extend({
+	   model: House,
+	   url: '/api/houses'
+	});
+	
+	 var ResidentsCollection = Backbone.Collection.extend({
+        model: Resident,
+        url: '/api/residents',
+    });
+	
     var Resident = Backbone.Model.extend({
     	defaults: {
     		id: null,
     		name: null,
     		birthdate: null
     	}
-    })
+    });
     
     var ResidentView = Marionette.ItemView.extend({
     	template: Handlebars.compile($('#resident-template').html()),
@@ -80,7 +88,16 @@
     	test: function(e) {
     	   console.log('change in residents collection:', e);
     	}
-    })
+    });
+    
+    var ApplicationModel = Backbone.Model.extend({
+        defaults: {
+            residentId: null
+        },
+        getResidentId: function() {
+            return this.get('residentId');
+        }
+    });
     
     var ApplicationView = Marionette.LayoutView.extend({
     	template: _.template($('#application-view-template').html()),
@@ -130,6 +147,9 @@
     	});
     	
     });
+    
+    var houses = new HousesCollection();
+    houses.fetch();
     
     var AppRouter = Backbone.Router.extend({
     	routes: {
