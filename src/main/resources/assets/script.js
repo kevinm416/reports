@@ -31,7 +31,9 @@
         tagName: 'li',
         className: 'list-group-item',
         initialize: function() {
+            this.applicationModel = this.options.applicationModel;
             this.listenTo(this.options.applicationModel, 'change:residentId', this.updateSelected);
+            this.updateSelected();
         },
         events: {
             'click': 'onClick'
@@ -46,7 +48,7 @@
             this.options.applicationModel.set('residentId', this.model.id);
         },
         updateSelected: function() {
-            this.$el.toggleClass('active', this.options.applicationModel.getResidentId() == this.model.id);
+            this.$el.toggleClass('active', this.applicationModel.getResidentId() == this.model.id);
         }
     });
     
