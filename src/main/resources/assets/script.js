@@ -167,22 +167,16 @@
     });
     
     var applicationModel = new ApplicationModel();
-    console.log('created a new application model');
-    
-    app.addInitializer(function() {
-
-        applicationModel.on('change', function() {
-            console.log(this.toJSON())
-        });
-        
-    });
     
     var AppRouter = Backbone.Router.extend({
         routes: {
             'residents': 'residentsRoute',
             'shiftReport': 'shiftReportRoute',
             'incidentReport': 'incidentReportRoute',
-            '*all': 'residentsRoute'
+            '*all': 'defaultRoute'
+        },
+        defaultRoute: function() {
+            this.navigate('residents', {trigger:true});
         },
         residentsRoute: function() {
             var residents = new ResidentsCollection();
@@ -194,13 +188,6 @@
                     housesCollection: houses
                 }));
             });
-        },
-        displayApplicationView: function(residents, houses) {
-            app.appRegion.show(new ApplicationView({
-                model: applicationModel,
-                residentsCollection: residents,
-                housesCollection: houses
-            }));
         },
         shiftReportRoute: function() {
             app.appRegion.show(new ShiftReportView());
