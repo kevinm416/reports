@@ -44,20 +44,29 @@
     
     <script type='text/template' id='application-view-template'>
         <div class='container-fluid'>
-            <div class='row'>
-                <div id='resident-list-region' class='col-sm-3'></div>
-                <div class='col-sm-9'>
-                    <div class='row'>
-                        <ul class='nav nav-tabs' role='tablist'>
-                            <li role='presentation' class='active'><a href="#">Info</a></li>
-                            <li role='presentation'><a href='#'>Care</a></li>
-                        </ul>
-                    <div class='row'>
-                        <div id='selected-resident-region'></div>
-                    </div>
-                </div>
-            </div>
+          <div class='row'>
+            <div id='resident-list-region' class='col-sm-3'></div>
+            <div class='col-sm-9'>
+              <div class='row'>
+                <div id='selected-resident-tabs'></div>
+              </div>
+              <div class='row'>
+                <div id='selected-resident-region'></div>
+              </div> 
+            </div>  
+          </div>
         </div>
+    </script>
+    
+    <script id='selected-resident-tabs-template' type='text/template'>
+        <ul class='nav nav-tabs' role='tablist'>
+          <li role='presentation' class='active'>
+            <a href='#residents/{{residentId}}/info'>Info</a>
+          </li>
+          <li role='presentation'>
+            <a href='#residents/{{residentId}}/care'>Care</a>
+          </li>
+        </ul>
     </script>
     
     <script id='resident-template' type='text/x-handlebars-template'>

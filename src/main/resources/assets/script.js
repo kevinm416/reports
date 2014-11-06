@@ -52,7 +52,21 @@
         }
     });
     
-    var SelectedResidentView = Marionette.ItemView.extend({
+    var SelectedResidentTabsModel = Backbone.Model.extend({
+        defaults: {
+            residentId: null,
+        }
+    });
+    
+    var SelectedResidentTabsView = Marionette.ItemView.extend({
+       template: Handlebars.compile($('#selected-resident-tabs-template').html()),
+    });
+    
+    var SelectedResidentCareView = Marionette.ItemView.extend({
+       template: Handlebars.compile("<h1>Care View</h1>")
+    });
+    
+    var SelectedResidentInfoView = Marionette.ItemView.extend({
         template: Handlebars.compile($('#selected-resident-template').html()),
         events: {
            'submit': 'onSubmit'
@@ -107,9 +121,16 @@
         }
     });
     
+    var residentPanelStates = [
+        'info',
+        'care',
+        'medication',
+    ];
+    
     var ApplicationModel = Backbone.Model.extend({
         defaults: {
-            residentId: null
+            residentId: null,
+            residentPanelState: 'info',
         },
         getResidentId: function() {
             return this.get('residentId');
@@ -120,10 +141,12 @@
         template: _.template($('#application-view-template').html()),
         regions: {
             'residentList': '#resident-list-region',
-            'selectedResident': '#selected-resident-region'
+            'selectedResident': '#selected-resident-region',
+            'selectedResidentTabs': '#selected-resident-tabs',
         },
         modelEvents: {
-            'change:residentId': 'changeResident'
+            'change:residentId': 'changeResident',
+            'change:residentPanelState': 'changeResident',
         },
         onShow: function() {
             var residentsView = new ResidentsView({
@@ -131,17 +154,38 @@
                 applicationModel: this.model
             })
             this.residentList.show(residentsView);
+            
+            
             this.changeResident();
         },
         changeResident: function() {
+            var view = this.getSelectedResidentView();
+            this.selectedResident.show(view);
+            
+            var tabsView = this.getSelectedResidentTabsView();
+            this.selectedResidentTabs.show(tabsView);
+        },
+        getSelectedResidentView: function() {
             var selectedResident = this.options.residentsCollection.get(this.model.get('residentId'));
             var selectedHouse = this.getSelectedHouse(selectedResident);
-            selectedResidentView = new SelectedResidentView({
-                resident: selectedResident,
-                houses: this.options.housesCollection,
-                selectedHouse: selectedHouse,
+            var state = this.model.get('residentPanelState');
+            if (state == 'info') {
+                return new SelectedResidentInfoView({
+                    resident: selectedResident,
+                    houses: this.options.housesCollection,
+                    selectedHouse: selectedHouse,
+                });
+            } else if (state == 'care') {
+                return new SelectedResidentCareView({});
+            }
+        },
+        getSelectedResidentTabsView: function() {
+            var selectedResidentTabsModel = new SelectedResidentTabsModel({
+                'residentId': this.model.get('residentId'),
             });
-            this.selectedResident.show(selectedResidentView);
+            return selectedResidentTabsView = new SelectedResidentTabsView({
+                model: selectedResidentTabsModel,
+            });
         },
         getSelectedHouse: function(selectedResident) {
             if (selectedResident) {
@@ -149,7 +193,7 @@
             } else {
                 return undefined;
             }
-        }
+        },
     });
     
     var ShiftReportView = Marionette.ItemView.extend({
@@ -171,6 +215,7 @@
     var AppRouter = Backbone.Router.extend({
         routes: {
             'residents': 'residentsRoute',
+            'residents/:id/:residentPanelState': 'residentsPanelRoute',
             'shiftReport': 'shiftReportRoute',
             'incidentReport': 'incidentReportRoute',
             '*all': 'defaultRoute'
@@ -188,6 +233,12 @@
                     housesCollection: houses
                 }));
             });
+        },
+        residentsPanelRoute: function(residentId, residentPanelState) {
+            applicationModel.set({
+                'residentId': residentId,
+                'residentPanelState': residentPanelState,
+            })
         },
         shiftReportRoute: function() {
             app.appRegion.show(new ShiftReportView());
