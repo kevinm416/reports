@@ -27,7 +27,7 @@
     });
     
     var ResidentView = Marionette.ItemView.extend({
-        template: Handlebars.compile($('#resident-template').html()),
+        template: Handlebars.compile("{{name}}"),
         tagName: 'li',
         className: 'list-group-item',
         initialize: function() {
@@ -45,7 +45,7 @@
             this.render();
         },
         onClick: function() {
-            this.options.applicationModel.set('residentId', this.model.id);
+            this.applicationModel.set('residentId', this.model.id);
         },
         updateSelected: function() {
             this.$el.toggleClass('active', this.applicationModel.getResidentId() == this.model.id);
@@ -154,8 +154,6 @@
                 applicationModel: this.model
             })
             this.residentList.show(residentsView);
-            
-            
             this.changeResident();
         },
         changeResident: function() {
@@ -196,8 +194,47 @@
         },
     });
     
-    var ShiftReportView = Marionette.ItemView.extend({
-        template: _.template("<h1>Shift Report View!</h1>")
+    var ShiftReportResidentView = Marionette.ItemView.extend({
+        template: Handlebars.compile($('#shift-report-resident-template').html()),
+    });
+    
+    var ShiftReportResidentsView = Marionette.CollectionView.extend({
+        childView: ShiftReportResidentView,
+    });
+    
+    var ShiftReportModel = Backbone.Model.extend({
+       defaults: {
+           houses: null,
+           residents: null,
+       },
+    });
+    
+    var ShiftReportView = Marionette.LayoutView.extend({
+        template: Handlebars.compile($('#create-shift-report-template').html()),
+        regions: {
+            'formTop': '#create-shift-report-top-template',
+            'formBottom': '#create-shift-report-bottom-template',
+        },
+        onShow: function() {
+            var shiftReportTopView = new ShiftReportTopView({
+                model: this.model,
+            });
+            this.formTop.show(shiftReportTopView);
+            
+            var shiftReportBottomView = new ShiftReportResidentsView({
+                collection: this.model.get('residents'),
+            });
+            this.formBottom.show(shiftReportBottomView);
+        }
+    });
+    
+    var ShiftReportTopView = Marionette.ItemView.extend({
+        template: Handlebars.compile($('#create-shift-report-top-template').html()),
+        serializeData: function() {
+            return {
+                'houses': this.model.get('houses').toJSON(),
+            }
+        },
     });
     
     var IncidentReportView = Marionette.ItemView.extend({
@@ -241,7 +278,18 @@
             })
         },
         shiftReportRoute: function() {
-            app.appRegion.show(new ShiftReportView());
+            var houses = new HousesCollection();
+            var residents = new ResidentsCollection();
+            $.when(houses.fetch(), residents.fetch()).then(function() {
+                var shiftReportModel = new ShiftReportModel({
+                    houses: houses,
+                    residents: residents,
+                });
+                var shiftReportView = new ShiftReportView({
+                   model: shiftReportModel, 
+                });
+                app.appRegion.show(shiftReportView);    
+            });
         },
         incidentReportRoute: function() {
             app.appRegion.show(new IncidentReportView());

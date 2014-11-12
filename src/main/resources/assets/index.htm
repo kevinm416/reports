@@ -69,11 +69,8 @@
         </ul>
     </script>
     
-    <script id='resident-template' type='text/x-handlebars-template'>
-        {{name}}
-    </script>
-    
     <script id='selected-resident-template' type='text/x-handlebars-template'>
+        {{#if resident}}
         <form class='form-horizontal'>
           <fieldset>
             <div class='form-group'>
@@ -101,19 +98,82 @@
             <div class='form-group'>
               <label class='col-sm-3 control-label' for='textinput'>House:</label>
               <div class='col-sm-6'>
+                <select id='houseid-input' class='form-control'>
+                    <option value='{{selectedHouse.id}}'>{{selectedHouse.name}}</option>
+                    {{#each houses}}
+                    <option value='{{id}}'>{{name}}</option>
+                    {{/each}}
+                </select>
+              </div>
+            </div>
+            <div class='form-group'>
+              <button type="submit" class="btn btn-default col-sm-1 col-sm-offset-8">Save</button>
+            </div>
+          </fieldset>
+        </form>
+        {{else}}
+        <h1>No Resident Selected</h1>
+        {{/if}}
+    </script>
+
+    <script id='create-shift-report-template' type='text/x-handlebars-template'>
+        <div class='container-fluid'>
+          <form class='form-horizontal'>
+            <div id='create-shift-report-top-template'></div>
+            <div id='create-shift-report-bottom-template'></div>
+          </form>
+        </div>
+    </script>
+
+    <script id='create-shift-report-top-template' type='text/x-handlebars-template'>
+        <fieldset>
+          <div class='form-group'>
+            <label class='col-sm-3 control-label' for='textinput'>Title:</label>
+            <div class='col-sm-6'>
+              <input id='name-input'
+                     type='text' 
+                     class='form-control input-md'>
+            </div>
+          </div>
+        </fieldset>
+        <fieldset>
+          <div class='form-group'>
+            <label class='col-sm-3 control-label' for='textinput'>Shift:</label>
+            <div class='col-sm-6'>
+              <select id='shift-input' class='form-control'>
+                <option>AM</option>
+                <option>PM</option>
+                <option>Graveyard</option>
+              </select>
+            </div>
+          </div>
+        </fieldset>
+        <fieldset>
+          <div class='form-group'>
+            <label class='col-sm-3 control-label' for='textinput'>House:</label>
+            <div class='col-sm-6'>
               <select id='houseid-input' class='form-control'>
-                <option value='{{selectedHouse.id}}'>{{selectedHouse.name}}</option>
                 {{#each houses}}
                 <option value='{{id}}'>{{name}}</option>
                 {{/each}}
               </select>
-              </div>
             </div>
-            <div class='form-group'>
-                <button type="submit" class="btn btn-default col-sm-1 col-sm-offset-8">Submit</button>
+          </div>
+        </fieldset>
+    </script>
+    
+    <script id='shift-report-resident-template' type='text/x-handlebars-template'>
+        <fieldset>
+          <div class='form-group'>
+            <label class='col-sm-3 control-label' for='textinput'>{{name}}</label>
+            <div class='col-sm-6'>
+              <input id='input'
+                     type='text' 
+                     class='form-control input-md' 
+                     value='{{resident.name}}'>
             </div>
-          </fieldset>
-        </form>
+          </div>
+        </fieldset>
     </script>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js" type="text/javascript"></script>

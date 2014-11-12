@@ -1,12 +1,4 @@
 package com.kevinm416.report.server;
-import org.skife.jdbi.v2.DBI;
-
-import com.kevinm416.report.house.HouseDAO;
-import com.kevinm416.report.house.HouseResource;
-import com.kevinm416.report.resident.ResidentDAO;
-import com.kevinm416.report.resident.ResidentResource;
-import com.kevinm416.report.server.config.ReportServiceConfiguration;
-
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.auth.basic.BasicAuthProvider;
@@ -15,6 +7,16 @@ import io.dropwizard.jdbi.DBIFactory;
 import io.dropwizard.migrations.MigrationsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+
+import org.skife.jdbi.v2.DBI;
+
+import com.kevinm416.report.house.HouseDAO;
+import com.kevinm416.report.house.HouseResource;
+import com.kevinm416.report.rc.ResidentCoordinatorDAO;
+import com.kevinm416.report.rc.ResidentCoordinatorResource;
+import com.kevinm416.report.resident.ResidentDAO;
+import com.kevinm416.report.resident.ResidentResource;
+import com.kevinm416.report.server.config.ReportServiceConfiguration;
 
 
 public class ReportApplication extends Application<ReportServiceConfiguration> {
@@ -47,9 +49,13 @@ public class ReportApplication extends Application<ReportServiceConfiguration> {
         DBI jdbi = dbiFactory.build(environment, configuration.getDataSourceFactory(), "postgres");
         ResidentDAO residentDAO = jdbi.onDemand(ResidentDAO.class);
         HouseDAO houseDAO = jdbi.onDemand(HouseDAO.class);
+        ResidentCoordinatorDAO residentCoordinatorDao = jdbi.onDemand(ResidentCoordinatorDAO.class);
 
         ResidentResource residentResource = new ResidentResource(residentDAO);
         environment.jersey().register(residentResource);
+
+        ResidentCoordinatorResource residentCoordinatorResource = new ResidentCoordinatorResource(residentCoordinatorDao);
+        environment.jersey().register(residentCoordinatorResource);
 
         HouseResource houseResource = new HouseResource(houseDAO);
         environment.jersey().register(houseResource);
