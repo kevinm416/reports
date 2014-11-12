@@ -215,6 +215,8 @@
             'formTop': '#create-shift-report-top-template',
             'formBottom': '#create-shift-report-bottom-template',
         },
+        events: {
+        },
         onShow: function() {
             var shiftReportTopView = new ShiftReportTopView({
                 model: this.model,
@@ -225,7 +227,7 @@
                 collection: this.model.get('residents'),
             });
             this.formBottom.show(shiftReportBottomView);
-        }
+        },
     });
     
     var ShiftReportTopView = Marionette.ItemView.extend({
