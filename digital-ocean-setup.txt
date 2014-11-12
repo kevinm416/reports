@@ -1,0 +1,35 @@
+# create and run a container named postgres
+docker run \
+  --detach \
+  --name postgres \
+  --publish 127.0.0.1:5432:5432 \
+  stackbrew/postgres:9.3 
+
+# open sql shell in container
+docker exec \
+  --tty \
+  --interactive \
+  bash
+
+# create the db
+CREATE DATABASE reports;
+
+# install java
+sudo apt-get install default-jre
+sudo apt-get install default-jdk
+
+# hydrate db
+./gradlew hydrate
+
+# create houses
+INSERT INTO houses (name)
+VALUES ('house1'), ('house2'), ('house3')
+;
+
+# redirect 80 to internal 8080
+iptables -t nat -I PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8080
+
+# start server so that I can disconnect
+nohup ./gradlew run
+
+
