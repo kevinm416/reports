@@ -32,7 +32,7 @@
         className: 'list-group-item',
         initialize: function() {
             this.applicationModel = this.options.applicationModel;
-            this.listenTo(this.options.applicationModel, 'change:residentId', this.updateSelected);
+            this.listenTo(this.applicationModel, 'change:residentId', this.updateSelected);
             this.updateSelected();
         },
         events: {
@@ -48,18 +48,54 @@
             this.applicationModel.set('residentId', this.model.id);
         },
         updateSelected: function() {
-            this.$el.toggleClass('active', this.applicationModel.getResidentId() == this.model.id);
+            this.$el.toggleClass('active', this.applicationModel.get('residentId') == this.model.id);
         }
     });
-    
-    var SelectedResidentTabsModel = Backbone.Model.extend({
+
+    var SelectedResidentTab = Backbone.Model.extend({
         defaults: {
-            residentId: null,
+            tabState: null,
+            tabStateDisplayName: null,
         }
     });
     
-    var SelectedResidentTabsView = Marionette.ItemView.extend({
-       template: Handlebars.compile($('#selected-resident-tabs-template').html()),
+    var SelectedResidentTabs = Backbone.Collection.extend({
+        model: SelectedResidentTab
+    });
+    
+    var selectedResidentTabs = new SelectedResidentTabs([
+        { tabState: 'info', tabStateDisplayName: 'Info' },
+        { tabState: 'care', tabStateDisplayName: 'Care' },
+        { tabState: 'reports', tabStateDisplayName: 'Reports' },
+    ]);
+    
+    var SelectedResidentTabView = Marionette.ItemView.extend({
+        template: Handlebars.compile($('#selected-resident-tab-template').html()),
+        tagName: 'li',
+        initialize: function() {
+            this.applicationModel = this.options.applicationModel;
+            this.listenTo(this.applicationModel, 'change:residentPanelState', this.updateSelectedTab);
+            this.updateSelectedTab();
+        },
+        events: {
+            'click': 'selectCurrentTab',
+        },
+        selectCurrentTab: function() {
+            this.applicationModel.set('residentPanelState', this.model.get('tabState'));
+            this.updateSelectedTab();
+        },
+        updateSelectedTab: function() {
+            this.$el.toggleClass('active', this.applicationModel.get('residentPanelState') == this.model.get('tabState'));
+        },
+    });
+    
+    var SelectedResidentTabsView = Marionette.CollectionView.extend({
+       childView: SelectedResidentTabView,
+       tagName: 'ul',
+       className: 'nav nav-tabs',
+       childViewOptions: function() {
+           return { applicationModel: this.options.applicationModel };
+       }
     });
     
     var SelectedResidentCareView = Marionette.ItemView.extend({
@@ -121,20 +157,11 @@
         }
     });
     
-    var residentPanelStates = [
-        'info',
-        'care',
-        'medication',
-    ];
-    
     var ApplicationModel = Backbone.Model.extend({
         defaults: {
             residentId: null,
             residentPanelState: 'info',
         },
-        getResidentId: function() {
-            return this.get('residentId');
-        }
     });
     
     var ApplicationView = Marionette.LayoutView.extend({
@@ -154,14 +181,16 @@
                 applicationModel: this.model
             })
             this.residentList.show(residentsView);
+            this.createResidentTabs();
             this.changeResident();
+        },
+        createResidentTabs: function() {
+            var tabsView = this.getSelectedResidentTabsView();
+            this.selectedResidentTabs.show(tabsView);
         },
         changeResident: function() {
             var view = this.getSelectedResidentView();
             this.selectedResident.show(view);
-            
-            var tabsView = this.getSelectedResidentTabsView();
-            this.selectedResidentTabs.show(tabsView);
         },
         getSelectedResidentView: function() {
             var selectedResident = this.options.residentsCollection.get(this.model.get('residentId'));
@@ -178,18 +207,16 @@
             }
         },
         getSelectedResidentTabsView: function() {
-            var selectedResidentTabsModel = new SelectedResidentTabsModel({
-                'residentId': this.model.get('residentId'),
-            });
             return selectedResidentTabsView = new SelectedResidentTabsView({
-                model: selectedResidentTabsModel,
+                collection: selectedResidentTabs,
+                applicationModel: this.model,
             });
         },
         getSelectedHouse: function(selectedResident) {
             if (selectedResident) {
                 return this.options.housesCollection.get(selectedResident.get('houseId'));
             } else {
-                return undefined;
+                return null;
             }
         },
     });
@@ -278,6 +305,7 @@
                 'residentId': residentId,
                 'residentPanelState': residentPanelState,
             })
+            this.residentsRoute();
         },
         shiftReportRoute: function() {
             var houses = new HousesCollection();
@@ -313,9 +341,7 @@
     });
     
     Backbone.history.start();
+    app.start();
     
-    $(function() {
-        app.start();
-    })
     
 })(jQuery)

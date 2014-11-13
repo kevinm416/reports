@@ -59,14 +59,18 @@
     </script>
     
     <script id='selected-resident-tabs-template' type='text/template'>
-        <ul class='nav nav-tabs' role='tablist'>
+        <ul class='nav nav-tabs' role='tablist' id='selected-resident-tabs'>
           <li role='presentation' class='active'>
-            <a href='#residents/{{residentId}}/info'>Info</a>
+            <a href='#' id='info' >Info</a>
           </li>
           <li role='presentation'>
-            <a href='#residents/{{residentId}}/care'>Care</a>
+            <a href='#' id='care'>Care</a>
           </li>
         </ul>
+    </script>
+    
+    <script id='selected-resident-tab-template' type='text/x-handlebars-template'>
+        <a href='javaScript:void(0);'>{{tabStateDisplayName}}</a>
     </script>
     
     <script id='selected-resident-template' type='text/x-handlebars-template'>
