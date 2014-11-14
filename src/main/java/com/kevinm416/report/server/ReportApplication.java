@@ -10,6 +10,7 @@ import io.dropwizard.setup.Environment;
 
 import org.skife.jdbi.v2.DBI;
 
+import com.fasterxml.jackson.core.JsonGenerator.Feature;
 import com.kevinm416.report.house.HouseDAO;
 import com.kevinm416.report.house.HouseResource;
 import com.kevinm416.report.rc.ResidentCoordinatorDAO;
@@ -53,6 +54,7 @@ public class ReportApplication extends Application<ReportServiceConfiguration> {
 
         ResidentResource residentResource = new ResidentResource(residentDAO);
         environment.jersey().register(residentResource);
+        environment.getObjectMapper().configure(Feature.WRITE_NUMBERS_AS_STRINGS, true);
 
         ResidentCoordinatorResource residentCoordinatorResource = new ResidentCoordinatorResource(residentCoordinatorDao);
         environment.jersey().register(residentCoordinatorResource);

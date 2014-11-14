@@ -154,9 +154,28 @@
         </fieldset>
         <fieldset>
           <div class='form-group'>
+            <label class='col-sm-3 control-label' for='textinput'>Are keys accounted for:</label>
+            <div class='col-sm-6'>
+            <div class="radio">
+              <label>
+                <input id="inlineradio1" name="sampleinlineradio" value="option1" type="radio">Yes
+              </label>
+            </div>
+            <div class="radio ">
+              <label>
+                <input id="inlineradio1" name="sampleinlineradio" value="option1" type="radio">No
+                <input type="text" class='form-inline input-md' />​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​
+              </label>
+            </div>
+            </div>
+          </div>
+        <fieldset>
+        <fieldset>
+          <div class='form-group'>
             <label class='col-sm-3 control-label' for='textinput'>House:</label>
             <div class='col-sm-6'>
               <select id='houseid-input' class='form-control'>
+                <option disabled selected> -- select a house -- </option>
                 {{#each houses}}
                 <option value='{{id}}'>{{name}}</option>
                 {{/each}}
@@ -169,11 +188,10 @@
     <script id='shift-report-resident-template' type='text/x-handlebars-template'>
         <fieldset>
           <div class='form-group'>
-            <label class='col-sm-3 control-label' for='textinput'>{{name}}</label>
+            <label class='col-sm-3 control-label' for='textinput'>{{residentName}}</label>
             <div class='col-sm-6'>
-              <textarea id='resident-{{id}}'
-                     type='text' 
-                     class='form-control input-md' />
+              <input type='text' class='form-control margin-bottom input-md' placeholder='Summary'/>
+              <textarea type='text' class='form-control input-md' />
             </div>
           </div>
         </fieldset>
@@ -187,7 +205,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.min.js" type="text/javascript"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.min.js" type="text/javascript"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.3/moment.min.js" type="text/javascript"></script>
-    <script src="bootstrap.js" type="text/javascript"></script>    
+    <script src="shift-report.js" type="text/javascript"></script>
     <script src="script.js" type="text/javascript"></script>
     
   </body>
