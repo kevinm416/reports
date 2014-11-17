@@ -1,17 +1,4 @@
 
-var DateFormats = {
-    day: 'MM/DD/YYYY'
-}
-
-Handlebars.registerHelper('formatDate', function(formatKey, datetime) {
-    if (datetime) {
-        var f = DateFormats[formatKey];
-        return moment.unix(datetime).format(f);
-    } else {
-        return '';
-    }
-});
-
 var House = Backbone.Model.extend({
    defaults: {
        id: null,
@@ -138,7 +125,7 @@ var SelectedResidentInfoView = Marionette.ItemView.extend({
     onSubmit: function(e) {
         e.preventDefault();
         var name = this.$('#name-input').val();
-        var birthdate = moment(this.$('#birthdate-input').val(), "MM/DD/YYYY").unix();
+        var birthdate = getUnixTimestampForDay(this.$('#birthdate-input').val()); 
         var houseId = this.$('#houseid-input').val();
         this.options.resident.set({
             'name': name,
@@ -284,6 +271,7 @@ var AppRouter = Backbone.Router.extend({
             });
             var shiftReportView = new ShiftReportView({
                model: shiftReportModel, 
+               houses: houses,
             });
             app.appRegion.show(shiftReportView);    
         });
@@ -309,7 +297,7 @@ appRouter.on('route', function() {
     
 $(function() {
     Backbone.history.start();
-//    app.start();
+    app.start();
 });
     
     
