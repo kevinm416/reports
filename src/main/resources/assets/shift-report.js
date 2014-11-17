@@ -26,11 +26,11 @@ var ShiftReportResidentListItemView = Marionette.ItemView.extend({
         'change #notes': 'changeReport',
     },
     changeSummary: function() {
-        var summary = this.$('#summary').val(); 
+        var summary = $(e.currentTarget).val(); 
         this.model.set('summary', summary);
     },
     changeReport: function() {
-        var notes = this.$('#notes').val();
+        var notes = $(e.currentTarget).val();
         this.model.set('notes', notes);
     },
 });
@@ -132,19 +132,19 @@ var ShiftReportTopView = Marionette.ItemView.extend({
         'change #keys-accounted-for-yes': 'changeKeys',
         'change #keys-accounted-for-no': 'changeKeys',
     },
-    changeDate: function() {
-        var date = getUnixTimestampForDay(this.$('#date-input').val());
+    changeDate: function(e) {
+        var date = getUnixTimestampForDay($(e.currentTarget).val());
         this.model.set('date', date);
     },
-    changeShift: function() {
-        var shift = this.$('#shift-input').val();
+    changeShift: function(e) {
+        var shift = $(e.currentTarget).val();
         this.model.set('shift', shift);
     },
-    changeHouse: function() {
-        var selectedHouseId = this.$('#houseid-input').val();
+    changeHouse: function(e) {
+        var selectedHouseId = $(e.currentTarget).val();
         this.model.set('houseId', selectedHouseId);
     },
-    changeKeys: function() {
+    changeKeys: function(e) {
         if (this.$('#keys-accounted-for-yes').is(':checked')) {
             this.model.set('keysAccountedFor', true);
         } else if (this.$('#keys-accounted-for-no').is(':checked')) {
