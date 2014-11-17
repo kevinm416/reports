@@ -9,8 +9,8 @@
     <changeSet id="1" author="kmorgan">
 
         <createTable tableName="houses">
-            <column name="id" type="bigint" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
+            <column name="id" type="serial">
+                <constraints unique="true"/>
             </column>
             <column name="name" type="varchar(255)">
                 <constraints nullable="false"/>
@@ -18,8 +18,8 @@
         </createTable>
         
         <createTable tableName="resident_coordinators">
-            <column name="id" type="bigint" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
+            <column name="id" type="serial">
+                <constraints unique="true"/>
             </column>
             <column name="name" type="varchar(255)">
                 <constraints nullable="false"/>
@@ -27,8 +27,8 @@
         </createTable>
         
         <createTable tableName="residents">
-            <column name="id" type="bigint" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
+            <column name="id" type="serial">
+                <constraints unique="true"/>
             </column>
             <column name="name" type="varchar(255)">
                 <constraints nullable="false"/>
@@ -48,8 +48,8 @@
                 referencedColumnNames="id"/>
         
         <createTable tableName="resident_education_plan">
-            <column name="id" type="bigint" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
+            <column name="id" type="serial">
+                <constraints unique="true"/>
             </column>
             <column name="resident_id" type="bigint">
                 <constraints nullable="true"/>
@@ -59,9 +59,9 @@
             </column>
         </createTable>
         
-        <createTable tableName="reports">
-            <column name="id" type="bigint" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
+        <createTable tableName="shift_reports">
+            <column name="id" type="serial">
+                <constraints unique="true"/>
             </column>
             <column name="house_id" type="bigint">
                 <constraints nullable="false"/>
@@ -75,33 +75,49 @@
             <column name="time_created" type="bigint">
                 <constraints nullable="false"/>
             </column>
+            <column name="keys_accounted_for" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+            <column name="keys_accounted_for_reason" type="varchar(255)" />
         </createTable>
         <addForeignKeyConstraint 
-                constraintName="reports_house_id" 
-                baseTableName="reports"
+                constraintName="shift_reports_house_id" 
+                baseTableName="shift_reports"
                 baseColumnNames="house_id"
                 referencedTableName="houses"  
                 referencedColumnNames="id"/>
         
-        <createTable tableName="resident_reports">
-            <column name="id" type="bigint" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
+        <createTable tableName="shift_report_residents">
+            <column name="id" type="serial">
+                <constraints unique="true"/>
             </column>
-            <column name="report_id" type="bigint">
+            <column name="shift_report_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="resident_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
             <column name="time_created" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="contents" type="text">
+            <column name="summary" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="notes" type="text">
                 <constraints nullable="false"/>
             </column>
         </createTable>
         <addForeignKeyConstraint 
-                constraintName="resident_reports_report_id"
-                baseTableName="resident_reports" 
-                baseColumnNames="report_id" 
-                referencedTableName="reports"
+                constraintName="shift_report_residents_report_id"
+                baseTableName="shift_report_residents" 
+                baseColumnNames="shift_report_id" 
+                referencedTableName="shift_reports"
+                referencedColumnNames="id"/>
+        <addForeignKeyConstraint
+                constraintName="shift_report_residents_resident_id"
+                baseTableName="shift_report_residents"
+                baseColumnNames="resident_id"
+                referencedTableName="residents"
                 referencedColumnNames="id"/>
         
     </changeSet>

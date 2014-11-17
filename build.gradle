@@ -52,6 +52,18 @@ task dbClean(type: JavaExec, dependsOn:[classes]) {
 task hydrate(dependsOn:[classes, dbClean, migrate]) {
 }
 
+task dbDoc(type: JavaExec, dependsOn:[classes]) {
+    main mainClassName
+    args = ['db', 'generate-docs', dropWizardConfig, './db-docs']
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+task dbCheck(type: JavaExec, dependsOn:[classes]) {
+    main mainClassName
+    args = ['db', 'status', dropWizardConfig]
+    classpath = sourceSets.main.runtimeClasspath
+}
+
 task wrapper(type: Wrapper) {
     gradleVersion = '2.0'
 }
