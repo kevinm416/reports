@@ -8,8 +8,40 @@
 
     <changeSet id="1" author="kmorgan">
 
+        <createSequence sequenceName="id_seq"/>
+
+        <createTable tableName="users">
+            <column name="id" type="bigint" defaultValue="nextval('id_seq')">
+                <constraints unique="true" />
+            </column>
+            <column name="email" type="varchar(255)">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="first_name" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="last_name" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+        
+        <createTable tableName="user_sessions">
+            <column name="id" type="uuid">
+                <constraints unique="true" />
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+        <addForeignKeyConstraint
+                constraintName="user_sessions_user_id" 
+                baseTableName="user_sessions"
+                baseColumnNames="user_id"
+                referencedTableName="users" 
+                referencedColumnNames="id"/>
+
         <createTable tableName="houses">
-            <column name="id" type="serial">
+            <column name="id" type="bigint" defaultValue="nextval('id_seq')">
                 <constraints unique="true"/>
             </column>
             <column name="name" type="varchar(255)">
@@ -18,7 +50,7 @@
         </createTable>
         
         <createTable tableName="resident_coordinators">
-            <column name="id" type="serial">
+            <column name="id" type="bigint" defaultValue="nextval('id_seq')">
                 <constraints unique="true"/>
             </column>
             <column name="name" type="varchar(255)">
@@ -27,7 +59,7 @@
         </createTable>
         
         <createTable tableName="residents">
-            <column name="id" type="serial">
+            <column name="id" type="bigint" defaultValue="nextval('id_seq')">
                 <constraints unique="true"/>
             </column>
             <column name="name" type="varchar(255)">
@@ -48,7 +80,7 @@
                 referencedColumnNames="id"/>
         
         <createTable tableName="resident_education_plan">
-            <column name="id" type="serial">
+            <column name="id" type="bigint" defaultValue="nextval('id_seq')">
                 <constraints unique="true"/>
             </column>
             <column name="resident_id" type="bigint">
@@ -60,7 +92,7 @@
         </createTable>
         
         <createTable tableName="shift_reports">
-            <column name="id" type="serial">
+            <column name="id" type="bigint" defaultValue="nextval('id_seq')">
                 <constraints unique="true"/>
             </column>
             <column name="house_id" type="bigint">
@@ -91,7 +123,7 @@
                 referencedColumnNames="id"/>
         
         <createTable tableName="shift_report_residents">
-            <column name="id" type="serial">
+            <column name="id" type="bigint" defaultValue="nextval('id_seq')">
                 <constraints unique="true"/>
             </column>
             <column name="shift_report_id" type="bigint">
