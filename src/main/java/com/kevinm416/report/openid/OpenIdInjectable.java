@@ -15,30 +15,30 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Optional;
-import com.kevinm416.report.user.User;
+import com.kevinm416.report.user.UserSession;
 import com.sun.jersey.api.core.HttpContext;
 import com.sun.jersey.server.impl.inject.AbstractHttpContextInjectable;
 
-public class OpenIdInjectable extends AbstractHttpContextInjectable<User> {
+public class OpenIdInjectable extends AbstractHttpContextInjectable<UserSession> {
 
     private static final Logger log = LoggerFactory.getLogger(OpenIdInjectable.class);
 
-    private final Authenticator<OpenIdCredentials, User> authenticator;
+    private final Authenticator<OpenIdCredentials, UserSession> authenticator;
     private final Set<Authority> requiredAuthorities;
 
     public OpenIdInjectable(
-            Authenticator<OpenIdCredentials, User> authenticator,
+            Authenticator<OpenIdCredentials, UserSession> authenticator,
             Set<Authority> requiredAuthorities) {
         this.authenticator = authenticator;
         this.requiredAuthorities = requiredAuthorities;
     }
 
     @Override
-    public User getValue(HttpContext context) {
+    public UserSession getValue(HttpContext context) {
         UUID sessionToken = getSessionToken(context);
         OpenIdCredentials credentials = new OpenIdCredentials(sessionToken, requiredAuthorities);
         try {
-            Optional<User> user = authenticator.authenticate(credentials);
+            Optional<UserSession> user = authenticator.authenticate(credentials);
             if (user.isPresent()) {
                 return user.get();
             } else {

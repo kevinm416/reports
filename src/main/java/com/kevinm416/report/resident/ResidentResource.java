@@ -11,7 +11,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.kevinm416.report.openid.RestrictedTo;
-import com.kevinm416.report.user.User;
+import com.kevinm416.report.user.UserSession;
 
 @Path("/residents")
 @Produces(MediaType.APPLICATION_JSON)
@@ -24,24 +24,24 @@ public class ResidentResource {
     }
 
     @GET
-    public List<Resident> loadResidents(@RestrictedTo User user) {
+    public List<Resident> loadResidents(@RestrictedTo UserSession user) {
         return residentDAO.loadResidents();
     }
 
     @POST
-    public long createResident(@RestrictedTo User user, CreateResidentForm form) {
+    public long createResident(@RestrictedTo UserSession user, CreateResidentForm form) {
         return residentDAO.createUser(form);
     }
 
     @PUT
     @Path("/{id}")
-    public void updateResident(@RestrictedTo User user, Resident resident) {
+    public void updateResident(@RestrictedTo UserSession user, Resident resident) {
         residentDAO.updateResident(resident);
     }
 
     @GET
     @Path("/{id}")
-    public Resident loadResident(@RestrictedTo User user, @PathParam("id") long id) {
+    public Resident loadResident(@RestrictedTo UserSession user, @PathParam("id") long id) {
         return residentDAO.loadResident(id);
     }
 

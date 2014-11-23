@@ -217,5 +217,15 @@
     <script src="shift-report.js" type="text/javascript"></script>
     <script src="script.js" type="text/javascript"></script>
     
+    <script>
+        $(function() {
+            $.ajax({
+                url: '/api/session',
+            }).error(function() {
+                window.location.href = '/login.htm';
+            });
+        });
+    </script>
+    
   </body>
 </html>
