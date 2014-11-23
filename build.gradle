@@ -3,6 +3,7 @@ apply plugin: 'eclipse-wtp'
 apply plugin: 'application'
 
 version = '0.1.0'
+sourceCompatibility = '1.7'
 
 project.ext {
     dropwizardVersion = '0.7.1'

@@ -12,7 +12,7 @@ public class CreateUserTransaction {
         this.h = h;
     }
 
-    public long loadOrCreateUser(CreateUser createUser) {
+    public long loadOrCreateUser(final CreateUser createUser) {
         Long ret = h.inTransaction(new TransactionCallback<Long>() {
             @Override
             public Long inTransaction(Handle conn, TransactionStatus status) throws Exception {

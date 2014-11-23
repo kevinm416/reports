@@ -14,20 +14,20 @@ public interface UserSessionDAO {
             " INSERT INTO user_sessions (id, user_id) " +
             " VALUES (:id, :userId) "
     )
-    public void createSession(@Bind("id") UUID id, @Bind("userId") long userId);
+    void createSession(@Bind("id") UUID id, @Bind("userId") long userId);
 
     @SqlQuery(
             " SELECT id, user_id " +
             " FROM user_sessions " +
             " WHERE id = :id "
     )
-    public UserSession loadSession(@Bind("id") UUID id);
+    UserSession loadSession(@Bind("id") UUID id);
 
     @SqlQuery(
             " SELECT COUNT(*) " +
             " FROM user_sessions " +
             " WHERE id = :id "
     )
-    public boolean sessionExists(@Bind("id") UUID id);
+    boolean sessionExists(@Bind("id") UUID id);
 
 }

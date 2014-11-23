@@ -23,7 +23,9 @@ public class ShiftReportResource {
     }
 
     @POST
-    public long createShiftReport(@RestrictedTo User user, CreateShiftReport createShiftReport) {
+    public long createShiftReport(
+            @RestrictedTo final User user,
+            final CreateShiftReport createShiftReport) {
         return jdbi.withHandle(new HandleCallback<Long>() {
             @Override
             public Long withHandle(Handle handle) throws Exception {

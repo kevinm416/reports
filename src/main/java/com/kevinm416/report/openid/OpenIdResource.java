@@ -182,7 +182,7 @@ public class OpenIdResource {
         }
     }
 
-    private long loadOrCreateUser(CreateUser createUser) {
+    private long loadOrCreateUser(final CreateUser createUser) {
         return dbi.withHandle(new HandleCallback<Long>() {
             @Override
             public Long withHandle(Handle handle) throws Exception {
@@ -221,7 +221,8 @@ public class OpenIdResource {
         }
     }
 
-    private static DiscoveryInformation getDiscoveryInformation(DiscoveryInformationMemento memento) {
+    private static DiscoveryInformation getDiscoveryInformation(
+            final DiscoveryInformationMemento memento) {
         Identifier identifier = new Identifier() {
             private static final long serialVersionUID = 1L;
             @Override
