@@ -1,6 +1,7 @@
 package com.kevinm416.report.server;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
+import io.dropwizard.auth.basic.BasicAuthProvider;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.jdbi.DBIFactory;
 import io.dropwizard.migrations.MigrationsBundle;
@@ -12,14 +13,11 @@ import org.skife.jdbi.v2.DBI;
 import com.fasterxml.jackson.core.JsonGenerator.Feature;
 import com.kevinm416.report.house.HouseDAO;
 import com.kevinm416.report.house.HouseResource;
-import com.kevinm416.report.openid.OpenIdAuthProvider;
-import com.kevinm416.report.openid.OpenIdResource;
 import com.kevinm416.report.rc.ResidentCoordinatorDAO;
 import com.kevinm416.report.rc.ResidentCoordinatorResource;
 import com.kevinm416.report.resident.ResidentDAO;
 import com.kevinm416.report.resident.ResidentResource;
 import com.kevinm416.report.server.config.ReportServiceConfiguration;
-import com.kevinm416.report.shiftreport.ShiftReportResource;
 
 
 public class ReportApplication extends Application<ReportServiceConfiguration> {
@@ -47,7 +45,6 @@ public class ReportApplication extends Application<ReportServiceConfiguration> {
         setupAuth(environment);
 
         environment.jersey().setUrlPattern("/api/*");
-        environment.getObjectMapper().configure(Feature.WRITE_NUMBERS_AS_STRINGS, true);
 
         DBIFactory dbiFactory = new DBIFactory();
         DBI jdbi = dbiFactory.build(environment, configuration.getDataSourceFactory(), "postgres");
@@ -55,11 +52,9 @@ public class ReportApplication extends Application<ReportServiceConfiguration> {
         HouseDAO houseDAO = jdbi.onDemand(HouseDAO.class);
         ResidentCoordinatorDAO residentCoordinatorDao = jdbi.onDemand(ResidentCoordinatorDAO.class);
 
-        OpenIdResource openIdResource = new OpenIdResource();
-        environment.jersey().register(openIdResource);
-
         ResidentResource residentResource = new ResidentResource(residentDAO);
         environment.jersey().register(residentResource);
+        environment.getObjectMapper().configure(Feature.WRITE_NUMBERS_AS_STRINGS, true);
 
         ResidentCoordinatorResource residentCoordinatorResource = new ResidentCoordinatorResource(residentCoordinatorDao);
         environment.jersey().register(residentCoordinatorResource);
@@ -67,15 +62,13 @@ public class ReportApplication extends Application<ReportServiceConfiguration> {
         HouseResource houseResource = new HouseResource(houseDAO);
         environment.jersey().register(houseResource);
 
-        ShiftReportResource shiftReportResource = new ShiftReportResource(jdbi);
-        environment.jersey().register(shiftReportResource);
-
         environment.healthChecks().register("test", new ReportApplicationHealthCheck());
     }
 
     private void setupAuth(Environment environment) {
-        environment.jersey().register(
-                new OpenIdAuthProvider(new ReportApplicationAuthenticator()));
+        environment.jersey().register(new BasicAuthProvider<User>(
+                new ReportApplicationAuthenticator(),
+                "idk what this does"));
     }
 
     public static void main(String args[]) throws Exception {
