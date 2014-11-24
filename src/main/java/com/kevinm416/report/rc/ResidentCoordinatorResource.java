@@ -10,8 +10,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.kevinm416.report.server.User;
-
 @Path("/residentCoordinators")
 @Produces(MediaType.APPLICATION_JSON)
 public class ResidentCoordinatorResource {
@@ -24,12 +22,14 @@ public class ResidentCoordinatorResource {
     }
 
     @GET
-    public List<ResidentCoordinator> loadResidentCoordinators(@Auth User user) {
+    public List<ResidentCoordinator> loadResidentCoordinators(@Auth ResidentCoordinator user) {
         return residentCoordinatorDao.loadResidentCoordinators();
     }
 
     @POST
-    public long createResidentCoordinator(@Auth User user, CreateResidentCoordinatorForm form) {
+    public long createResidentCoordinator(
+            @Auth ResidentCoordinator user,
+            CreateResidentCoordinatorForm form) {
         return residentCoordinatorDao.createResidentCoordinator(form);
     }
 

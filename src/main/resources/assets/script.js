@@ -20,6 +20,18 @@ var Resident = Backbone.Model.extend({
     }
 });
 
+var ResidentCoordinator = Backbone.Model.extend({
+    defaults: {
+        id: null,
+        name: null,
+    }
+});
+
+var ResidentCoordinatorCollection = Backbone.Collection.extend({
+    model: ResidentCoordinator,
+    url: '/api/residentCoordinators'
+});
+
 var ResidentsCollection = Backbone.Collection.extend({
     model: Resident,
     url: '/api/residents',
@@ -264,13 +276,14 @@ var AppRouter = Backbone.Router.extend({
     shiftReportRoute: function() {
         var houses = new HousesCollection();
         var residents = new ResidentsCollection();
-        $.when(houses.fetch(), residents.fetch()).then(function() {
+        $.when(houses.fetch(), residents.fetch())
+        .then(function() {
             var shiftReportModel = new ShiftReportModel({
-                houses: houses,
                 residents: residents,
             });
             var shiftReportView = new ShiftReportView({
                model: shiftReportModel, 
+               residents: residents,
                houses: houses,
             });
             app.appRegion.show(shiftReportView);    

@@ -5,14 +5,30 @@ import io.dropwizard.auth.Authenticator;
 import io.dropwizard.auth.basic.BasicCredentials;
 
 import com.google.common.base.Optional;
+import com.kevinm416.report.rc.CreateResidentCoordinatorForm;
+import com.kevinm416.report.rc.ResidentCoordinator;
+import com.kevinm416.report.rc.ResidentCoordinatorDAO;
 
-public class ReportApplicationAuthenticator implements Authenticator<BasicCredentials, User> {
+public class ReportApplicationAuthenticator implements Authenticator<BasicCredentials, ResidentCoordinator> {
+
+    private final ResidentCoordinatorDAO ResidentCoordinatorDAO;
+
+    public ReportApplicationAuthenticator(
+            ResidentCoordinatorDAO residentCoordinatorDAO) {
+        ResidentCoordinatorDAO = residentCoordinatorDAO;
+    }
 
     @Override
-    public Optional<User> authenticate(BasicCredentials credentials)
+    public Optional<ResidentCoordinator> authenticate(BasicCredentials credentials)
             throws AuthenticationException {
         if ("password".equals(credentials.getPassword())) {
-            return Optional.of(new User(credentials.getUsername()));
+            ResidentCoordinator rc = ResidentCoordinatorDAO.loadResidentCoordinatorByName(credentials.getUsername());
+            if (rc != null) {
+                return Optional.of(rc);
+            } else {
+                long rcId = ResidentCoordinatorDAO.createResidentCoordinator(new CreateResidentCoordinatorForm(credentials.getUsername()));
+                return Optional.of(new ResidentCoordinator(rcId, credentials.getUsername()));
+            }
         } else {
             return Optional.absent();
         }

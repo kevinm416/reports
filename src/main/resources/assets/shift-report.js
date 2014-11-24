@@ -25,11 +25,11 @@ var ShiftReportResidentListItemView = Marionette.ItemView.extend({
         'change #summary': 'changeSummary',
         'change #notes': 'changeReport',
     },
-    changeSummary: function() {
+    changeSummary: function(e) {
         var summary = $(e.currentTarget).val(); 
         this.model.set('summary', summary);
     },
-    changeReport: function() {
+    changeReport: function(e) {
         var notes = $(e.currentTarget).val();
         this.model.set('notes', notes);
     },
@@ -41,8 +41,7 @@ var ShiftReportResidentsListView = Marionette.CollectionView.extend({
 
 var ShiftReportModel = Backbone.Model.extend({
    defaults: {
-       residents: null,
-       selectedHouseId: null,
+       selectedResidents: null,
    },
 });
 
@@ -59,7 +58,7 @@ var ShiftReportView = Marionette.LayoutView.extend({
     template: Handlebars.compile($('#create-shift-report-template').html()),
     initialize: function(){
         this.houses = this.options.houses;
-        this.shiftReportResidents = null;
+        this.residents = this.options.residents;
         this.topModel = new ShiftReportTopModel({
             date: this.getToday(),
         });
@@ -88,6 +87,7 @@ var ShiftReportView = Marionette.LayoutView.extend({
         var houseId = this.topModel.get('houseId');
         var filteredResidents = this.model.get('residents').where({houseId: houseId});
         var shiftReportResidents = convertResidentsToShiftReportResidentListItems(filteredResidents);
+        this.model.set('shiftReportResidents', shiftReportResidents);
         var shiftReportBottomView = new ShiftReportResidentsListView({
             collection: new ShiftReportResidentsList(shiftReportResidents),
         });
@@ -96,20 +96,54 @@ var ShiftReportView = Marionette.LayoutView.extend({
     },
     onSubmit: function(e) {
         e.preventDefault();
-        console.log(e);
+        
+        var shiftReport = new ShiftReportServerModel({
+            houseId: this.topModel.get('houseId'),
+            date: this.topModel.get('date'),
+            shift: this.topModel.get('shift'),
+            timeCreated: moment().valueOf(),
+            keysAccountedFor: this.topModel.get('keysAccountedFor'),
+            keysAccountedForReason: this.topModel.get('keysAccountedForReason'),
+            shiftReportResidents: $.map(this.model.get('shiftReportResidents'), function(val) {
+                return val.toJSON();
+            }),
+        });
+        console.log(shiftReport);        
+        shiftReport.save(
+            {
+                error: function(e) {
+                    console.log("error during save", e);
+                },
+                success: function() {
+                    console.log("saved successfully");
+                }
+            }
+        );
     },
     getToday: function() {
         return moment().format(DateFormats.day);
     }
 });
 
-var ShiftReportTopModel = Backbone.Model.extend({
+var ShiftReportServerModel = Backbone.Model.extend({
+    url: 'api/shiftReports',
     defaults: {
+        houseId: null,
         date: null,
         shift: null,
         keysAccountedFor: null,
         keysAccountedForReason: null,
+        shiftReportResidents: null,
+    }
+})
+
+var ShiftReportTopModel = Backbone.Model.extend({
+    defaults: {
         houseId: null,
+        date: null,
+        shift: null,
+        keysAccountedFor: null,
+        keysAccountedForReason: null,
     }
 });
 
