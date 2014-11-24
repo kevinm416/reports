@@ -59,6 +59,7 @@ var ShiftReportView = Marionette.LayoutView.extend({
     initialize: function(){
         this.houses = this.options.houses;
         this.residents = this.options.residents;
+        this.residentCoordinators = this.options.residentCoordinators,
         this.topModel = new ShiftReportTopModel({
             date: this.getToday(),
         });
@@ -78,6 +79,7 @@ var ShiftReportView = Marionette.LayoutView.extend({
     onShow: function() {
         var shiftReportTopView = new ShiftReportTopView({
             houses: this.houses,
+            residentCoordinators: this.residentCoordinators,
             model: this.topModel,
             today: this.getToday(),
         });
@@ -101,6 +103,7 @@ var ShiftReportView = Marionette.LayoutView.extend({
             houseId: this.topModel.get('houseId'),
             date: this.topModel.get('date'),
             shift: this.topModel.get('shift'),
+            onShift: this.topModel.get('onShift'),
             timeCreated: moment().valueOf(),
             keysAccountedFor: this.topModel.get('keysAccountedFor'),
             keysAccountedForReason: this.topModel.get('keysAccountedForReason'),
@@ -131,6 +134,7 @@ var ShiftReportServerModel = Backbone.Model.extend({
         houseId: null,
         date: null,
         shift: null,
+        onShift: null,
         keysAccountedFor: null,
         keysAccountedForReason: null,
         shiftReportResidents: null,
@@ -142,6 +146,7 @@ var ShiftReportTopModel = Backbone.Model.extend({
         houseId: null,
         date: null,
         shift: null,
+        onShift: null,
         keysAccountedFor: null,
         keysAccountedForReason: null,
     }
@@ -151,17 +156,20 @@ var ShiftReportTopView = Marionette.ItemView.extend({
     template: Handlebars.compile($('#create-shift-report-top-template').html()),
     initialize: function() {
         this.houses = this.options.houses;
+        this.residentCoordinators = this.options.residentCoordinators,
         this.today = this.options.today;
     },
     serializeData: function() {
         return {
             'houses': this.houses.toJSON(),
+            'residentCoordinators': this.residentCoordinators.toJSON(),
             'today': this.today,
         }
     },
     events: {
         'change #date-input': 'changeDate',
         'change #shift-input': 'changeShift',
+        'change #on-shift-input': 'changeOnShift',
         'change #houseid-input': 'changeHouse',
         'change #keys-accounted-for-yes': 'changeKeys',
         'change #keys-accounted-for-no': 'changeKeys',
@@ -173,6 +181,10 @@ var ShiftReportTopView = Marionette.ItemView.extend({
     changeShift: function(e) {
         var shift = $(e.currentTarget).val();
         this.model.set('shift', shift);
+    },
+    changeOnShift: function(e) {
+        var onShift = $(e.currentTarget).val();
+        this.model.set('onShift', onShift);
     },
     changeHouse: function(e) {
         var selectedHouseId = $(e.currentTarget).val();

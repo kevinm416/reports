@@ -156,6 +156,18 @@
         </fieldset>
         <fieldset>
           <div class='form-group'>
+            <label class='col-sm-3 control-label' for='textinput'>Staff On Shift:</label>
+            <div class='col-sm-6'>
+              <select multiple id='on-shift-input' class='form-control'>
+                {{#each residentCoordinators}}
+                <option value={{id}}>{{name}}</option>
+                {{/each}}
+              </select>
+            </div>
+          </div>
+        </fieldset>
+        <fieldset>
+          <div class='form-group'>
             <label class='col-sm-3 control-label' for='textinput'>Are keys accounted for:</label>
             <div class='col-sm-6'>
             <div class="radio">

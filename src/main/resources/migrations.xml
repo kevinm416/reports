@@ -123,7 +123,7 @@
         
         <createTable tableName="shift_report_on_shift">
             <column name="shift_report_id" type="bigint">
-                <constraints unique="true" />
+                <constraints nullable="false" />
             </column>
             <column name="resident_coordinator_id" type="bigint">
                 <constraints nullable="false" />
