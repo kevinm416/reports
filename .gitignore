@@ -2,7 +2,6 @@
 reports/
 /bin/
 build/
-db-docs/
 .project
 .classpath
 .settings

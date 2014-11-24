@@ -9,7 +9,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.kevinm416.report.openid.RestrictedTo;
-import com.kevinm416.report.user.UserSession;
+import com.kevinm416.report.user.User;
 
 @Path("/houses")
 @Produces(MediaType.APPLICATION_JSON)
@@ -22,12 +22,12 @@ public class HouseResource {
     }
 
     @GET
-    public List<House> loadHouses(@RestrictedTo UserSession user) {
+    public List<House> loadHouses(@RestrictedTo User user) {
         return houseDAO.loadHouses();
     }
 
     @POST
-    public long createHouse(@RestrictedTo UserSession user, CreateHouseForm form) {
+    public long createHouse(@RestrictedTo User user, CreateHouseForm form) {
         return houseDAO.createHouse(form);
     }
 

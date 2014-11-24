@@ -6,7 +6,6 @@ import io.dropwizard.jdbi.DBIFactory;
 import io.dropwizard.migrations.MigrationsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-import io.dropwizard.views.ViewBundle;
 
 import org.skife.jdbi.v2.DBI;
 
@@ -21,8 +20,6 @@ import com.kevinm416.report.resident.ResidentDAO;
 import com.kevinm416.report.resident.ResidentResource;
 import com.kevinm416.report.server.config.ReportServiceConfiguration;
 import com.kevinm416.report.shiftreport.ShiftReportResource;
-import com.kevinm416.report.user.UserSessionDAO;
-import com.kevinm416.report.user.UserSessionResource;
 
 
 public class ReportApplication extends Application<ReportServiceConfiguration> {
@@ -42,12 +39,13 @@ public class ReportApplication extends Application<ReportServiceConfiguration> {
             }
         });
         bootstrap.addBundle(new AssetsBundle("/assets", ""));
-        bootstrap.addBundle(new ViewBundle());
     }
 
     @Override
     public void run(ReportServiceConfiguration configuration,
             Environment environment) throws Exception {
+        setupAuth(environment);
+
         environment.jersey().setUrlPattern("/api/*");
         environment.getObjectMapper().configure(Feature.WRITE_NUMBERS_AS_STRINGS, true);
 
@@ -56,13 +54,9 @@ public class ReportApplication extends Application<ReportServiceConfiguration> {
         ResidentDAO residentDAO = jdbi.onDemand(ResidentDAO.class);
         HouseDAO houseDAO = jdbi.onDemand(HouseDAO.class);
         ResidentCoordinatorDAO residentCoordinatorDao = jdbi.onDemand(ResidentCoordinatorDAO.class);
-        UserSessionDAO userSessionDao = jdbi.onDemand(UserSessionDAO.class);
 
-        OpenIdResource openIdResource = new OpenIdResource(jdbi, userSessionDao);
+        OpenIdResource openIdResource = new OpenIdResource();
         environment.jersey().register(openIdResource);
-
-        UserSessionResource userSessionResource = new UserSessionResource();
-        environment.jersey().register(userSessionResource);
 
         ResidentResource residentResource = new ResidentResource(residentDAO);
         environment.jersey().register(residentResource);
@@ -76,14 +70,12 @@ public class ReportApplication extends Application<ReportServiceConfiguration> {
         ShiftReportResource shiftReportResource = new ShiftReportResource(jdbi);
         environment.jersey().register(shiftReportResource);
 
-        setupAuth(environment, userSessionDao);
-
         environment.healthChecks().register("test", new ReportApplicationHealthCheck());
     }
 
-    private void setupAuth(Environment environment, UserSessionDAO userSessionDAO) {
+    private void setupAuth(Environment environment) {
         environment.jersey().register(
-                new OpenIdAuthProvider(new ReportApplicationAuthenticator(userSessionDAO)));
+                new OpenIdAuthProvider(new ReportApplicationAuthenticator()));
     }
 
     public static void main(String args[]) throws Exception {

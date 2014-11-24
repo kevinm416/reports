@@ -32,33 +32,21 @@ import org.openid4java.message.ParameterList;
 import org.openid4java.message.ax.AxMessage;
 import org.openid4java.message.ax.FetchRequest;
 import org.openid4java.message.ax.FetchResponse;
-import org.skife.jdbi.v2.DBI;
-import org.skife.jdbi.v2.Handle;
-import org.skife.jdbi.v2.tweak.HandleCallback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Throwables;
-import com.kevinm416.report.user.CreateUser;
-import com.kevinm416.report.user.CreateUserTransaction;
-import com.kevinm416.report.user.UserSessionDAO;
+import com.kevinm416.report.user.User;
+import com.kevinm416.report.user.UserCache;
 
 @Path("openid")
 public class OpenIdResource {
 
-    private static final Logger log = LoggerFactory.getLogger(OpenIdResource.class);
+    Logger log = LoggerFactory.getLogger(OpenIdResource.class);
 
     private final static String YAHOO_ENDPOINT = "https://me.yahoo.com";
     private final static String GOOGLE_ENDPOINT = "https://www.google.com/accounts/o8/id";
-
-    private final DBI dbi;
-    private final UserSessionDAO userSessionDao;
-
-    public OpenIdResource(DBI dbi, UserSessionDAO userSessionDao) {
-        this.dbi = dbi;
-        this.userSessionDao = userSessionDao;
-    }
 
     @POST
     public Response authenticationRequest(
@@ -169,8 +157,7 @@ public class OpenIdResource {
                 String email = getStuff(authSuccess, "email");
                 String firstName = getStuff(authSuccess, "firstName");
                 String lastName = getStuff(authSuccess, "lastName");
-                long userId = loadOrCreateUser(new CreateUser(email, firstName, lastName));
-                userSessionDao.createSession(sessionToken, userId);
+                UserCache.INSTANCE.putUser(sessionToken, new User(0, email, firstName, lastName));
             }
 
             return Response
@@ -180,15 +167,6 @@ public class OpenIdResource {
         } else {
             throw new WebApplicationException();
         }
-    }
-
-    private long loadOrCreateUser(final CreateUser createUser) {
-        return dbi.withHandle(new HandleCallback<Long>() {
-            @Override
-            public Long withHandle(Handle handle) throws Exception {
-                return new CreateUserTransaction(handle).loadOrCreateUser(createUser);
-            }
-        });
     }
 
     private static NewCookie getCookie(@Nullable String sessionToken) {

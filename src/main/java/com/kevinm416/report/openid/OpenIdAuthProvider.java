@@ -6,7 +6,7 @@ import java.util.EnumSet;
 import java.util.Set;
 
 import com.google.common.collect.Lists;
-import com.kevinm416.report.user.UserSession;
+import com.kevinm416.report.user.User;
 import com.sun.jersey.api.model.Parameter;
 import com.sun.jersey.core.spi.component.ComponentContext;
 import com.sun.jersey.core.spi.component.ComponentScope;
@@ -15,9 +15,9 @@ import com.sun.jersey.spi.inject.InjectableProvider;
 
 public class OpenIdAuthProvider implements InjectableProvider<RestrictedTo, Parameter> {
 
-    private final Authenticator<OpenIdCredentials, UserSession> authenticator;
+    private final Authenticator<OpenIdCredentials, User> authenticator;
 
-    public OpenIdAuthProvider(Authenticator<OpenIdCredentials, UserSession> authenticator) {
+    public OpenIdAuthProvider(Authenticator<OpenIdCredentials, User> authenticator) {
         this.authenticator = authenticator;
     }
 

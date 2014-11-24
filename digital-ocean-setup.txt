@@ -9,7 +9,6 @@ docker run \
 docker exec \
   --tty \
   --interactive \
-  <container name>
   bash
 
 # create the db
