@@ -8,9 +8,11 @@
 
     <changeSet id="1" author="kmorgan">
 
+        <createSequence sequenceName="id_seq"/>
+
         <createTable tableName="houses">
-            <column name="id" type="serial">
-                <constraints unique="true"/>
+            <column name="id" type="bigint" defaultValue="nextval('id_seq')">
+                <constraints unique="true" />
             </column>
             <column name="name" type="varchar(255)">
                 <constraints nullable="false"/>
@@ -18,8 +20,8 @@
         </createTable>
         
         <createTable tableName="resident_coordinators">
-            <column name="id" type="serial">
-                <constraints unique="true"/>
+            <column name="id" type="bigint" defaultValue="nextval('id_seq')">
+                <constraints unique="true" />
             </column>
             <column name="name" type="varchar(255)">
                 <constraints nullable="false"/>
@@ -27,8 +29,8 @@
         </createTable>
         
         <createTable tableName="residents">
-            <column name="id" type="serial">
-                <constraints unique="true"/>
+            <column name="id" type="bigint" defaultValue="nextval('id_seq')">
+                <constraints unique="true" />
             </column>
             <column name="name" type="varchar(255)">
                 <constraints nullable="false"/>
@@ -48,8 +50,8 @@
                 referencedColumnNames="id"/>
         
         <createTable tableName="resident_education_plan">
-            <column name="id" type="serial">
-                <constraints unique="true"/>
+            <column name="id" type="bigint" defaultValue="nextval('id_seq')">
+                <constraints unique="true" />
             </column>
             <column name="resident_id" type="bigint">
                 <constraints nullable="true"/>
@@ -60,8 +62,8 @@
         </createTable>
         
         <createTable tableName="shift_reports">
-            <column name="id" type="serial">
-                <constraints unique="true"/>
+            <column name="id" type="bigint" defaultValue="nextval('id_seq')">
+                <constraints unique="true" />
             </column>
             <column name="house_id" type="bigint">
                 <constraints nullable="false"/>
@@ -91,8 +93,8 @@
                 referencedColumnNames="id"/>
         
         <createTable tableName="shift_report_residents">
-            <column name="id" type="serial">
-                <constraints unique="true"/>
+            <column name="id" type="bigint" defaultValue="nextval('id_seq')">
+                <constraints unique="true" />
             </column>
             <column name="shift_report_id" type="bigint">
                 <constraints nullable="false"/>
