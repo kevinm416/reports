@@ -113,10 +113,6 @@ var SelectedResidentCareView = Marionette.ItemView.extend({
    template: Handlebars.compile("<h1>Care View</h1>")
 });
 
-var SelectedResidentReportsView = Marionette.ItemView.extend({
-    template: Handlebars.compile("<h1>Reports View</h1>")
-});
-
 var SelectedResidentInfoView = Marionette.ItemView.extend({
     template: Handlebars.compile($('#selected-resident-template').html()),
     events: {
@@ -220,8 +216,11 @@ var ApplicationView = Marionette.LayoutView.extend({
         } else if (state == 'care') {
             return new SelectedResidentCareView({});
         } else if (state == 'reports') {
-            console.log('going to reports view');
-            return new SelectedResidentReportsView();
+            var residentId = this.model.get('residentId');
+            var shiftReportResidents = loadShiftReportsForResident(residentId);
+            return new ShiftReportResidentListView({
+                collection: shiftReportResidents,
+            });
         }
     },
     getSelectedResidentTabsView: function() {

@@ -2,8 +2,12 @@ package com.kevinm416.report.shiftreport;
 
 import io.dropwizard.auth.Auth;
 
+import java.util.List;
+
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
@@ -18,9 +22,13 @@ import com.kevinm416.report.rc.ResidentCoordinator;
 public class ShiftReportResource {
 
     private final DBI jdbi;
+    private final ShiftReportResidentDAO shiftReportResidentDao;
 
-    public ShiftReportResource(DBI jdbi) {
+    public ShiftReportResource(
+            DBI jdbi,
+            ShiftReportResidentDAO shiftReportResidentDao) {
         this.jdbi = jdbi;
+        this.shiftReportResidentDao = shiftReportResidentDao;
     }
 
     @POST
@@ -33,6 +41,14 @@ public class ShiftReportResource {
                 return new CreateShiftReportTransaction(handle).createShiftReport(createShiftReport);
             }
         });
+    }
+
+    @GET
+    @Path("/{residentId}")
+    public List<ShiftReportResident> loadShiftReportsForResident(
+            @Auth ResidentCoordinator user,
+            @PathParam("residentId") long residentId) {
+        return shiftReportResidentDao.loadShiftReportResidents(residentId);
     }
 
 }

@@ -14,7 +14,7 @@ public class ShiftReportResidentDBMapper implements ResultSetMapper<ShiftReportR
         return new ShiftReportResident(
                 r.getLong("id"),
                 r.getLong("resident_id"),
-                r.getString("summery"),
+                r.getString("summary"),
                 r.getString("notes"));
     }
 

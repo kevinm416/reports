@@ -108,6 +108,13 @@
         <h1>No Resident Selected</h1>
         {{/if}}
     </script>
+    
+    <script id='shift-report-list-item-template' type='text/x-handlebars-template'>
+        <h4 class='list-group-item-heading'>{{summary}}
+        <p>
+        <small></small></h4>
+        <p  class='list-group-item-text'>{{notes}}</p>
+    </script>
 
     <script id='create-shift-report-template' type='text/x-handlebars-template'>
         <div class='container-fluid'>
@@ -216,7 +223,7 @@
           </div>
         </fieldset>
     </script>
-
+    
     <script src="lib/jquery-1.11.1.min.js" type="text/javascript"></script>
     <script src="lib/bootstrap-3.3.1.min.js" type="text/javascript"></script>
     <script src="lib/underscore-1.7.0.min.js" type="text/javascript"></script>
@@ -227,6 +234,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.3/moment.min.js" type="text/javascript"></script>
     <script src="common.js" type="text/javascript"></script>
     <script src="shift-report.js" type="text/javascript"></script>
+    <script src='selected-resident-shift-reports.js' type='text/javascript'></script>
     <script src="script.js" type="text/javascript"></script>
     
   </body>
