@@ -112,9 +112,7 @@
     
     <script id='shift-report-list-item-template' type='text/x-handlebars-template'>
         <h4 class='list-group-item-heading'>
-          <a href='#shiftReport/{{shiftReportMetadata.id}}' target='_blank'>
-            {{shiftReportResident.summary}}
-          </a>
+          <a href='#shiftReport/{{shiftReportMetadata.id}}' target='_blank'>{{shiftReportResident.summary}}</a>
           <small>{{formatDate 'day' shiftReportMetadata.date}}</small>
           <p>
           <small>
@@ -226,6 +224,7 @@
             <label class='col-sm-3 control-label' for='textinput'>{{residentName}}</label>
             <div class='col-sm-6'>
               <input id='summary' type='text' class='form-control margin-bottom input-md' placeholder='Summary'/>
+              <p><p>
               <textarea id='notes' type='text' class='form-control input-md' placeholder='Notes' />
             </div>
           </div>
@@ -252,7 +251,6 @@
             <h1>{{formatDate 'day' date}}</h1>
           </div>
           <div class='row'>
-            <h
           </div>
         </div>
     </script>

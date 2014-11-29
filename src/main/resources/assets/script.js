@@ -286,10 +286,10 @@ var AppRouter = Backbone.Router.extend({
         var residentCoordinators = new ResidentCoordinatorCollection();
         $.when(houses.fetch(), residents.fetch(), residentCoordinators.fetch())
         .then(function() {
-            var shiftReportModel = new ShiftReportModel({
+            var shiftReportModel = new CreateShiftReportModel({
                 residents: residents,
             });
-            var shiftReportView = new ShiftReportView({
+            var shiftReportView = new CreateShiftReportView({
                model: shiftReportModel, 
                residents: residents,
                residentCoordinators: residentCoordinators,

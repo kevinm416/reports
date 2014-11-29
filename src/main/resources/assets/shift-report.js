@@ -39,7 +39,7 @@ var ShiftReportResidentsListView = Marionette.CollectionView.extend({
     childView: ShiftReportResidentListItemView,
 });
 
-var ShiftReportModel = Backbone.Model.extend({
+var CreateShiftReportModel = Backbone.Model.extend({
    defaults: {
        selectedResidents: null,
    },
@@ -54,7 +54,7 @@ function convertResidentsToShiftReportResidentListItems(residents) {
     });
 }
 
-var ShiftReportView = Marionette.LayoutView.extend({
+var CreateShiftReportView = Marionette.LayoutView.extend({
     template: Handlebars.compile($('#create-shift-report-template').html()),
     initialize: function(){
         this.houses = this.options.houses;
