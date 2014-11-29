@@ -1,6 +1,8 @@
 package com.kevinm416.report.shiftreport;
 
 import org.skife.jdbi.v2.Handle;
+import org.skife.jdbi.v2.TransactionCallback;
+import org.skife.jdbi.v2.TransactionStatus;
 
 public class CreateShiftReportTransaction {
 
@@ -10,21 +12,29 @@ public class CreateShiftReportTransaction {
         this.h = h;
     }
 
-    public long createShiftReport(CreateShiftReport createShiftReport) {
-        ShiftReportDAO shiftReportDAO = h.attach(ShiftReportDAO.class);
-        ShiftReportResidentDAO shiftReportResidentDAO = h.attach(ShiftReportResidentDAO.class);
-        ShiftReportOnShiftDAO shiftReportOnShiftDAO = h.attach(ShiftReportOnShiftDAO.class);
+    public long createShiftReport(
+            final long userId,
+            final CreateShiftReport createShiftReport) {
+        return h.inTransaction(new TransactionCallback<Long>() {
+            @Override
+            public Long inTransaction(Handle txn, TransactionStatus status) throws Exception {
+                return createShiftReportInTransaction(txn, userId, createShiftReport);
+            }
+        });
 
-        h.begin();
-        long shiftReportId = shiftReportDAO.createShiftReport(1, createShiftReport);
+    }
+
+    private static long createShiftReportInTransaction(Handle txn, long userId, CreateShiftReport createShiftReport) {
+        ShiftReportDAO shiftReportDAO = txn.attach(ShiftReportDAO.class);
+        ShiftReportResidentDAO shiftReportResidentDAO = txn.attach(ShiftReportResidentDAO.class);
+        ShiftReportOnShiftDAO shiftReportOnShiftDAO = txn.attach(ShiftReportOnShiftDAO.class);
+
+        long shiftReportId = shiftReportDAO.createShiftReport(userId, createShiftReport);
         shiftReportResidentDAO.createShiftReportResidents(
                 shiftReportId,
                 createShiftReport.getTimeCreated(),
                 createShiftReport.getShiftReportResidents());
         shiftReportOnShiftDAO.createOnShiftRecords(shiftReportId, createShiftReport.getOnShift());
-        h.commit();
-        h.close();
-
         return shiftReportId;
     }
 

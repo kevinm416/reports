@@ -67,6 +67,9 @@
             <column name="house_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
+            <column name="date" type="bigint">
+                <constraints nullable="false"/>
+            </column>
             <column name="created_by" type="bigint">
                 <constraints nullable="false"/>
             </column>

@@ -104,7 +104,7 @@ var ShiftReportView = Marionette.LayoutView.extend({
             date: this.topModel.get('date'),
             shift: this.topModel.get('shift'),
             onShift: this.topModel.get('onShift'),
-            timeCreated: moment().valueOf(),
+            timeCreated: moment().unix(),
             keysAccountedFor: this.topModel.get('keysAccountedFor'),
             keysAccountedForReason: this.topModel.get('keysAccountedForReason'),
             shiftReportResidents: $.map(this.model.get('shiftReportResidents'), function(val) {
@@ -124,7 +124,7 @@ var ShiftReportView = Marionette.LayoutView.extend({
         );
     },
     getToday: function() {
-        return moment().format(DateFormats.day);
+        return moment().unix();
     }
 });
 

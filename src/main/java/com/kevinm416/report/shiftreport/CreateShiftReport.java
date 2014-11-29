@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class CreateShiftReport {
 
     private final long houseId;
+    private final long date;
     private final List<Long> onShift;
     private final String shift;
     private final long timeCreated;
@@ -18,6 +19,7 @@ public class CreateShiftReport {
     @JsonCreator
     public CreateShiftReport(
             @JsonProperty("houseId") long houseId,
+            @JsonProperty("date") long date,
             @JsonProperty("onShift") List<Long> onShift,
             @JsonProperty("shift") String shift,
             @JsonProperty("timeCreated") long timeCreated,
@@ -25,6 +27,7 @@ public class CreateShiftReport {
             @JsonProperty("keysAccountedForReason") String keysAccountedForReason,
             @JsonProperty("shiftReportResidents") List<CreateShiftReportResident> shiftReportResidents) {
         this.houseId = houseId;
+        this.date = date;
         this.onShift = onShift;
         this.shift = shift;
         this.timeCreated = timeCreated;
@@ -35,6 +38,10 @@ public class CreateShiftReport {
 
     public long getHouseId() {
         return houseId;
+    }
+
+    public long getDate() {
+        return date;
     }
 
     public List<Long> getOnShift() {
@@ -65,6 +72,7 @@ public class CreateShiftReport {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
+        result = prime * result + (int) (date ^ (date >>> 32));
         result = prime * result + (int) (houseId ^ (houseId >>> 32));
         result = prime * result + (keysAccountedFor ? 1231 : 1237);
         result = prime
@@ -93,6 +101,9 @@ public class CreateShiftReport {
             return false;
         }
         CreateShiftReport other = (CreateShiftReport) obj;
+        if (date != other.date) {
+            return false;
+        }
         if (houseId != other.houseId) {
             return false;
         }
@@ -135,11 +146,12 @@ public class CreateShiftReport {
 
     @Override
     public String toString() {
-        return "CreateShiftReport [houseId=" + houseId + ", onShift=" + onShift
-                + ", shift=" + shift + ", timeCreated=" + timeCreated
-                + ", keysAccountedFor=" + keysAccountedFor
-                + ", keysAccountedForReason=" + keysAccountedForReason
-                + ", shiftReportResidents=" + shiftReportResidents + "]";
+        return "CreateShiftReport [houseId=" + houseId + ", date=" + date
+                + ", onShift=" + onShift + ", shift=" + shift
+                + ", timeCreated=" + timeCreated + ", keysAccountedFor="
+                + keysAccountedFor + ", keysAccountedForReason="
+                + keysAccountedForReason + ", shiftReportResidents="
+                + shiftReportResidents + "]";
     }
 
 }

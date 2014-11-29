@@ -18,10 +18,16 @@ public interface ResidentCoordinatorDAO {
     long createResidentCoordinator(@BindBean CreateResidentCoordinatorForm form);
 
     @SqlQuery(
-            " SELECT * from resident_coordinators " +
+            " SELECT * FROM resident_coordinators " +
             " WHERE name = :name "
     )
     ResidentCoordinator loadResidentCoordinatorByName(@Bind("name") String name);
+
+    @SqlQuery(
+            " SELECT * FROM resident_coordinators " +
+            " WHERE id = :id "
+    )
+    ResidentCoordinator loadResidentCoordinatorById(@Bind("id") long id);
 
     @SqlQuery(
             " SELECT * " +

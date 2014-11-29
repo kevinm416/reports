@@ -13,6 +13,7 @@ public class ShiftReportResidentDBMapper implements ResultSetMapper<ShiftReportR
             throws SQLException {
         return new ShiftReportResident(
                 r.getLong("id"),
+                r.getLong("shift_report_id"),
                 r.getLong("resident_id"),
                 r.getString("summary"),
                 r.getString("notes"));

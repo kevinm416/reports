@@ -9,6 +9,7 @@ public interface ShiftReportDAO {
     @SqlQuery(
             " INSERT INTO shift_reports ( " +
             "     house_id, " +
+            "     date, " +
             "     created_by, " +
             "     shift, " +
             "     time_created, " +
@@ -17,6 +18,7 @@ public interface ShiftReportDAO {
             " ) " +
             " VALUES ( " +
             "     :houseId, " +
+            "     :date, " +
             "     :createdBy, " +
             "     :shift, " +
             "     :timeCreated, " +

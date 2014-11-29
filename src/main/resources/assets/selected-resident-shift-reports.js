@@ -3,6 +3,7 @@ var ShiftReportResidentListItem = Backbone.Model.extend({
     defaults: {
         id: null,
         residentId: null,
+        createdByName: null,
         summary: null,
         notes: null,
     }

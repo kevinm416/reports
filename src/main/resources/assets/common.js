@@ -1,6 +1,7 @@
 
 var DateFormats = {
-    day: 'MM/DD/YYYY'
+    day: 'MM/DD/YYYY',
+    detail: 'MM/DD/YYYY h:mm a'
 }
 
 function getUnixTimestampForDay(s) {

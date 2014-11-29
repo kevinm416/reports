@@ -5,13 +5,19 @@ import com.kevinm416.report.common.Identifiable;
 public class ShiftReportResident implements Identifiable {
 
     private final long id;
+    private final long shiftReportId;
     private final long residentId;
     private final String summary;
     private final String notes;
 
-    public ShiftReportResident(long id, long residentId, String summary,
+    public ShiftReportResident(
+            long id,
+            long shiftReportId,
+            long residentId,
+            String summary,
             String notes) {
         this.id = id;
+        this.shiftReportId = shiftReportId;
         this.residentId = residentId;
         this.summary = summary;
         this.notes = notes;
@@ -20,6 +26,10 @@ public class ShiftReportResident implements Identifiable {
     @Override
     public long getId() {
         return id;
+    }
+
+    public long getShiftReportId() {
+        return shiftReportId;
     }
 
     public long getResidentId() {
@@ -41,6 +51,8 @@ public class ShiftReportResident implements Identifiable {
         result = prime * result + (int) (id ^ (id >>> 32));
         result = prime * result + ((notes == null) ? 0 : notes.hashCode());
         result = prime * result + (int) (residentId ^ (residentId >>> 32));
+        result = prime * result
+                + (int) (shiftReportId ^ (shiftReportId >>> 32));
         result = prime * result + ((summary == null) ? 0 : summary.hashCode());
         return result;
     }
@@ -70,6 +82,9 @@ public class ShiftReportResident implements Identifiable {
         if (residentId != other.residentId) {
             return false;
         }
+        if (shiftReportId != other.shiftReportId) {
+            return false;
+        }
         if (summary == null) {
             if (other.summary != null) {
                 return false;
@@ -82,8 +97,9 @@ public class ShiftReportResident implements Identifiable {
 
     @Override
     public String toString() {
-        return "ShiftReportResident [id=" + id + ", residentId=" + residentId
-                + ", summary=" + summary + ", notes=" + notes + "]";
+        return "ShiftReportResident [id=" + id + ", shiftReportId="
+                + shiftReportId + ", residentId=" + residentId + ", summary="
+                + summary + ", notes=" + notes + "]";
     }
 
 }

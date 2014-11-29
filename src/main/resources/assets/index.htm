@@ -110,10 +110,15 @@
     </script>
     
     <script id='shift-report-list-item-template' type='text/x-handlebars-template'>
-        <h4 class='list-group-item-heading'>{{summary}}
-        <p>
-        <small></small></h4>
-        <p  class='list-group-item-text'>{{notes}}</p>
+        <h4 class='list-group-item-heading'>
+          {{shiftReportResident.summary}}
+          <small>{{formatDate 'day' shiftReportMetadata.date}}</small>
+          <p>
+          <small>
+            <i>by</i> {{shiftReportMetadata.createdByName}} <i>on</i> {{formatDate 'detail' shiftReportMetadata.timeCreated}}
+          </small>
+        </h4>
+        <p  class='list-group-item-text'>{{shiftReportResident.notes}}</p>
     </script>
 
     <script id='create-shift-report-template' type='text/x-handlebars-template'>
@@ -141,7 +146,7 @@
                          type='text' 
                          class="form-control" 
                          data-date-format="DD/MM/YYYY"/ 
-                         value='{{today}}'>
+                         value='{{formatDate 'day' today}}'>
               <span class="input-group-addon">
                 <span class="glyphicon glyphicon-calendar"></span>
               </span>

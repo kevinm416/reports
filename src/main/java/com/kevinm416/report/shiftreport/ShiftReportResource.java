@@ -16,19 +16,20 @@ import org.skife.jdbi.v2.Handle;
 import org.skife.jdbi.v2.tweak.HandleCallback;
 
 import com.kevinm416.report.rc.ResidentCoordinator;
+import com.kevinm416.report.rc.ResidentCoordinatorCache;
 
 @Path("/shiftReports")
 @Produces(MediaType.APPLICATION_JSON)
 public class ShiftReportResource {
 
     private final DBI jdbi;
-    private final ShiftReportResidentDAO shiftReportResidentDao;
+    private final ResidentCoordinatorCache residentCoordinatorCache;
 
     public ShiftReportResource(
             DBI jdbi,
-            ShiftReportResidentDAO shiftReportResidentDao) {
+            ResidentCoordinatorCache residentCoordinatorCache) {
         this.jdbi = jdbi;
-        this.shiftReportResidentDao = shiftReportResidentDao;
+        this.residentCoordinatorCache = residentCoordinatorCache;
     }
 
     @POST
@@ -38,17 +39,26 @@ public class ShiftReportResource {
         return jdbi.withHandle(new HandleCallback<Long>() {
             @Override
             public Long withHandle(Handle handle) throws Exception {
-                return new CreateShiftReportTransaction(handle).createShiftReport(createShiftReport);
+                return new CreateShiftReportTransaction(handle).createShiftReport(
+                        user.getId(),
+                        createShiftReport);
             }
         });
     }
 
     @GET
     @Path("/{residentId}")
-    public List<ShiftReportResident> loadShiftReportsForResident(
+    public List<ShiftReportResidentWithMetadata> loadShiftReportsForResident(
             @Auth ResidentCoordinator user,
-            @PathParam("residentId") long residentId) {
-        return shiftReportResidentDao.loadShiftReportResidents(residentId);
+            @PathParam("residentId") final long residentId) {
+        List<ShiftReportResidentWithMetadata> a = jdbi.withHandle(new HandleCallback<List<ShiftReportResidentWithMetadata>>() {
+            @Override
+            public List<ShiftReportResidentWithMetadata> withHandle(Handle handle) throws Exception {
+                return new LoadShiftReportResidentWithMetadata(handle, residentCoordinatorCache)
+                        .loadShiftReportResidentsWithMetadata(residentId);
+            }
+        });
+        return a;
     }
 
 }

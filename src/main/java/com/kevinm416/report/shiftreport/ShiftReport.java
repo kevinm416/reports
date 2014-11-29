@@ -9,22 +9,21 @@ public class ShiftReport implements Identifiable {
 
     private final long id;
     private final long houseId;
-    private final List<Long> onShift;
-    private final String shift;
-    private final long timeCreated;
     private final boolean keysAccountedFor;
     private final String keysAccountedForReason;
+    private final ShiftReportMetadata shiftReportMetadata;
     private final List<CreateShiftReportResident> shiftReportResidents;
 
-    public ShiftReport(long id, long houseId, List<Long> onShift, String shift,
-            long timeCreated, boolean keysAccountedFor,
+    public ShiftReport(
+            long id,
+            long houseId,
+            boolean keysAccountedFor,
             String keysAccountedForReason,
+            ShiftReportMetadata shiftReportMetadata,
             List<CreateShiftReportResident> shiftReportResidents) {
         this.id = id;
         this.houseId = houseId;
-        this.onShift = onShift;
-        this.shift = shift;
-        this.timeCreated = timeCreated;
+        this.shiftReportMetadata = shiftReportMetadata;
         this.keysAccountedFor = keysAccountedFor;
         this.keysAccountedForReason = keysAccountedForReason;
         this.shiftReportResidents = shiftReportResidents;
@@ -39,16 +38,8 @@ public class ShiftReport implements Identifiable {
         return houseId;
     }
 
-    public List<Long> getOnShift() {
-        return onShift;
-    }
-
-    public String getShift() {
-        return shift;
-    }
-
-    public long getTimeCreated() {
-        return timeCreated;
+    public ShiftReportMetadata getShiftReportMetadata() {
+        return shiftReportMetadata;
     }
 
     public boolean isKeysAccountedFor() {
@@ -74,13 +65,14 @@ public class ShiftReport implements Identifiable {
                 * result
                 + ((keysAccountedForReason == null) ? 0
                         : keysAccountedForReason.hashCode());
-        result = prime * result + ((onShift == null) ? 0 : onShift.hashCode());
-        result = prime * result + ((shift == null) ? 0 : shift.hashCode());
+        result = prime
+                * result
+                + ((shiftReportMetadata == null) ? 0 : shiftReportMetadata
+                        .hashCode());
         result = prime
                 * result
                 + ((shiftReportResidents == null) ? 0 : shiftReportResidents
                         .hashCode());
-        result = prime * result + (int) (timeCreated ^ (timeCreated >>> 32));
         return result;
     }
 
@@ -112,18 +104,11 @@ public class ShiftReport implements Identifiable {
         } else if (!keysAccountedForReason.equals(other.keysAccountedForReason)) {
             return false;
         }
-        if (onShift == null) {
-            if (other.onShift != null) {
+        if (shiftReportMetadata == null) {
+            if (other.shiftReportMetadata != null) {
                 return false;
             }
-        } else if (!onShift.equals(other.onShift)) {
-            return false;
-        }
-        if (shift == null) {
-            if (other.shift != null) {
-                return false;
-            }
-        } else if (!shift.equals(other.shift)) {
+        } else if (!shiftReportMetadata.equals(other.shiftReportMetadata)) {
             return false;
         }
         if (shiftReportResidents == null) {
@@ -133,18 +118,15 @@ public class ShiftReport implements Identifiable {
         } else if (!shiftReportResidents.equals(other.shiftReportResidents)) {
             return false;
         }
-        if (timeCreated != other.timeCreated) {
-            return false;
-        }
         return true;
     }
 
     @Override
     public String toString() {
-        return "ShiftReport [id=" + id + ", houseId=" + houseId + ", onShift="
-                + onShift + ", shift=" + shift + ", timeCreated=" + timeCreated
+        return "ShiftReport [id=" + id + ", houseId=" + houseId
                 + ", keysAccountedFor=" + keysAccountedFor
                 + ", keysAccountedForReason=" + keysAccountedForReason
+                + ", shiftReportMetadata=" + shiftReportMetadata
                 + ", shiftReportResidents=" + shiftReportResidents + "]";
     }
 

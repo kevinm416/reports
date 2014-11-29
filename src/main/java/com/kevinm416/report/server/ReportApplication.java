@@ -15,12 +15,12 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.kevinm416.report.house.HouseDAO;
 import com.kevinm416.report.house.HouseResource;
 import com.kevinm416.report.rc.ResidentCoordinator;
+import com.kevinm416.report.rc.ResidentCoordinatorCache;
 import com.kevinm416.report.rc.ResidentCoordinatorDAO;
 import com.kevinm416.report.rc.ResidentCoordinatorResource;
 import com.kevinm416.report.resident.ResidentDAO;
 import com.kevinm416.report.resident.ResidentResource;
 import com.kevinm416.report.server.config.ReportServiceConfiguration;
-import com.kevinm416.report.shiftreport.ShiftReportResidentDAO;
 import com.kevinm416.report.shiftreport.ShiftReportResource;
 
 
@@ -52,10 +52,10 @@ public class ReportApplication extends Application<ReportServiceConfiguration> {
 
         DBIFactory dbiFactory = new DBIFactory();
         DBI jdbi = dbiFactory.build(environment, configuration.getDataSourceFactory(), "postgres");
+        ResidentCoordinatorCache residentCoordinatorCache = new ResidentCoordinatorCache();
         ResidentDAO residentDAO = jdbi.onDemand(ResidentDAO.class);
         HouseDAO houseDAO = jdbi.onDemand(HouseDAO.class);
         ResidentCoordinatorDAO residentCoordinatorDao = jdbi.onDemand(ResidentCoordinatorDAO.class);
-        ShiftReportResidentDAO shiftReportResidentDAO = jdbi.onDemand(ShiftReportResidentDAO.class);
 
         setupAuth(environment, residentCoordinatorDao);
 
@@ -68,7 +68,7 @@ public class ReportApplication extends Application<ReportServiceConfiguration> {
         HouseResource houseResource = new HouseResource(houseDAO);
         environment.jersey().register(houseResource);
 
-        ShiftReportResource shiftReportResource = new ShiftReportResource(jdbi, shiftReportResidentDAO);
+        ShiftReportResource shiftReportResource = new ShiftReportResource(jdbi, residentCoordinatorCache);
         environment.jersey().register(shiftReportResource);
 
         environment.healthChecks().register("test", new ReportApplicationHealthCheck());
