@@ -18,22 +18,46 @@ public class LoadShiftReportResidentWithMetadata {
         this.residentCoordinatorCache = residentCoordinatorCache;
     }
 
-    public List<ShiftReportResidentWithMetadata> loadShiftReportResidentsWithMetadata(long residentId) {
-        ShiftReportResidentDAO shiftReportResidentDAO = h.attach(ShiftReportResidentDAO.class);
-        List<ShiftReportResident> shiftReportResidents = shiftReportResidentDAO.loadShiftReportResidents(residentId);
+    public List<ShiftReportResidentWithMetadata> loadShiftReportResidentsWithMetadata(
+            long residentId,
+            int pageSize) {
+        ShiftReportResidentDAO shiftReportResidentDAO = getShiftReportResidentDAO();
+        List<ShiftReportResident> shiftReportResidents =
+                shiftReportResidentDAO.loadShiftReportResidents(residentId, pageSize);
+        return loadMetadataForResidents(shiftReportResidents);
+    }
+
+    public List<ShiftReportResidentWithMetadata> loadShiftReportResidentsWithMetadataPage(
+            long residentId,
+            int pageSize,
+            Long lastShiftReportResidentId) {
+        ShiftReportResidentDAO shiftReportResidentDao = getShiftReportResidentDAO();
+        List<ShiftReportResident> shiftReportResidents;
+        if (lastShiftReportResidentId == null) {
+            shiftReportResidents = shiftReportResidentDao.loadShiftReportResidents(residentId, pageSize);
+        } else {
+            shiftReportResidents = shiftReportResidentDao.loadShiftReportResidentPage(
+                    residentId,
+                    pageSize,
+                    lastShiftReportResidentId.longValue());
+        }
         return loadMetadataForResidents(shiftReportResidents);
     }
 
     private List<ShiftReportResidentWithMetadata> loadMetadataForResidents(
             List<ShiftReportResident> shiftReportResidents) {
-        LoadShiftReportMetadata loadShiftReportMetadata =
-                new LoadShiftReportMetadata(h, residentCoordinatorCache);
+        ShiftReportMetadataLoader loadShiftReportMetadata =
+                new ShiftReportMetadataLoader(h, residentCoordinatorCache);
         List<ShiftReportResidentWithMetadata> ret = Lists.newArrayListWithCapacity(shiftReportResidents.size());
         for (ShiftReportResident shiftReportResident : shiftReportResidents) {
             ShiftReportMetadata metadata = loadShiftReportMetadata.loadMetadata(shiftReportResident.getShiftReportId());
             ret.add(new ShiftReportResidentWithMetadata(shiftReportResident, metadata));
         }
         return ret;
+    }
+
+    private ShiftReportResidentDAO getShiftReportResidentDAO() {
+        return h.attach(ShiftReportResidentDAO.class);
     }
 
 }

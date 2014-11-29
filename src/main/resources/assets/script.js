@@ -217,8 +217,8 @@ var ApplicationView = Marionette.LayoutView.extend({
             return new SelectedResidentCareView({});
         } else if (state == 'reports') {
             var residentId = this.model.get('residentId');
-            var shiftReportResidents = loadShiftReportsForResident(residentId);
-            return new ShiftReportResidentListView({
+            var shiftReportResidents = new ShiftReportResidents(loadShiftReportsForResident(residentId, 7));
+            return new ShiftReportResidentListViewWithFooter({
                 collection: shiftReportResidents,
             });
         }

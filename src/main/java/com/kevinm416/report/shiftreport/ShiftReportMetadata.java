@@ -1,22 +1,32 @@
 package com.kevinm416.report.shiftreport;
 
+import com.kevinm416.report.common.Identifiable;
 
-public class ShiftReportMetadata {
 
+public class ShiftReportMetadata implements Identifiable {
+
+    private final long id;
     private final long date;
     private final String createdByName;
     private final String shift;
     private final long timeCreated;
 
     public ShiftReportMetadata(
+            long id,
             long date,
             String createdByName,
             String shift,
             long timeCreated) {
+        this.id = id;
         this.date = date;
         this.createdByName = createdByName;
         this.shift = shift;
         this.timeCreated = timeCreated;
+    }
+
+    @Override
+    public long getId() {
+        return id;
     }
 
     public long getDate() {
@@ -42,6 +52,7 @@ public class ShiftReportMetadata {
         result = prime * result
                 + ((createdByName == null) ? 0 : createdByName.hashCode());
         result = prime * result + (int) (date ^ (date >>> 32));
+        result = prime * result + (int) (id ^ (id >>> 32));
         result = prime * result + ((shift == null) ? 0 : shift.hashCode());
         result = prime * result + (int) (timeCreated ^ (timeCreated >>> 32));
         return result;
@@ -69,6 +80,9 @@ public class ShiftReportMetadata {
         if (date != other.date) {
             return false;
         }
+        if (id != other.id) {
+            return false;
+        }
         if (shift == null) {
             if (other.shift != null) {
                 return false;
@@ -84,9 +98,9 @@ public class ShiftReportMetadata {
 
     @Override
     public String toString() {
-        return "ShiftReportMetadata [date=" + date + ", createdByName="
-                + createdByName + ", shift=" + shift + ", timeCreated="
-                + timeCreated + "]";
+        return "ShiftReportMetadata [id=" + id + ", date=" + date
+                + ", createdByName=" + createdByName + ", shift=" + shift
+                + ", timeCreated=" + timeCreated + "]";
     }
 
 }

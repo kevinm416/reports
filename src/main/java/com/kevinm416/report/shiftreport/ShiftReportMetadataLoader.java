@@ -8,12 +8,12 @@ import com.google.common.collect.Iterables;
 import com.kevinm416.report.rc.ResidentCoordinator;
 import com.kevinm416.report.rc.ResidentCoordinatorCache;
 
-public class LoadShiftReportMetadata {
+public class ShiftReportMetadataLoader {
 
     private final Handle h;
     private final ResidentCoordinatorCache residentCoordinatorCache;
 
-    public LoadShiftReportMetadata(
+    public ShiftReportMetadataLoader(
             Handle h,
             ResidentCoordinatorCache residentCoordinatorCache) {
         this.h = h;
@@ -30,6 +30,7 @@ public class LoadShiftReportMetadata {
                 residentCoordinatorCache.loadResidentCoordinatorById(h, createdById);
 
         return new ShiftReportMetadata(
+                (long) row.get("id"),
                 (long) row.get("date"),
                 residentCoordinator.getName(),
                 (String) row.get("shift"),
@@ -37,7 +38,8 @@ public class LoadShiftReportMetadata {
     }
 
     private static final String LOAD_SHIFT_REPORT_METADATA_SQL =
-            " SELECT date, " +
+            " SELECT id, " +
+            "        date, " +
             "        shift, " +
             "        time_created, " +
             "        created_by " +

@@ -21,22 +21,37 @@ public interface ShiftReportResidentDAO {
             " ) " +
             " VALUES (" +
             "     :shiftReportId, " +
-            "     :c.residentId, " +
+            "     :residentId, " +
             "     :timeCreated, " +
-            "     :c.summary, " +
-            "     :c.notes " +
+            "     :summary, " +
+            "     :notes " +
             " )"
     )
     void createShiftReportResidents(
             @Bind("shiftReportId") long shiftReportId,
             @Bind("timeCreated") long timeCreated,
-            @BindBean("c") Iterable<CreateShiftReportResident> createShiftReportResident);
+            @BindBean Iterable<CreateShiftReportResident> createShiftReportResident);
 
     @SqlQuery(
             " SELECT * FROM shift_report_residents " +
             " WHERE resident_id = :residentId " +
-            " ORDER BY time_created DESC "
+            " ORDER BY time_created DESC " +
+            " LIMIT :pageSize "
     )
-    List<ShiftReportResident> loadShiftReportResidents(@Bind("residentId") long residentId);
+    List<ShiftReportResident> loadShiftReportResidents(
+            @Bind("residentId") long residentId,
+            @Bind("pageSize") int pageSize);
+
+    @SqlQuery(
+            " SELECT * FROM shift_report_residents " +
+            " WHERE resident_id = :residentId " +
+            "   AND id < :lastShiftReportResidentId " +
+            " ORDER BY time_created DESC " +
+            " LIMIT :pageSize "
+    )
+    List<ShiftReportResident> loadShiftReportResidentPage(
+            @Bind("residentId") long residentId,
+            @Bind("pageSize") int pageSize,
+            @Bind("lastShiftReportResidentId") long lastShiftReportResidentId);
 
 }

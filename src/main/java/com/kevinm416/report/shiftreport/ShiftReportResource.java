@@ -9,6 +9,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.skife.jdbi.v2.DBI;
@@ -50,15 +51,29 @@ public class ShiftReportResource {
     @Path("/{residentId}")
     public List<ShiftReportResidentWithMetadata> loadShiftReportsForResident(
             @Auth ResidentCoordinator user,
-            @PathParam("residentId") final long residentId) {
-        List<ShiftReportResidentWithMetadata> a = jdbi.withHandle(new HandleCallback<List<ShiftReportResidentWithMetadata>>() {
+            @PathParam("residentId") final long residentId,
+            @QueryParam("pageSize") final int pageSize,
+            @QueryParam(value = "lastShiftReportResidentId") final Long lastShiftReportResidentId) {
+        List<ShiftReportResidentWithMetadata> ret = jdbi.withHandle(new HandleCallback<List<ShiftReportResidentWithMetadata>>() {
             @Override
             public List<ShiftReportResidentWithMetadata> withHandle(Handle handle) throws Exception {
-                return new LoadShiftReportResidentWithMetadata(handle, residentCoordinatorCache)
-                        .loadShiftReportResidentsWithMetadata(residentId);
+                return loadShiftReportsForResidentWithHandle(handle, residentId, pageSize, lastShiftReportResidentId);
             }
         });
-        return a;
+        return ret;
+    }
+
+    private List<ShiftReportResidentWithMetadata> loadShiftReportsForResidentWithHandle(
+            Handle handle,
+            long residentId,
+            int pageSize,
+            Long lastShiftReportResidentId) {
+        LoadShiftReportResidentWithMetadata loadShiftReportResidentWithMetadata =
+                new LoadShiftReportResidentWithMetadata(handle, residentCoordinatorCache);
+        return loadShiftReportResidentWithMetadata.loadShiftReportResidentsWithMetadataPage(
+                residentId,
+                pageSize,
+                lastShiftReportResidentId);
     }
 
 }
