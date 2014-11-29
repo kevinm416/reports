@@ -16,21 +16,29 @@ import org.skife.jdbi.v2.DBI;
 import org.skife.jdbi.v2.Handle;
 import org.skife.jdbi.v2.tweak.HandleCallback;
 
+import com.kevinm416.report.common.cache.IdCache;
+import com.kevinm416.report.house.House;
 import com.kevinm416.report.rc.ResidentCoordinator;
-import com.kevinm416.report.rc.ResidentCoordinatorCache;
+import com.kevinm416.report.resident.Resident;
 
 @Path("/shiftReports")
 @Produces(MediaType.APPLICATION_JSON)
 public class ShiftReportResource {
 
     private final DBI jdbi;
-    private final ResidentCoordinatorCache residentCoordinatorCache;
+    private final IdCache<House> houseCache;
+    private final IdCache<ResidentCoordinator> rcCache;
+    private final IdCache<Resident> residentCache;
 
     public ShiftReportResource(
             DBI jdbi,
-            ResidentCoordinatorCache residentCoordinatorCache) {
+            IdCache<House> houseCache,
+            IdCache<ResidentCoordinator> rcCache,
+            IdCache<Resident> residentCache) {
         this.jdbi = jdbi;
-        this.residentCoordinatorCache = residentCoordinatorCache;
+        this.houseCache = houseCache;
+        this.rcCache = rcCache;
+        this.residentCache = residentCache;
     }
 
     @POST
@@ -39,7 +47,7 @@ public class ShiftReportResource {
             final CreateShiftReport createShiftReport) {
         return jdbi.withHandle(new HandleCallback<Long>() {
             @Override
-            public Long withHandle(Handle handle) throws Exception {
+            public Long withHandle(Handle handle) {
                 return new CreateShiftReportTransaction(handle).createShiftReport(
                         user.getId(),
                         createShiftReport);
@@ -48,7 +56,7 @@ public class ShiftReportResource {
     }
 
     @GET
-    @Path("/{residentId}")
+    @Path("/resident/{residentId}")
     public List<ShiftReportResidentWithMetadata> loadShiftReportsForResident(
             @Auth ResidentCoordinator user,
             @PathParam("residentId") final long residentId,
@@ -56,7 +64,7 @@ public class ShiftReportResource {
             @QueryParam(value = "lastShiftReportResidentId") final Long lastShiftReportResidentId) {
         List<ShiftReportResidentWithMetadata> ret = jdbi.withHandle(new HandleCallback<List<ShiftReportResidentWithMetadata>>() {
             @Override
-            public List<ShiftReportResidentWithMetadata> withHandle(Handle handle) throws Exception {
+            public List<ShiftReportResidentWithMetadata> withHandle(Handle handle) {
                 return loadShiftReportsForResidentWithHandle(handle, residentId, pageSize, lastShiftReportResidentId);
             }
         });
@@ -64,16 +72,35 @@ public class ShiftReportResource {
     }
 
     private List<ShiftReportResidentWithMetadata> loadShiftReportsForResidentWithHandle(
-            Handle handle,
+            Handle h,
             long residentId,
             int pageSize,
             Long lastShiftReportResidentId) {
         LoadShiftReportResidentWithMetadata loadShiftReportResidentWithMetadata =
-                new LoadShiftReportResidentWithMetadata(handle, residentCoordinatorCache);
+                new LoadShiftReportResidentWithMetadata(h, rcCache);
         return loadShiftReportResidentWithMetadata.loadShiftReportResidentsWithMetadataPage(
                 residentId,
                 pageSize,
                 lastShiftReportResidentId);
+    }
+
+    @GET
+    @Path("/{shiftReportId}")
+    public ShiftReportView loadShiftReport(
+            @Auth ResidentCoordinator user,
+            @PathParam("shiftReportId") final long shiftReportId) {
+        ShiftReportView shiftReportView = jdbi.withHandle(new HandleCallback<ShiftReportView>() {
+            @Override
+            public ShiftReportView withHandle(Handle h) {
+                return loadShiftReportWithHandle(h, shiftReportId);
+            }
+        });
+        return shiftReportView;
+    }
+
+    private ShiftReportView loadShiftReportWithHandle(Handle h, long shiftReportId) {
+        ShiftReportViewLoader shiftReportViewLoader = new ShiftReportViewLoader(h, houseCache, rcCache, residentCache);
+        return shiftReportViewLoader.loadShiftReport(shiftReportId);
     }
 
 }

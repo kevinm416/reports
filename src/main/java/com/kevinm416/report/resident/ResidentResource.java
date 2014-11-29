@@ -12,6 +12,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.kevinm416.report.common.cache.IdCache;
 import com.kevinm416.report.rc.ResidentCoordinator;
 
 @Path("/residents")
@@ -19,9 +20,12 @@ import com.kevinm416.report.rc.ResidentCoordinator;
 public class ResidentResource {
 
     private final ResidentDAO residentDAO;
+    private final IdCache<Resident> residentCache;
 
-    public ResidentResource(ResidentDAO residentDAO) {
+    public ResidentResource(ResidentDAO residentDAO,
+            IdCache<Resident> residentCache) {
         this.residentDAO = residentDAO;
+        this.residentCache = residentCache;
     }
 
     @GET
@@ -31,13 +35,14 @@ public class ResidentResource {
 
     @POST
     public long createResident(@Auth ResidentCoordinator user, CreateResidentForm form) {
-        return residentDAO.createUser(form);
+        return residentDAO.createResident(form);
     }
 
     @PUT
     @Path("/{id}")
     public void updateResident(@Auth ResidentCoordinator user, Resident resident) {
         residentDAO.updateResident(resident);
+        residentCache.invalidate(resident.getId());
     }
 
     @GET

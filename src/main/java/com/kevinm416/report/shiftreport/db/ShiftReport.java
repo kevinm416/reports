@@ -1,35 +1,36 @@
-package com.kevinm416.report.shiftreport;
-
-import java.util.List;
-
-import com.kevinm416.report.common.Identifiable;
+package com.kevinm416.report.shiftreport.db;
 
 
-public class ShiftReport implements Identifiable {
+public class ShiftReport {
 
     private final long id;
     private final long houseId;
+    private final long date;
+    private final long createdBy;
+    private final String shift;
+    private final long timeCreated;
     private final boolean keysAccountedFor;
     private final String keysAccountedForReason;
-    private final ShiftReportMetadata shiftReportMetadata;
-    private final List<CreateShiftReportResident> shiftReportResidents;
 
     public ShiftReport(
             long id,
             long houseId,
+            long date,
+            long createdBy,
+            String shift,
+            long timeCreated,
             boolean keysAccountedFor,
-            String keysAccountedForReason,
-            ShiftReportMetadata shiftReportMetadata,
-            List<CreateShiftReportResident> shiftReportResidents) {
+            String keysAccountedForReason) {
         this.id = id;
         this.houseId = houseId;
-        this.shiftReportMetadata = shiftReportMetadata;
+        this.date = date;
+        this.createdBy = createdBy;
+        this.shift = shift;
+        this.timeCreated = timeCreated;
         this.keysAccountedFor = keysAccountedFor;
         this.keysAccountedForReason = keysAccountedForReason;
-        this.shiftReportResidents = shiftReportResidents;
     }
 
-    @Override
     public long getId() {
         return id;
     }
@@ -38,8 +39,20 @@ public class ShiftReport implements Identifiable {
         return houseId;
     }
 
-    public ShiftReportMetadata getShiftReportMetadata() {
-        return shiftReportMetadata;
+    public long getDate() {
+        return date;
+    }
+
+    public long getCreatedBy() {
+        return createdBy;
+    }
+
+    public String getShift() {
+        return shift;
+    }
+
+    public long getTimeCreated() {
+        return timeCreated;
     }
 
     public boolean isKeysAccountedFor() {
@@ -50,14 +63,12 @@ public class ShiftReport implements Identifiable {
         return keysAccountedForReason;
     }
 
-    public List<CreateShiftReportResident> getShiftReportResidents() {
-        return shiftReportResidents;
-    }
-
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
+        result = prime * result + (int) (createdBy ^ (createdBy >>> 32));
+        result = prime * result + (int) (date ^ (date >>> 32));
         result = prime * result + (int) (houseId ^ (houseId >>> 32));
         result = prime * result + (int) (id ^ (id >>> 32));
         result = prime * result + (keysAccountedFor ? 1231 : 1237);
@@ -65,14 +76,8 @@ public class ShiftReport implements Identifiable {
                 * result
                 + ((keysAccountedForReason == null) ? 0
                         : keysAccountedForReason.hashCode());
-        result = prime
-                * result
-                + ((shiftReportMetadata == null) ? 0 : shiftReportMetadata
-                        .hashCode());
-        result = prime
-                * result
-                + ((shiftReportResidents == null) ? 0 : shiftReportResidents
-                        .hashCode());
+        result = prime * result + ((shift == null) ? 0 : shift.hashCode());
+        result = prime * result + (int) (timeCreated ^ (timeCreated >>> 32));
         return result;
     }
 
@@ -88,6 +93,12 @@ public class ShiftReport implements Identifiable {
             return false;
         }
         ShiftReport other = (ShiftReport) obj;
+        if (createdBy != other.createdBy) {
+            return false;
+        }
+        if (date != other.date) {
+            return false;
+        }
         if (houseId != other.houseId) {
             return false;
         }
@@ -104,18 +115,14 @@ public class ShiftReport implements Identifiable {
         } else if (!keysAccountedForReason.equals(other.keysAccountedForReason)) {
             return false;
         }
-        if (shiftReportMetadata == null) {
-            if (other.shiftReportMetadata != null) {
+        if (shift == null) {
+            if (other.shift != null) {
                 return false;
             }
-        } else if (!shiftReportMetadata.equals(other.shiftReportMetadata)) {
+        } else if (!shift.equals(other.shift)) {
             return false;
         }
-        if (shiftReportResidents == null) {
-            if (other.shiftReportResidents != null) {
-                return false;
-            }
-        } else if (!shiftReportResidents.equals(other.shiftReportResidents)) {
+        if (timeCreated != other.timeCreated) {
             return false;
         }
         return true;
@@ -123,11 +130,11 @@ public class ShiftReport implements Identifiable {
 
     @Override
     public String toString() {
-        return "ShiftReport [id=" + id + ", houseId=" + houseId
-                + ", keysAccountedFor=" + keysAccountedFor
-                + ", keysAccountedForReason=" + keysAccountedForReason
-                + ", shiftReportMetadata=" + shiftReportMetadata
-                + ", shiftReportResidents=" + shiftReportResidents + "]";
+        return "ShiftReport [id=" + id + ", houseId=" + houseId + ", date="
+                + date + ", createdBy=" + createdBy + ", shift=" + shift
+                + ", timeCreated=" + timeCreated + ", keysAccountedFor="
+                + keysAccountedFor + ", keysAccountedForReason="
+                + keysAccountedForReason + "]";
     }
 
 }

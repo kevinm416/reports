@@ -13,7 +13,7 @@ var ShiftReportResidents = Backbone.Collection.extend({
 function loadShiftReportsForResident(residentId, pageSize, lastShiftReportResidentId) {
     var ret = null;
     $.ajax({
-        url: '/api/shiftReports/' + residentId,
+        url: '/api/shiftReports/resident/' + residentId,
         data: {
             'pageSize': pageSize,
             'lastShiftReportResidentId': lastShiftReportResidentId,

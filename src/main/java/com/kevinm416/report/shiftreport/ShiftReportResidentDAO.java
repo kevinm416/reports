@@ -54,4 +54,12 @@ public interface ShiftReportResidentDAO {
             @Bind("pageSize") int pageSize,
             @Bind("lastShiftReportResidentId") long lastShiftReportResidentId);
 
+    @SqlQuery(
+            " SELECT * FROM shift_report_residents " +
+            " WHERE shift_report_id = :shiftReportId " +
+            " ORDER BY time_created DESC "
+    )
+    List<ShiftReportResident> loadShiftReportResidentsForShiftReport(
+            @Bind("shiftReportId") long shiftReportId);
+
 }

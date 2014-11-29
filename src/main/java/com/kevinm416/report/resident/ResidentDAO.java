@@ -16,7 +16,7 @@ public interface ResidentDAO {
             " VALUES (:name, :birthdate, :houseId) " +
             " RETURNING id "
     )
-    long createUser(@BindBean CreateResidentForm form);
+    long createResident(@BindBean CreateResidentForm form);
 
     @SqlUpdate(
             " UPDATE residents " +

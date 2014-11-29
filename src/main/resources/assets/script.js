@@ -103,7 +103,7 @@ var SelectedResidentTabView = Marionette.ItemView.extend({
 var SelectedResidentTabsView = Marionette.CollectionView.extend({
    childView: SelectedResidentTabView,
    tagName: 'ul',
-   className: 'nav nav-tabs',
+   className: 'nav nav-pills',
    childViewOptions: function() {
        return { applicationModel: this.options.applicationModel };
    }
@@ -179,8 +179,8 @@ var ApplicationView = Marionette.LayoutView.extend({
     template: _.template($('#application-view-template').html()),
     regions: {
         'residentList': '#resident-list-region',
-        'selectedResident': '#selected-resident-region',
-        'selectedResidentTabs': '#selected-resident-tabs',
+        'selectedResident': '.selected-resident-region',
+        'selectedResidentTabs': '.selected-resident-tabs',
     },
     modelEvents: {
         'change:residentId': 'changeResident',
@@ -254,7 +254,8 @@ var AppRouter = Backbone.Router.extend({
     routes: {
         'residents': 'residentsRoute',
         'residents/:id/:residentPanelState': 'residentsPanelRoute',
-        'shiftReport': 'shiftReportRoute',
+        'shiftReport': 'createShiftReportRoute',
+        'shiftReport/:shiftReportId': 'viewShiftReportRoute',
         'incidentReport': 'incidentReportRoute',
         '*all': 'defaultRoute'
     },
@@ -276,10 +277,10 @@ var AppRouter = Backbone.Router.extend({
         applicationModel.set({
             'residentId': residentId,
             'residentPanelState': residentPanelState,
-        })
+        });
         this.residentsRoute();
     },
-    shiftReportRoute: function() {
+    createShiftReportRoute: function() {
         var houses = new HousesCollection();
         var residents = new ResidentsCollection();
         var residentCoordinators = new ResidentCoordinatorCollection();
@@ -299,6 +300,13 @@ var AppRouter = Backbone.Router.extend({
     },
     incidentReportRoute: function() {
         app.appRegion.show(new IncidentReportView());
+    },
+    viewShiftReportRoute: function(shiftReportId) {
+        var shiftReportModel = loadShiftReportModel(shiftReportId);
+        var shiftReportView = new ShiftReportView({
+            model: shiftReportModel,
+        });
+        app.appRegion.show(shiftReportView);
     },
 });
 

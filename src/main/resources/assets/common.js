@@ -17,3 +17,12 @@ Handlebars.registerHelper('formatDate', function(formatKey, datetime) {
     }
 });
 
+function getUrlVars() {
+    var hash = {};
+    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+    for(var i = 0; i < hashes.length; i++) {
+        arg = hashes[i].split('=');
+        hash[arg[0]] = arg[1];
+    }
+    return hash;
+}

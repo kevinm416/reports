@@ -12,12 +12,17 @@ import org.skife.jdbi.v2.DBI;
 
 import com.fasterxml.jackson.core.JsonGenerator.Feature;
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.kevinm416.report.common.cache.IdCache;
+import com.kevinm416.report.house.House;
+import com.kevinm416.report.house.HouseCache;
 import com.kevinm416.report.house.HouseDAO;
 import com.kevinm416.report.house.HouseResource;
 import com.kevinm416.report.rc.ResidentCoordinator;
 import com.kevinm416.report.rc.ResidentCoordinatorCache;
 import com.kevinm416.report.rc.ResidentCoordinatorDAO;
 import com.kevinm416.report.rc.ResidentCoordinatorResource;
+import com.kevinm416.report.resident.Resident;
+import com.kevinm416.report.resident.ResidentCache;
 import com.kevinm416.report.resident.ResidentDAO;
 import com.kevinm416.report.resident.ResidentResource;
 import com.kevinm416.report.server.config.ReportServiceConfiguration;
@@ -50,16 +55,19 @@ public class ReportApplication extends Application<ReportServiceConfiguration> {
 
         environment.jersey().setUrlPattern("/api/*");
 
+        IdCache<ResidentCoordinator> residentCoordinatorCache = ResidentCoordinatorCache.create();
+        IdCache<House> houseCache = HouseCache.create();
+        IdCache<Resident> residentCache = ResidentCache.create();
+
         DBIFactory dbiFactory = new DBIFactory();
         DBI jdbi = dbiFactory.build(environment, configuration.getDataSourceFactory(), "postgres");
-        ResidentCoordinatorCache residentCoordinatorCache = new ResidentCoordinatorCache();
         ResidentDAO residentDAO = jdbi.onDemand(ResidentDAO.class);
         HouseDAO houseDAO = jdbi.onDemand(HouseDAO.class);
         ResidentCoordinatorDAO residentCoordinatorDao = jdbi.onDemand(ResidentCoordinatorDAO.class);
 
         setupAuth(environment, residentCoordinatorDao);
 
-        ResidentResource residentResource = new ResidentResource(residentDAO);
+        ResidentResource residentResource = new ResidentResource(residentDAO, residentCache);
         environment.jersey().register(residentResource);
 
         ResidentCoordinatorResource residentCoordinatorResource = new ResidentCoordinatorResource(residentCoordinatorDao);
@@ -68,7 +76,7 @@ public class ReportApplication extends Application<ReportServiceConfiguration> {
         HouseResource houseResource = new HouseResource(houseDAO);
         environment.jersey().register(houseResource);
 
-        ShiftReportResource shiftReportResource = new ShiftReportResource(jdbi, residentCoordinatorCache);
+        ShiftReportResource shiftReportResource = new ShiftReportResource(jdbi, houseCache, residentCoordinatorCache, residentCache);
         environment.jersey().register(shiftReportResource);
 
         environment.healthChecks().register("test", new ReportApplicationHealthCheck());

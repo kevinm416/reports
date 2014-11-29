@@ -5,17 +5,17 @@ import java.util.Map;
 import org.skife.jdbi.v2.Handle;
 
 import com.google.common.collect.Iterables;
+import com.kevinm416.report.common.cache.IdCache;
 import com.kevinm416.report.rc.ResidentCoordinator;
-import com.kevinm416.report.rc.ResidentCoordinatorCache;
 
 public class ShiftReportMetadataLoader {
 
     private final Handle h;
-    private final ResidentCoordinatorCache residentCoordinatorCache;
+    private final IdCache<ResidentCoordinator> residentCoordinatorCache;
 
     public ShiftReportMetadataLoader(
             Handle h,
-            ResidentCoordinatorCache residentCoordinatorCache) {
+            IdCache<ResidentCoordinator> residentCoordinatorCache) {
         this.h = h;
         this.residentCoordinatorCache = residentCoordinatorCache;
     }
@@ -27,7 +27,7 @@ public class ShiftReportMetadataLoader {
         long createdById = (long) row.get("created_by");
 
         ResidentCoordinator residentCoordinator =
-                residentCoordinatorCache.loadResidentCoordinatorById(h, createdById);
+                residentCoordinatorCache.loadById(h, createdById);
 
         return new ShiftReportMetadata(
                 (long) row.get("id"),
