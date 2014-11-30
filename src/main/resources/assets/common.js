@@ -27,5 +27,8 @@ Handlebars.registerHelper('formatBoolean', function(boolean) {
 
 // This collapses the mobile navbar dropdown after the user clicks on an option
 $('.nav a').click(function(){
-    $('.navbar-collapse').collapse('hide');
+    var toggle = $('.navbar-toggle');
+    if (toggle.is(':visible')) {
+        toggle.click();
+    }
 });
