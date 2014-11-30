@@ -53,8 +53,12 @@ var ShiftReportResidentListViewWithFooter = Marionette.CompositeView.extend({
         button.on('click', {outer: this}, function(e) {
             var outer = e.data.outer;
             button.button('loading');
-            outer.loadNextPage();
-            button.button('reset');
+            var loadedSize = outer.loadNextPage();
+            if (loadedSize < 7) {
+                button.hide();
+            } else {
+                button.button('reset');
+            }
         });
     },
     loadNextPage: function() {
@@ -63,5 +67,6 @@ var ShiftReportResidentListViewWithFooter = Marionette.CompositeView.extend({
         var residentId = lastShiftReportResident.residentId;
         var nextPage =loadShiftReportsForResident(residentId, 7, shiftReportResidentId);
         this.collection.add(nextPage);
+        return nextPage.length;
     }
 });

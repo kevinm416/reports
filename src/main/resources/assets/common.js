@@ -25,12 +25,7 @@ Handlebars.registerHelper('formatBoolean', function(boolean) {
     }
 });
 
-function getUrlVars() {
-    var hash = {};
-    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
-    for(var i = 0; i < hashes.length; i++) {
-        arg = hashes[i].split('=');
-        hash[arg[0]] = arg[1];
-    }
-    return hash;
-}
+// This collapses the mobile navbar dropdown after the user clicks on an option
+$('.nav a').click(function(){
+    $('.navbar-collapse').collapse('hide');
+});
