@@ -4,6 +4,7 @@ import io.dropwizard.validation.ValidationMethod;
 
 import java.util.List;
 
+import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -16,7 +17,7 @@ public class CreateShiftReport {
     private final long houseId;
     private final long date;
     @NotEmpty private final List<Long> onShift;
-    @NotEmpty private final String shift;
+    @NotBlank private final String shift;
     private final long timeCreated;
     private final boolean keysAccountedFor;
     private final String keysAccountedForReason;

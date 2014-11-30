@@ -1,13 +1,13 @@
 package com.kevinm416.report.house.api;
 
-import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class CreateHouseForm {
 
-    @NotEmpty
+    @NotBlank
     private final String name;
 
     @JsonCreator

@@ -1,10 +1,10 @@
 package com.kevinm416.report.rc.api;
 
-import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.NotBlank;
 
 public class CreateResidentCoordinatorForm {
 
-    @NotEmpty
+    @NotBlank
     private final String name;
 
     public CreateResidentCoordinatorForm(String name) {
