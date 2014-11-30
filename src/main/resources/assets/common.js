@@ -17,6 +17,14 @@ Handlebars.registerHelper('formatDate', function(formatKey, datetime) {
     }
 });
 
+Handlebars.registerHelper('formatBoolean', function(boolean) {
+    if (boolean) {
+        return 'Yes';
+    } else {
+        return 'No';
+    }
+});
+
 function getUrlVars() {
     var hash = {};
     var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');

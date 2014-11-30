@@ -1,11 +1,12 @@
 package com.kevinm416.report.shiftreport;
 
 import java.util.List;
+import java.util.Set;
 
 import org.skife.jdbi.v2.Handle;
 
 import com.google.common.base.Function;
-import com.google.common.collect.Lists;
+import com.google.common.collect.FluentIterable;
 import com.kevinm416.report.common.cache.IdCache;
 import com.kevinm416.report.house.House;
 import com.kevinm416.report.rc.ResidentCoordinator;
@@ -47,6 +48,7 @@ public class ShiftReportViewLoader {
             List<ShiftReportResident> shiftReportResidents) {
         House house = houseCache.loadById(h, shiftReport.getHouseId());
         ResidentCoordinator residentCoordinator = rcCache.loadById(h, shiftReport.getCreatedBy());
+        Set<String> onShiftNames = loadOnShiftNames(onShift);
         List<ShiftReportResidentView> shiftReportResidentViews = convertShiftReportResidents(shiftReportResidents);
         return new ShiftReportView(
                 shiftReport.getId(),
@@ -57,13 +59,14 @@ public class ShiftReportViewLoader {
                 shiftReport.getTimeCreated(),
                 shiftReport.isKeysAccountedFor(),
                 shiftReport.getKeysAccountedForReason(),
+                onShiftNames,
                 shiftReportResidentViews);
 
     }
 
     private List<ShiftReportResidentView> convertShiftReportResidents(
             List<ShiftReportResident> shiftReportResidents) {
-        return Lists.transform(shiftReportResidents, new Function<ShiftReportResident, ShiftReportResidentView>() {
+        return FluentIterable.from(shiftReportResidents).transform(new Function<ShiftReportResident, ShiftReportResidentView>() {
             @Override
             public ShiftReportResidentView apply(ShiftReportResident shiftReportResident) {
                 Resident resident = residentCache.loadById(h, shiftReportResident.getResidentId());
@@ -74,7 +77,16 @@ public class ShiftReportViewLoader {
                         shiftReportResident.getSummary(),
                         shiftReportResident.getNotes());
             }
-        });
+        }).toList();
+    }
+
+    private Set<String> loadOnShiftNames(List<Long> onShift) {
+        return FluentIterable.from(onShift).transform(new Function<Long, String>() {
+            @Override
+            public String apply(Long input) {
+                return rcCache.loadById(h, input).getName();
+            }
+        }).toSet();
     }
 
 }

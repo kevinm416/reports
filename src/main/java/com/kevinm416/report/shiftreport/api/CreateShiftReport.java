@@ -1,20 +1,26 @@
-package com.kevinm416.report.shiftreport;
+package com.kevinm416.report.shiftreport.api;
+
+import io.dropwizard.validation.ValidationMethod;
 
 import java.util.List;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.common.base.Strings;
+import com.kevinm416.report.shiftreport.CreateShiftReportResident;
 
 public class CreateShiftReport {
 
     private final long houseId;
     private final long date;
-    private final List<Long> onShift;
-    private final String shift;
+    @NotEmpty private final List<Long> onShift;
+    @NotEmpty private final String shift;
     private final long timeCreated;
     private final boolean keysAccountedFor;
     private final String keysAccountedForReason;
-    private final List<CreateShiftReportResident> shiftReportResidents;
+    @NotEmpty private final List<CreateShiftReportResident> shiftReportResidents;
 
     @JsonCreator
     public CreateShiftReport(
@@ -66,6 +72,12 @@ public class CreateShiftReport {
 
     public Iterable<CreateShiftReportResident> getShiftReportResidents() {
         return shiftReportResidents;
+    }
+
+    @ValidationMethod(message = "keysAccountedForReason should be null iff keysAccountedFor == true")
+    public boolean isKeysAccountedForReasonValid() {
+        return keysAccountedFor && keysAccountedForReason == null ||
+                !keysAccountedFor && !Strings.isNullOrEmpty(keysAccountedForReason);
     }
 
     @Override

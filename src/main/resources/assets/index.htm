@@ -248,10 +248,59 @@
     <script id='shift-report-template' type='text/x-handlebars-template'>
         <div class='container-fluid'>
           <div class='row'>
-            <h1>{{formatDate 'day' date}}</h1>
+            <h3 class='text-center'>{{formatDate 'day' date}} 
+              <small>
+                <i>by</i> {{createdByName}} <i>on</i> {{formatDate 'detail' timeCreated}}
+              </small>
+            </h3>
           </div>
-          <div class='row'>
-          </div>
+          <form class='form-horizontal'>
+            <fieldset disabled>
+              <div class='form-group'>
+                <label class='col-sm-3 control-label'>Shift:</label>
+                <div class='col-sm-6'>
+                  <input type="text" class="form-control" value='{{shift}}'>
+                </div>
+              </div>
+            </fieldset>
+            <fieldset disabled>
+              <div class='form-group'>
+                <label class='col-sm-3 control-label'>On Shift:</label>
+                <div class='col-sm-6'>
+                  <ul class='list-group'>
+                    {{#each onShiftNames}}
+                    <li class='list-group-item'>{{this}}</li>
+                    {{/each}}
+                  </ul>
+                </div>
+              </div>
+            </fieldset>
+            <fieldset disabled>
+              <div class='form-group'>
+                <label class='col-sm-3 control-label'>Keys Accounted For:</label>
+                <div class='col-sm-6'>
+                  <input type='text' class='form-control' value='{{formatBoolean keysAccountedFor}}'>
+                  {{#unless keysAccountedFor}}
+                  <p><p>
+                  <textarea class='form-control'>{{keysAccountedForReason}}</textarea>
+                  {{/unless}}
+                </div>
+              </div>
+            </fieldset>
+
+            {{#each shiftReportResidents}}
+            <fieldset disabled>
+              <div class='form-group'>
+                <label class='col-sm-3 control-label'>{{residentName}}:</label>
+                <div class='col-sm-6'>
+                  <input type='text' class='form-control' value='{{summary}}'>
+                  <p><p>
+                  <textarea class='form-control'>{{notes}}</textarea>
+                </div>
+              </div>
+            </fieldset>
+            {{/each}}
+          </form>
         </div>
     </script>
 

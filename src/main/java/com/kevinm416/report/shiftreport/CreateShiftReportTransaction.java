@@ -4,6 +4,7 @@ import org.skife.jdbi.v2.Handle;
 import org.skife.jdbi.v2.TransactionCallback;
 import org.skife.jdbi.v2.TransactionStatus;
 
+import com.kevinm416.report.shiftreport.api.CreateShiftReport;
 import com.kevinm416.report.shiftreport.db.ShiftReportDAO;
 
 public class CreateShiftReportTransaction {

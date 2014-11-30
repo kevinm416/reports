@@ -4,6 +4,7 @@ import io.dropwizard.auth.Auth;
 
 import java.util.List;
 
+import javax.validation.Valid;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -20,6 +21,7 @@ import com.kevinm416.report.common.cache.IdCache;
 import com.kevinm416.report.house.House;
 import com.kevinm416.report.rc.ResidentCoordinator;
 import com.kevinm416.report.resident.Resident;
+import com.kevinm416.report.shiftreport.api.CreateShiftReport;
 
 @Path("/shiftReports")
 @Produces(MediaType.APPLICATION_JSON)
@@ -44,7 +46,7 @@ public class ShiftReportResource {
     @POST
     public long createShiftReport(
             @Auth final ResidentCoordinator user,
-            final CreateShiftReport createShiftReport) {
+            @Valid final CreateShiftReport createShiftReport) {
         return jdbi.withHandle(new HandleCallback<Long>() {
             @Override
             public Long withHandle(Handle handle) {

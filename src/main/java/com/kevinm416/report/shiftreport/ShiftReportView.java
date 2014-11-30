@@ -1,6 +1,7 @@
 package com.kevinm416.report.shiftreport;
 
 import java.util.List;
+import java.util.Set;
 
 import com.kevinm416.report.common.Identifiable;
 
@@ -14,6 +15,7 @@ public class ShiftReportView implements Identifiable {
     private final long timeCreated;
     private final boolean keysAccountedFor;
     private final String keysAccountedForReason;
+    private final Set<String> onShiftNames;
     private final List<ShiftReportResidentView> shiftReportResidents;
 
     public ShiftReportView(
@@ -25,6 +27,7 @@ public class ShiftReportView implements Identifiable {
             long timeCreated,
             boolean keysAccountedFor,
             String keysAccountedForReason,
+            Set<String> onShiftNames,
             List<ShiftReportResidentView> shiftReportResidents) {
         this.id = id;
         this.houseName = houseName;
@@ -34,6 +37,7 @@ public class ShiftReportView implements Identifiable {
         this.timeCreated = timeCreated;
         this.keysAccountedFor = keysAccountedFor;
         this.keysAccountedForReason = keysAccountedForReason;
+        this.onShiftNames = onShiftNames;
         this.shiftReportResidents = shiftReportResidents;
     }
 
@@ -70,6 +74,10 @@ public class ShiftReportView implements Identifiable {
         return keysAccountedForReason;
     }
 
+    public Set<String> getOnShiftNames() {
+        return onShiftNames;
+    }
+
     public List<ShiftReportResidentView> getShiftReportResidents() {
         return shiftReportResidents;
     }
@@ -89,6 +97,8 @@ public class ShiftReportView implements Identifiable {
                 * result
                 + ((keysAccountedForReason == null) ? 0
                         : keysAccountedForReason.hashCode());
+        result = prime * result
+                + ((onShiftNames == null) ? 0 : onShiftNames.hashCode());
         result = prime * result + ((shift == null) ? 0 : shift.hashCode());
         result = prime
                 * result
@@ -140,6 +150,13 @@ public class ShiftReportView implements Identifiable {
         } else if (!keysAccountedForReason.equals(other.keysAccountedForReason)) {
             return false;
         }
+        if (onShiftNames == null) {
+            if (other.onShiftNames != null) {
+                return false;
+            }
+        } else if (!onShiftNames.equals(other.onShiftNames)) {
+            return false;
+        }
         if (shift == null) {
             if (other.shift != null) {
                 return false;
@@ -167,7 +184,8 @@ public class ShiftReportView implements Identifiable {
                 + ", shift=" + shift + ", timeCreated=" + timeCreated
                 + ", keysAccountedFor=" + keysAccountedFor
                 + ", keysAccountedForReason=" + keysAccountedForReason
-                + ", shiftReportResidents=" + shiftReportResidents + "]";
+                + ", onShiftNames=" + onShiftNames + ", shiftReportResidents="
+                + shiftReportResidents + "]";
     }
 
 }

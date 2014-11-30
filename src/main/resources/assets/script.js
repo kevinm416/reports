@@ -76,7 +76,6 @@ var SelectedResidentTabs = Backbone.Collection.extend({
 
 var selectedResidentTabs = new SelectedResidentTabs([
     { tabState: 'info', tabStateDisplayName: 'Info' },
-    { tabState: 'care', tabStateDisplayName: 'Care' },
     { tabState: 'reports', tabStateDisplayName: 'Reports' },
 ]);
 
@@ -107,10 +106,6 @@ var SelectedResidentTabsView = Marionette.CollectionView.extend({
    childViewOptions: function() {
        return { applicationModel: this.options.applicationModel };
    }
-});
-
-var SelectedResidentCareView = Marionette.ItemView.extend({
-   template: Handlebars.compile("<h1>Care View</h1>")
 });
 
 var SelectedResidentInfoView = Marionette.ItemView.extend({
@@ -213,8 +208,6 @@ var ApplicationView = Marionette.LayoutView.extend({
                 houses: this.options.housesCollection,
                 selectedHouse: selectedHouse,
             });
-        } else if (state == 'care') {
-            return new SelectedResidentCareView({});
         } else if (state == 'reports') {
             var residentId = this.model.get('residentId');
             var shiftReportResidents = new ShiftReportResidents(loadShiftReportsForResident(residentId, 7));
@@ -289,13 +282,13 @@ var AppRouter = Backbone.Router.extend({
             var shiftReportModel = new CreateShiftReportModel({
                 residents: residents,
             });
-            var shiftReportView = new CreateShiftReportView({
+            var createShiftReportView = new CreateShiftReportView({
                model: shiftReportModel, 
                residents: residents,
                residentCoordinators: residentCoordinators,
                houses: houses,
             });
-            app.appRegion.show(shiftReportView);    
+            app.appRegion.show(createShiftReportView);    
         });
     },
     incidentReportRoute: function() {

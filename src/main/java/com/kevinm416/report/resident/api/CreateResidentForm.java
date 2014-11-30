@@ -1,10 +1,13 @@
-package com.kevinm416.report.resident;
+package com.kevinm416.report.resident.api;
+
+import org.hibernate.validator.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class CreateResidentForm {
 
+    @NotEmpty
     private final String name;
     private final long birthdate;
     private final long houseId;

@@ -173,6 +173,7 @@ var ShiftReportTopView = Marionette.ItemView.extend({
         'change #houseid-input': 'changeHouse',
         'change #keys-accounted-for-yes': 'changeKeys',
         'change #keys-accounted-for-no': 'changeKeys',
+        'change #keys-accounted-for-reason': 'changeKeys',
     },
     changeDate: function(e) {
         var date = getUnixTimestampForDay($(e.currentTarget).val());

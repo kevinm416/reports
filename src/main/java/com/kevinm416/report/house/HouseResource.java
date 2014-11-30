@@ -10,6 +10,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.kevinm416.report.house.api.CreateHouseForm;
 import com.kevinm416.report.rc.ResidentCoordinator;
 
 @Path("/houses")

@@ -10,6 +10,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.kevinm416.report.rc.api.CreateResidentCoordinatorForm;
+
 @Path("/residentCoordinators")
 @Produces(MediaType.APPLICATION_JSON)
 public class ResidentCoordinatorResource {

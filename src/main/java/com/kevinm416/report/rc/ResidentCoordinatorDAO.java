@@ -7,6 +7,8 @@ import org.skife.jdbi.v2.sqlobject.BindBean;
 import org.skife.jdbi.v2.sqlobject.SqlQuery;
 import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapper;
 
+import com.kevinm416.report.rc.api.CreateResidentCoordinatorForm;
+
 @RegisterMapper(ResidentCoordinatorDBMapper.class)
 public interface ResidentCoordinatorDAO {
 

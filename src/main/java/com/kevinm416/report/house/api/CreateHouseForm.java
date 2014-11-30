@@ -1,10 +1,18 @@
-package com.kevinm416.report.rc;
+package com.kevinm416.report.house.api;
 
-public class CreateResidentCoordinatorForm {
+import org.hibernate.validator.constraints.NotEmpty;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public class CreateHouseForm {
+
+    @NotEmpty
     private final String name;
 
-    public CreateResidentCoordinatorForm(String name) {
+    @JsonCreator
+    public CreateHouseForm(
+            @JsonProperty("name") String name) {
         this.name = name;
     }
 
@@ -16,7 +24,7 @@ public class CreateResidentCoordinatorForm {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        result = prime * result + (name == null ? 0 : name.hashCode());
         return result;
     }
 
@@ -31,7 +39,7 @@ public class CreateResidentCoordinatorForm {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        CreateResidentCoordinatorForm other = (CreateResidentCoordinatorForm) obj;
+        CreateHouseForm other = (CreateHouseForm) obj;
         if (name == null) {
             if (other.name != null) {
                 return false;
@@ -44,7 +52,7 @@ public class CreateResidentCoordinatorForm {
 
     @Override
     public String toString() {
-        return "CreateResidentCoordinatorForm [name=" + name + "]";
+        return "CreateHouseForm [name=" + name + "]";
     }
 
 }

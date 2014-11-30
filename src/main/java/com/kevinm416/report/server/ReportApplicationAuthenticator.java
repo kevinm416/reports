@@ -5,9 +5,9 @@ import io.dropwizard.auth.Authenticator;
 import io.dropwizard.auth.basic.BasicCredentials;
 
 import com.google.common.base.Optional;
-import com.kevinm416.report.rc.CreateResidentCoordinatorForm;
 import com.kevinm416.report.rc.ResidentCoordinator;
 import com.kevinm416.report.rc.ResidentCoordinatorDAO;
+import com.kevinm416.report.rc.api.CreateResidentCoordinatorForm;
 
 public class ReportApplicationAuthenticator implements Authenticator<BasicCredentials, ResidentCoordinator> {
 

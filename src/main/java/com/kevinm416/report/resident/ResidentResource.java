@@ -14,6 +14,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.kevinm416.report.common.cache.IdCache;
 import com.kevinm416.report.rc.ResidentCoordinator;
+import com.kevinm416.report.resident.api.CreateResidentForm;
 
 @Path("/residents")
 @Produces(MediaType.APPLICATION_JSON)
