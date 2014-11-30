@@ -49,7 +49,7 @@ var ShiftReportResidentListViewWithFooter = Marionette.CompositeView.extend({
     childViewContainer: '#shift-report-list',
     childView: ShiftReportResidentListItemView,
     onShow: function() {
-        var button = this.$el.find('#shift-report-list-loading-button'); 
+        var button = this.$('#shift-report-list-loading-button'); 
         button.on('click', {outer: this}, function(e) {
             var outer = e.data.outer;
             button.button('loading');

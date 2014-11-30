@@ -17,7 +17,8 @@ var Resident = Backbone.Model.extend({
         name: null,
         birthdate: null,
         houseId: null
-    }
+    },
+    url: '/api/residents',
 });
 
 var ResidentCoordinator = Backbone.Model.extend({
@@ -35,32 +36,6 @@ var ResidentCoordinatorCollection = Backbone.Collection.extend({
 var ResidentsCollection = Backbone.Collection.extend({
     model: Resident,
     url: '/api/residents',
-});
-
-var ResidentListItemView = Marionette.ItemView.extend({
-    template: Handlebars.compile("{{name}}"),
-    tagName: 'li',
-    className: 'list-group-item',
-    initialize: function() {
-        this.applicationModel = this.options.applicationModel;
-        this.listenTo(this.applicationModel, 'change:residentId', this.updateSelected);
-        this.updateSelected();
-    },
-    events: {
-        'click': 'onClick'
-    },
-    modelEvents: {
-        'change': 'onChange'
-    },
-    onChange: function(e) {
-        this.render();
-    },
-    onClick: function() {
-        this.applicationModel.set('residentId', this.model.id);
-    },
-    updateSelected: function() {
-        this.$el.toggleClass('active', this.applicationModel.get('residentId') == this.model.id);
-    }
 });
 
 var SelectedResidentTab = Backbone.Model.extend({
@@ -143,15 +118,6 @@ var SelectedResidentInfoView = Marionette.ItemView.extend({
     }
 });
 
-var ResidentListView = Marionette.CollectionView.extend({
-    childView: ResidentListItemView,
-    tagName: 'ul',
-    className: 'list-group',
-    childViewOptions: function() {
-        return { applicationModel: this.options.applicationModel};
-    }
-});
-
 var ResidentsCollection = Backbone.Collection.extend({
     model: Resident,
     url: '/api/residents',
@@ -182,7 +148,7 @@ var ApplicationView = Marionette.LayoutView.extend({
         'change:residentPanelState': 'changeResident',
     },
     onShow: function() {
-        var residentListView = new ResidentListView({
+        var residentListView = new ResidentListViewWithFooter({
             collection: this.options.residentsCollection,
             applicationModel: this.model
         })
