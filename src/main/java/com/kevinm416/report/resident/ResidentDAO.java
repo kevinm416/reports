@@ -14,8 +14,18 @@ import com.kevinm416.report.resident.api.CreateResidentForm;
 public interface ResidentDAO {
 
     @SqlQuery(
-            " INSERT INTO residents (name, birthdate, house_id) " +
-            " VALUES (:name, :birthdate, :houseId) " +
+            " INSERT INTO residents ( " +
+            "     name, " +
+            "     birthdate, " +
+            "     house_id, " +
+            "     deleted " +
+            " ) " +
+            " VALUES ( " +
+            "     :name, " +
+            "     :birthdate, " +
+            "     :houseId, " +
+            "     FALSE " +
+            " ) " +
             " RETURNING id "
     )
     long createResident(@BindBean CreateResidentForm form);
@@ -25,16 +35,25 @@ public interface ResidentDAO {
             " SET name = :name, " +
             "     birthdate = :birthdate, " +
             "     house_id = :houseId " +
-            " WHERE id = :id "
+            " WHERE id = :id " +
+            "   AND deleted = FALSE "
     )
     void updateResident(@BindBean Resident resident);
 
     @SqlQuery(
             " SELECT * " +
             " FROM residents " +
-            " WHERE id = :id "
+            " WHERE id = :id " +
+            "   AND deleted = FALSE "
     )
     Resident loadResident(@Bind("id") long id);
+
+    @SqlQuery(
+            " SELECT * " +
+            " FROM residents " +
+            " WHERE id = :id "
+    )
+    Resident loadResidentIncludeDeleted(@Bind("id") long id);
 
     @SqlQuery(
             " SELECT * " +
@@ -42,5 +61,12 @@ public interface ResidentDAO {
             " ORDER BY name ASC "
     )
     List<Resident> loadResidents();
+
+    @SqlUpdate(
+            " UPDATE residents " +
+            " SET deleted = TRUE " +
+            " WHERE id = :id "
+    )
+    void deleteResident(@Bind("id") long id);
 
 }

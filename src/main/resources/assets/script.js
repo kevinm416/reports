@@ -138,6 +138,10 @@ var ApplicationModel = Backbone.Model.extend({
 
 var ApplicationView = Marionette.LayoutView.extend({
     template: _.template($('#application-view-template').html()),
+    initialize: function() {
+        this.houses = this.options.houses;
+        this.residents = this.options.residents;
+    },
     regions: {
         'residentList': '#resident-list-region',
         'selectedResident': '.selected-resident-region',
@@ -149,8 +153,9 @@ var ApplicationView = Marionette.LayoutView.extend({
     },
     onShow: function() {
         var residentListView = new ResidentListViewWithFooter({
-            collection: this.options.residentsCollection,
-            applicationModel: this.model
+            collection: this.residents,
+            applicationModel: this.model,
+            houses: this.houses,
         })
         this.residentList.show(residentListView);
         this.createResidentTabs();
@@ -165,13 +170,13 @@ var ApplicationView = Marionette.LayoutView.extend({
         this.selectedResident.show(view);
     },
     getSelectedResidentView: function() {
-        var selectedResident = this.options.residentsCollection.get(this.model.get('residentId'));
+        var selectedResident = this.residents.get(this.model.get('residentId'));
         var selectedHouse = this.getSelectedHouse(selectedResident);
         var state = this.model.get('residentPanelState');
         if (state == 'info') {
             return new SelectedResidentInfoView({
                 resident: selectedResident,
-                houses: this.options.housesCollection,
+                houses: this.houses,
                 selectedHouse: selectedHouse,
             });
         } else if (state == 'reports') {
@@ -190,7 +195,7 @@ var ApplicationView = Marionette.LayoutView.extend({
     },
     getSelectedHouse: function(selectedResident) {
         if (selectedResident) {
-            return this.options.housesCollection.get(selectedResident.get('houseId'));
+            return this.houses.get(selectedResident.get('houseId'));
         } else {
             return null;
         }
@@ -227,8 +232,8 @@ var AppRouter = Backbone.Router.extend({
         $.when(residents.fetch(), houses.fetch()).then(function() {
             app.appRegion.show(new ApplicationView({
                 model: applicationModel,
-                residentsCollection: residents,
-                housesCollection: houses
+                residents: residents,
+                houses: houses,
             }));
         });
     },

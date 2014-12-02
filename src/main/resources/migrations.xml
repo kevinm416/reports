@@ -40,6 +40,9 @@
             <column name="house_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
+            <column name="deleted" type="boolean">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
         <addForeignKeyConstraint 
                 constraintName="resident_house_id" 

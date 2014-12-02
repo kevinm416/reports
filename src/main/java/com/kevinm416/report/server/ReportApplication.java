@@ -91,6 +91,7 @@ public class ReportApplication extends Application<ReportServiceConfiguration> {
     private void configureObjectMapper(Environment environment) {
         environment.getObjectMapper().configure(Feature.WRITE_NUMBERS_AS_STRINGS, true);
         environment.getObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        environment.getObjectMapper().configure(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES, true);
     }
 
     public static void main(String args[]) throws Exception {

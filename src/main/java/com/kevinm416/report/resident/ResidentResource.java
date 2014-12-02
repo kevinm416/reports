@@ -4,6 +4,7 @@ import io.dropwizard.auth.Auth;
 
 import java.util.List;
 
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -55,6 +56,13 @@ public class ResidentResource {
     @Path("/{id}")
     public Resident loadResident(@Auth ResidentCoordinator user, @PathParam("id") long id) {
         return residentDAO.loadResident(id);
+    }
+
+    @DELETE
+    @Timed
+    @Path("/{id}")
+    public void deleteResident(@Auth ResidentCoordinator user, @PathParam("id") long id) {
+        residentDAO.deleteResident(id);
     }
 
 }

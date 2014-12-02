@@ -29,7 +29,7 @@ public class ResidentCache {
             @Override
             public Resident call() throws Exception {
                 ResidentDAO residentDao = h.attach(ResidentDAO.class);
-                return residentDao.loadResident(id);
+                return residentDao.loadResidentIncludeDeleted(id);
             }
         };
     }

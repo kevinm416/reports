@@ -112,16 +112,14 @@ var CreateShiftReportView = Marionette.LayoutView.extend({
             }),
         });
         console.log(shiftReport);        
-        shiftReport.save(
-            {
-                error: function(e) {
-                    console.log("error during save", e);
-                },
-                success: function() {
-                    console.log("saved successfully");
-                }
-            }
-        );
+        shiftReport.save({}, {
+            success: function() {
+                console.log("saved successfully");
+            },
+            error: function(e) {
+                alert("error during save \n" + JSON.stringify(e));
+            },
+        });
     },
     getToday: function() {
         return moment().unix();
