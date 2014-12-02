@@ -31,6 +31,9 @@ var CreateResidentModalView = Marionette.ItemView.extend({
         this.residents = this.options.residents;
         this.applicationModel = this.options.applicationModel;
     },
+    onShow: function() {
+        this.$('.modal').modal('show');
+    },
 });
 
 var ResidentListViewWithFooter = Marionette.CompositeView.extend({
