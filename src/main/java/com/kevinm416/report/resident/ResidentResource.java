@@ -13,6 +13,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.commons.lang.Validate;
+
 import com.codahale.metrics.annotation.Timed;
 import com.kevinm416.report.common.cache.IdCache;
 import com.kevinm416.report.rc.ResidentCoordinator;
@@ -46,7 +48,11 @@ public class ResidentResource {
     @PUT
     @Timed
     @Path("/{id}")
-    public void updateResident(@Auth ResidentCoordinator user, Resident resident) {
+    public void updateResident(
+            @Auth ResidentCoordinator user,
+            @PathParam("id") long id,
+            Resident resident) {
+        Validate.isTrue(id == resident.getId());
         residentDAO.updateResident(resident);
         residentCache.invalidate(resident.getId());
     }

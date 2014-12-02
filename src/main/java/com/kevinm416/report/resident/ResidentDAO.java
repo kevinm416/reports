@@ -58,6 +58,7 @@ public interface ResidentDAO {
     @SqlQuery(
             " SELECT * " +
             " FROM residents " +
+            " WHERE deleted = FALSE " +
             " ORDER BY name ASC "
     )
     List<Resident> loadResidents();

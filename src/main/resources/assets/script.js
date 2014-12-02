@@ -18,7 +18,7 @@ var Resident = Backbone.Model.extend({
         birthdate: null,
         houseId: null
     },
-    url: '/api/residents',
+    urlRoot: '/api/residents',
 });
 
 var ResidentCoordinator = Backbone.Model.extend({
@@ -83,41 +83,6 @@ var SelectedResidentTabsView = Marionette.CollectionView.extend({
    }
 });
 
-var SelectedResidentInfoView = Marionette.ItemView.extend({
-    template: Handlebars.compile($('#selected-resident-template').html()),
-    events: {
-       'submit': 'onSubmit'
-    },
-    serializeData: function() {
-        if (this.options.resident && this.options.selectedHouse) {
-            return {
-                'resident': this.options.resident.toJSON(),
-                'selectedHouse': this.options.selectedHouse.toJSON(),
-                'houses': this.options.houses.toJSON()
-            }
-        } else {
-            return {};
-        }
-    },
-    onRender: function() {
-        this.$el.find('#birthdate-picker').datepicker({
-            pickTime: false
-        });
-    },
-    onSubmit: function(e) {
-        e.preventDefault();
-        var name = this.$('#name-input').val();
-        var birthdate = getUnixTimestampForDay(this.$('#birthdate-input').val()); 
-        var houseId = this.$('#houseid-input').val();
-        this.options.resident.set({
-            'name': name,
-            'birthdate': birthdate,
-            'houseId': houseId,
-        });
-        this.options.resident.save();
-    }
-});
-
 var ResidentsCollection = Backbone.Collection.extend({
     model: Resident,
     url: '/api/residents',
@@ -175,8 +140,9 @@ var ApplicationView = Marionette.LayoutView.extend({
         var state = this.model.get('residentPanelState');
         if (state == 'info') {
             return new SelectedResidentInfoView({
-                resident: selectedResident,
+                applicationModel: this.model,
                 houses: this.houses,
+                resident: selectedResident,
                 selectedHouse: selectedHouse,
             });
         } else if (state == 'reports') {
