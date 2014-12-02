@@ -61,13 +61,14 @@ var CreateResidentModalView = Marionette.ItemView.extend({
     },
     createResident: function(e) {
         this.model.save({}, {
-            success: function(m, r, options) {
+            success: function(m, id, options) {
                 var view = options.view;
+                view.model.set('id', id);
                 view.residents.add(view.model);
                 view.$('.modal').modal('hide');
             },
-            error: function() {
-                alert('error creating resident');
+            error: function(m, r) {
+                alert('error creating resident\n' + JSON.stringify(r));
             },
             view: this,
         });
