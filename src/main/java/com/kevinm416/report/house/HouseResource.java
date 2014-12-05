@@ -1,7 +1,5 @@
 package com.kevinm416.report.house;
 
-import io.dropwizard.auth.Auth;
-
 import java.util.List;
 
 import javax.validation.Valid;
@@ -12,8 +10,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.codahale.metrics.annotation.Timed;
+import com.kevinm416.report.auth.ShiroAuth;
 import com.kevinm416.report.house.api.CreateHouseForm;
-import com.kevinm416.report.rc.ResidentCoordinator;
+import com.kevinm416.report.user.User;
 
 @Path("/houses")
 @Produces(MediaType.APPLICATION_JSON)
@@ -27,13 +26,13 @@ public class HouseResource {
 
     @GET
     @Timed
-    public List<House> loadHouses(@Auth ResidentCoordinator user) {
+    public List<House> loadHouses(@ShiroAuth User user) {
         return houseDAO.loadHouses();
     }
 
     @POST
     @Timed
-    public long createHouse(@Auth ResidentCoordinator user, @Valid CreateHouseForm form) {
+    public long createHouse(@ShiroAuth User user, @Valid CreateHouseForm form) {
         return houseDAO.createHouse(form);
     }
 

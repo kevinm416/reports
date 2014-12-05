@@ -1,7 +1,5 @@
 package com.kevinm416.report.resident;
 
-import io.dropwizard.auth.Auth;
-
 import java.util.List;
 
 import javax.ws.rs.DELETE;
@@ -16,9 +14,10 @@ import javax.ws.rs.core.MediaType;
 import org.apache.commons.lang.Validate;
 
 import com.codahale.metrics.annotation.Timed;
+import com.kevinm416.report.auth.ShiroAuth;
 import com.kevinm416.report.common.cache.IdCache;
-import com.kevinm416.report.rc.ResidentCoordinator;
 import com.kevinm416.report.resident.api.CreateResidentForm;
+import com.kevinm416.report.user.User;
 
 @Path("/residents")
 @Produces(MediaType.APPLICATION_JSON)
@@ -35,13 +34,13 @@ public class ResidentResource {
 
     @GET
     @Timed
-    public List<Resident> loadResidents(@Auth ResidentCoordinator user) {
+    public List<Resident> loadResidents(@ShiroAuth User user) {
         return residentDAO.loadResidents();
     }
 
     @POST
     @Timed
-    public long createResident(@Auth ResidentCoordinator user, CreateResidentForm form) {
+    public long createResident(@ShiroAuth User user, CreateResidentForm form) {
         return residentDAO.createResident(form);
     }
 
@@ -49,7 +48,7 @@ public class ResidentResource {
     @Timed
     @Path("/{id}")
     public void updateResident(
-            @Auth ResidentCoordinator user,
+            @ShiroAuth User user,
             @PathParam("id") long id,
             Resident resident) {
         Validate.isTrue(id == resident.getId());
@@ -60,14 +59,14 @@ public class ResidentResource {
     @GET
     @Timed
     @Path("/{id}")
-    public Resident loadResident(@Auth ResidentCoordinator user, @PathParam("id") long id) {
+    public Resident loadResident(@ShiroAuth User user, @PathParam("id") long id) {
         return residentDAO.loadResident(id);
     }
 
     @DELETE
     @Timed
     @Path("/{id}")
-    public void deleteResident(@Auth ResidentCoordinator user, @PathParam("id") long id) {
+    public void deleteResident(@ShiroAuth User user, @PathParam("id") long id) {
         residentDAO.deleteResident(id);
     }
 

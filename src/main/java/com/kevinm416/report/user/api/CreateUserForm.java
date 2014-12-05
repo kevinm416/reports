@@ -1,13 +1,17 @@
-package com.kevinm416.report.rc.api;
+package com.kevinm416.report.user.api;
 
 import org.hibernate.validator.constraints.NotBlank;
 
-public class CreateResidentCoordinatorForm {
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public class CreateUserForm {
 
     @NotBlank
     private final String name;
 
-    public CreateResidentCoordinatorForm(String name) {
+    @JsonCreator
+    public CreateUserForm(@JsonProperty("name") String name) {
         this.name = name;
     }
 
@@ -34,7 +38,7 @@ public class CreateResidentCoordinatorForm {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        CreateResidentCoordinatorForm other = (CreateResidentCoordinatorForm) obj;
+        CreateUserForm other = (CreateUserForm) obj;
         if (name == null) {
             if (other.name != null) {
                 return false;

@@ -18,12 +18,18 @@
             </column>
         </createTable>
         
-        <createTable tableName="resident_coordinators">
+        <createTable tableName="users">
             <column name="id" type="bigint" defaultValue="nextval('id_seq')">
                 <constraints nullable="false" unique="true" primaryKey="true" />
             </column>
             <column name="name" type="varchar(255)">
                 <constraints nullable="false" unique="true" primaryKey="true"/>
+            </column>
+            <column name="pw_hash" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="salt" type="varchar(255)">
+                <constraints nullable="false" />
             </column>
         </createTable>
         
@@ -131,15 +137,15 @@
             <column name="shift_report_id" type="bigint">
                 <constraints nullable="false" />
             </column>
-            <column name="resident_coordinator_id" type="bigint">
+            <column name="user_id" type="bigint">
                 <constraints nullable="false" />
             </column>
         </createTable>
         <addForeignKeyConstraint
                 constraintName="shift_report_on_shift_rc_id"
                 baseTableName="shift_report_on_shift"
-                baseColumnNames="resident_coordinator_id"
-                referencedTableName="resident_coordinators"
+                baseColumnNames="user_id"
+                referencedTableName="users"
                 referencedColumnNames="id" />
         <addForeignKeyConstraint
                 constraintName="shift_report_on_shift_shift_report_id"

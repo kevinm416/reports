@@ -9,26 +9,26 @@ import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
 import com.kevinm416.report.common.cache.IdCache;
 import com.kevinm416.report.house.House;
-import com.kevinm416.report.rc.ResidentCoordinator;
 import com.kevinm416.report.resident.Resident;
 import com.kevinm416.report.shiftreport.db.ShiftReport;
 import com.kevinm416.report.shiftreport.db.ShiftReportDAO;
+import com.kevinm416.report.user.User;
 
 public class ShiftReportViewLoader {
 
     private final Handle h;
     private final IdCache<House> houseCache;
-    private final IdCache<ResidentCoordinator> rcCache;
+    private final IdCache<User> userCache;
     private final IdCache<Resident> residentCache;
 
     public ShiftReportViewLoader(
             Handle h,
             IdCache<House> houseCache,
-            IdCache<ResidentCoordinator> rcCache,
+            IdCache<User> rcCache,
             IdCache<Resident> residentCache) {
         this.h = h;
         this.houseCache = houseCache;
-        this.rcCache = rcCache;
+        this.userCache = rcCache;
         this.residentCache = residentCache;
     }
 
@@ -47,14 +47,14 @@ public class ShiftReportViewLoader {
             List<Long> onShift,
             List<ShiftReportResident> shiftReportResidents) {
         House house = houseCache.loadById(h, shiftReport.getHouseId());
-        ResidentCoordinator residentCoordinator = rcCache.loadById(h, shiftReport.getCreatedBy());
+        User user = userCache.loadById(h, shiftReport.getCreatedBy());
         Set<String> onShiftNames = loadOnShiftNames(onShift);
         List<ShiftReportResidentView> shiftReportResidentViews = convertShiftReportResidents(shiftReportResidents);
         return new ShiftReportView(
                 shiftReport.getId(),
                 house.getName(),
                 shiftReport.getDate(),
-                residentCoordinator.getName(),
+                user.getName(),
                 shiftReport.getShift(),
                 shiftReport.getTimeCreated(),
                 shiftReport.isKeysAccountedFor(),
@@ -84,7 +84,7 @@ public class ShiftReportViewLoader {
         return FluentIterable.from(onShift).transform(new Function<Long, String>() {
             @Override
             public String apply(Long input) {
-                return rcCache.loadById(h, input).getName();
+                return userCache.loadById(h, input).getName();
             }
         }).toSet();
     }

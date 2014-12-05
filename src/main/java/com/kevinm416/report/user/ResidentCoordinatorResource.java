@@ -1,6 +1,4 @@
-package com.kevinm416.report.rc;
-
-import io.dropwizard.auth.Auth;
+package com.kevinm416.report.user;
 
 import java.util.List;
 
@@ -12,30 +10,31 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.codahale.metrics.annotation.Timed;
-import com.kevinm416.report.rc.api.CreateResidentCoordinatorForm;
+import com.kevinm416.report.auth.ShiroAuth;
+import com.kevinm416.report.user.api.CreateUserForm;
 
 @Path("/residentCoordinators")
 @Produces(MediaType.APPLICATION_JSON)
 public class ResidentCoordinatorResource {
 
-    private final ResidentCoordinatorDAO residentCoordinatorDao;
+    private final UserDAO residentCoordinatorDao;
 
     public ResidentCoordinatorResource(
-            ResidentCoordinatorDAO residentCoordinatorDao) {
+            UserDAO residentCoordinatorDao) {
         this.residentCoordinatorDao = residentCoordinatorDao;
     }
 
     @GET
     @Timed
-    public List<ResidentCoordinator> loadResidentCoordinators(@Auth ResidentCoordinator user) {
+    public List<User> loadResidentCoordinators(@ShiroAuth User user) {
         return residentCoordinatorDao.loadResidentCoordinators();
     }
 
     @POST
     @Timed
     public long createResidentCoordinator(
-            @Auth ResidentCoordinator user,
-            @Valid CreateResidentCoordinatorForm form) {
+            @ShiroAuth User user,
+            @Valid CreateUserForm form) {
         return residentCoordinatorDao.createResidentCoordinator(form);
     }
 

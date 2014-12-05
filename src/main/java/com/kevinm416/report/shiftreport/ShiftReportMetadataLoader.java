@@ -6,16 +6,16 @@ import org.skife.jdbi.v2.Handle;
 
 import com.google.common.collect.Iterables;
 import com.kevinm416.report.common.cache.IdCache;
-import com.kevinm416.report.rc.ResidentCoordinator;
+import com.kevinm416.report.user.User;
 
 public class ShiftReportMetadataLoader {
 
     private final Handle h;
-    private final IdCache<ResidentCoordinator> residentCoordinatorCache;
+    private final IdCache<User> residentCoordinatorCache;
 
     public ShiftReportMetadataLoader(
             Handle h,
-            IdCache<ResidentCoordinator> residentCoordinatorCache) {
+            IdCache<User> residentCoordinatorCache) {
         this.h = h;
         this.residentCoordinatorCache = residentCoordinatorCache;
     }
@@ -26,7 +26,7 @@ public class ShiftReportMetadataLoader {
 
         long createdById = (long) row.get("created_by");
 
-        ResidentCoordinator residentCoordinator =
+        User residentCoordinator =
                 residentCoordinatorCache.loadById(h, createdById);
 
         return new ShiftReportMetadata(

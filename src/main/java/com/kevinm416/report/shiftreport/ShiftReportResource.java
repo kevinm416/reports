@@ -1,7 +1,5 @@
 package com.kevinm416.report.shiftreport;
 
-import io.dropwizard.auth.Auth;
-
 import java.util.List;
 
 import javax.validation.Valid;
@@ -18,11 +16,12 @@ import org.skife.jdbi.v2.Handle;
 import org.skife.jdbi.v2.tweak.HandleCallback;
 
 import com.codahale.metrics.annotation.Timed;
+import com.kevinm416.report.auth.ShiroAuth;
 import com.kevinm416.report.common.cache.IdCache;
 import com.kevinm416.report.house.House;
-import com.kevinm416.report.rc.ResidentCoordinator;
 import com.kevinm416.report.resident.Resident;
 import com.kevinm416.report.shiftreport.api.CreateShiftReport;
+import com.kevinm416.report.user.User;
 
 @Path("/shiftReports")
 @Produces(MediaType.APPLICATION_JSON)
@@ -30,13 +29,13 @@ public class ShiftReportResource {
 
     private final DBI jdbi;
     private final IdCache<House> houseCache;
-    private final IdCache<ResidentCoordinator> rcCache;
+    private final IdCache<User> rcCache;
     private final IdCache<Resident> residentCache;
 
     public ShiftReportResource(
             DBI jdbi,
             IdCache<House> houseCache,
-            IdCache<ResidentCoordinator> rcCache,
+            IdCache<User> rcCache,
             IdCache<Resident> residentCache) {
         this.jdbi = jdbi;
         this.houseCache = houseCache;
@@ -47,7 +46,7 @@ public class ShiftReportResource {
     @POST
     @Timed
     public long createShiftReport(
-            @Auth final ResidentCoordinator user,
+            @ShiroAuth final User user,
             @Valid final CreateShiftReport createShiftReport) {
         return jdbi.withHandle(new HandleCallback<Long>() {
             @Override
@@ -63,7 +62,7 @@ public class ShiftReportResource {
     @Timed
     @Path("/resident/{residentId}")
     public List<ShiftReportResidentWithMetadata> loadShiftReportsForResident(
-            @Auth ResidentCoordinator user,
+            @ShiroAuth User user,
             @PathParam("residentId") final long residentId,
             @QueryParam("pageSize") final int pageSize,
             @QueryParam("lastShiftReportResidentId") final Long lastShiftReportResidentId) {
@@ -93,7 +92,7 @@ public class ShiftReportResource {
     @Timed
     @Path("/{shiftReportId}")
     public ShiftReportView loadShiftReport(
-            @Auth ResidentCoordinator user,
+            @ShiroAuth User user,
             @PathParam("shiftReportId") final long shiftReportId) {
         ShiftReportView shiftReportView = jdbi.withHandle(new HandleCallback<ShiftReportView>() {
             @Override

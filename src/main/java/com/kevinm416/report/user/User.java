@@ -1,16 +1,16 @@
-package com.kevinm416.report.rc;
+package com.kevinm416.report.user;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.kevinm416.report.common.Identifiable;
 
-public class ResidentCoordinator implements Identifiable {
+public class User implements Identifiable {
 
     private final long id;
     private final String name;
 
     @JsonCreator
-    public ResidentCoordinator(
+    public User(
             @JsonProperty("id") long id,
             @JsonProperty("name") String name) {
         this.id = id;
@@ -46,7 +46,7 @@ public class ResidentCoordinator implements Identifiable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        ResidentCoordinator other = (ResidentCoordinator) obj;
+        User other = (User) obj;
         if (id != other.id) {
             return false;
         }

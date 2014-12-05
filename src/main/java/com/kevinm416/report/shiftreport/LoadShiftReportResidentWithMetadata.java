@@ -6,15 +6,15 @@ import org.skife.jdbi.v2.Handle;
 
 import com.google.common.collect.Lists;
 import com.kevinm416.report.common.cache.IdCache;
-import com.kevinm416.report.rc.ResidentCoordinator;
+import com.kevinm416.report.user.User;
 
 public class LoadShiftReportResidentWithMetadata {
 
     private final Handle h;
-    private final IdCache<ResidentCoordinator> residentCoordinatorCache;
+    private final IdCache<User> residentCoordinatorCache;
 
     public LoadShiftReportResidentWithMetadata(Handle h,
-            IdCache<ResidentCoordinator> residentCoordinatorCache) {
+            IdCache<User> residentCoordinatorCache) {
         this.h = h;
         this.residentCoordinatorCache = residentCoordinatorCache;
     }
