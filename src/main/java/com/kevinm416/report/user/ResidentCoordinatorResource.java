@@ -10,7 +10,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.codahale.metrics.annotation.Timed;
-import com.kevinm416.report.auth.ShiroAuth;
+import com.kevinm416.report.auth.Auth;
 import com.kevinm416.report.user.api.CreateUserForm;
 
 @Path("/residentCoordinators")
@@ -26,14 +26,14 @@ public class ResidentCoordinatorResource {
 
     @GET
     @Timed
-    public List<User> loadResidentCoordinators(@ShiroAuth User user) {
+    public List<User> loadResidentCoordinators(@Auth User user) {
         return residentCoordinatorDao.loadResidentCoordinators();
     }
 
     @POST
     @Timed
     public long createResidentCoordinator(
-            @ShiroAuth User user,
+            @Auth User user,
             @Valid CreateUserForm form) {
         return residentCoordinatorDao.createResidentCoordinator(form);
     }

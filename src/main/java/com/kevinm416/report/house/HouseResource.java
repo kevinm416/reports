@@ -10,7 +10,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.codahale.metrics.annotation.Timed;
-import com.kevinm416.report.auth.ShiroAuth;
+import com.kevinm416.report.auth.Auth;
 import com.kevinm416.report.house.api.CreateHouseForm;
 import com.kevinm416.report.user.User;
 
@@ -26,13 +26,13 @@ public class HouseResource {
 
     @GET
     @Timed
-    public List<House> loadHouses(@ShiroAuth User user) {
+    public List<House> loadHouses(@Auth User user) {
         return houseDAO.loadHouses();
     }
 
     @POST
     @Timed
-    public long createHouse(@ShiroAuth User user, @Valid CreateHouseForm form) {
+    public long createHouse(@Auth User user, @Valid CreateHouseForm form) {
         return houseDAO.createHouse(form);
     }
 

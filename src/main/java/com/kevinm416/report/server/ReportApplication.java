@@ -19,7 +19,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.kevinm416.report.auth.AuthInjectableProvider;
 import com.kevinm416.report.auth.ReportApplicationRealm;
 import com.kevinm416.report.auth.ReportApplicationShiroFilter;
-import com.kevinm416.report.auth.TestAuthResource;
 import com.kevinm416.report.common.cache.IdCache;
 import com.kevinm416.report.house.House;
 import com.kevinm416.report.house.HouseCache;
@@ -86,8 +85,6 @@ public class ReportApplication extends Application<ReportServiceConfiguration> {
 
         ShiftReportResource shiftReportResource = new ShiftReportResource(jdbi, houseCache, residentCoordinatorCache, residentCache);
         environment.jersey().register(shiftReportResource);
-
-        environment.jersey().register(new TestAuthResource());
 
         environment.healthChecks().register("test", new ReportApplicationHealthCheck());
     }

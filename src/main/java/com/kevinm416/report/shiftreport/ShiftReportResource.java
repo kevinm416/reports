@@ -16,7 +16,7 @@ import org.skife.jdbi.v2.Handle;
 import org.skife.jdbi.v2.tweak.HandleCallback;
 
 import com.codahale.metrics.annotation.Timed;
-import com.kevinm416.report.auth.ShiroAuth;
+import com.kevinm416.report.auth.Auth;
 import com.kevinm416.report.common.cache.IdCache;
 import com.kevinm416.report.house.House;
 import com.kevinm416.report.resident.Resident;
@@ -46,7 +46,7 @@ public class ShiftReportResource {
     @POST
     @Timed
     public long createShiftReport(
-            @ShiroAuth final User user,
+            @Auth final User user,
             @Valid final CreateShiftReport createShiftReport) {
         return jdbi.withHandle(new HandleCallback<Long>() {
             @Override
@@ -62,7 +62,7 @@ public class ShiftReportResource {
     @Timed
     @Path("/resident/{residentId}")
     public List<ShiftReportResidentWithMetadata> loadShiftReportsForResident(
-            @ShiroAuth User user,
+            @Auth User user,
             @PathParam("residentId") final long residentId,
             @QueryParam("pageSize") final int pageSize,
             @QueryParam("lastShiftReportResidentId") final Long lastShiftReportResidentId) {
@@ -92,7 +92,7 @@ public class ShiftReportResource {
     @Timed
     @Path("/{shiftReportId}")
     public ShiftReportView loadShiftReport(
-            @ShiroAuth User user,
+            @Auth User user,
             @PathParam("shiftReportId") final long shiftReportId) {
         ShiftReportView shiftReportView = jdbi.withHandle(new HandleCallback<ShiftReportView>() {
             @Override
