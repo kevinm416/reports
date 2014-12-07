@@ -30,10 +30,10 @@ import com.kevinm416.report.resident.ResidentDAO;
 import com.kevinm416.report.resident.ResidentResource;
 import com.kevinm416.report.server.config.ReportServiceConfiguration;
 import com.kevinm416.report.shiftreport.ShiftReportResource;
-import com.kevinm416.report.user.UserResource;
 import com.kevinm416.report.user.User;
 import com.kevinm416.report.user.UserCache;
 import com.kevinm416.report.user.UserDAO;
+import com.kevinm416.report.user.UserResource;
 
 
 public class ReportApplication extends Application<ReportServiceConfiguration> {
@@ -42,7 +42,6 @@ public class ReportApplication extends Application<ReportServiceConfiguration> {
     public String getName() {
         return "report-application";
     }
-
 
     @Override
     public void initialize(Bootstrap<ReportServiceConfiguration> bootstrap) {
@@ -56,28 +55,40 @@ public class ReportApplication extends Application<ReportServiceConfiguration> {
     }
 
     @Override
-    public void run(ReportServiceConfiguration configuration,
+    public void run(
+            ReportServiceConfiguration configuration,
             Environment environment) throws Exception {
         configureObjectMapper(environment);
 
         environment.jersey().setUrlPattern("/api/*");
 
+        DBI jdbi = setupDB(configuration, environment);
+        setupResources(environment, jdbi);
+        setupAuth(environment, jdbi);
+
+        environment.healthChecks().register("test", new ReportApplicationHealthCheck());
+    }
+
+    private static DBI setupDB(
+            ReportServiceConfiguration configuration,
+            Environment environment) throws ClassNotFoundException {
+        DBIFactory dbiFactory = new DBIFactory();
+        return dbiFactory.build(environment, configuration.getDataSourceFactory(), "postgres");
+    }
+
+    private static void setupResources(Environment environment, DBI jdbi) {
+        ResidentDAO residentDAO = jdbi.onDemand(ResidentDAO.class);
+        HouseDAO houseDAO = jdbi.onDemand(HouseDAO.class);
+        UserDAO userDao = jdbi.onDemand(UserDAO.class);
+
         IdCache<User> residentCoordinatorCache = UserCache.create();
         IdCache<House> houseCache = HouseCache.create();
         IdCache<Resident> residentCache = ResidentCache.create();
 
-        DBIFactory dbiFactory = new DBIFactory();
-        DBI jdbi = dbiFactory.build(environment, configuration.getDataSourceFactory(), "postgres");
-        ResidentDAO residentDAO = jdbi.onDemand(ResidentDAO.class);
-        HouseDAO houseDAO = jdbi.onDemand(HouseDAO.class);
-        UserDAO residentCoordinatorDao = jdbi.onDemand(UserDAO.class);
-
-        setupAuth(environment, residentCoordinatorDao);
-
         ResidentResource residentResource = new ResidentResource(residentDAO, residentCache);
         environment.jersey().register(residentResource);
 
-        UserResource residentCoordinatorResource = new UserResource(residentCoordinatorDao);
+        UserResource residentCoordinatorResource = new UserResource(userDao);
         environment.jersey().register(residentCoordinatorResource);
 
         HouseResource houseResource = new HouseResource(houseDAO);
@@ -85,30 +96,20 @@ public class ReportApplication extends Application<ReportServiceConfiguration> {
 
         ShiftReportResource shiftReportResource = new ShiftReportResource(jdbi, houseCache, residentCoordinatorCache, residentCache);
         environment.jersey().register(shiftReportResource);
-
-        environment.healthChecks().register("test", new ReportApplicationHealthCheck());
     }
 
-    private void setupAuth(Environment environment, UserDAO residentCoordinatorDAO) {
-//        environment.jersey().register(new BasicAuthProvider<ResidentCoordinator>(
-//                new ReportApplicationAuthenticator(residentCoordinatorDAO),
-//                "reports"));
-
-//        SecurityManager securityManager = ReportApplicationSecurity.createSecurityManager(residentCoordinatorDAO);
-//        SecurityUtils.setSecurityManager(securityManager);
+    private static void setupAuth(Environment environment, DBI jdbi) {
+        UserDAO userDao = jdbi.onDemand(UserDAO.class);
 
         environment.jersey().register(new AuthInjectableProvider());
-
         environment.servlets().setSessionHandler(new SessionHandler());
-//        environment.servlets().addServletListeners(new EnvironmentLoaderListener());
 
-        ReportApplicationRealm realm = ReportApplicationRealm.create(residentCoordinatorDAO);
+        ReportApplicationRealm realm = ReportApplicationRealm.create(userDao);
         environment.servlets().addFilter("shiro-filter", new ReportApplicationShiroFilter(realm))
                 .addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "*");
-
     }
 
-    private void configureObjectMapper(Environment environment) {
+    private static void configureObjectMapper(Environment environment) {
         environment.getObjectMapper().configure(Feature.WRITE_NUMBERS_AS_STRINGS, true);
         environment.getObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         environment.getObjectMapper().configure(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES, true);

@@ -1,18 +1,23 @@
 # create and run a container named postgres
 docker run \
   --detach \
-  --name postgres \
+  --name reports-postgres \
   --publish 127.0.0.1:5432:5432 \
   stackbrew/postgres:9.3 
 
-# open sql shell in container
+# open shell in container
 docker exec \
   --tty \
   --interactive \
+  reports-postgres \
   bash
 
+# open sql shell from container shell
 psql \
   -U postgres \
   -h localhost \
   -f seed.sql
 
+# create admin user w/ password password
+insert into users (name, pw_hash, salt) 
+values ('admin', 'T1U8KXcwPmcn5OZob8FpccztBqLMZmmnPZ84lCz0yu8=', '');
