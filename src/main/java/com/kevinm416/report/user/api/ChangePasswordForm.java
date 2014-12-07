@@ -5,24 +5,14 @@ import org.hibernate.validator.constraints.NotBlank;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class CreateUserForm {
-
-    @NotBlank
-    private final String name;
+public class ChangePasswordForm {
 
     @NotBlank
     private final String password;
 
     @JsonCreator
-    public CreateUserForm(
-            @JsonProperty("name") String name,
-            @JsonProperty("password") String password) {
-        this.name = name;
+    public ChangePasswordForm(@JsonProperty("password") String password) {
         this.password = password;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public String getPassword() {
@@ -33,7 +23,6 @@ public class CreateUserForm {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((name == null) ? 0 : name.hashCode());
         result = prime * result
                 + ((password == null) ? 0 : password.hashCode());
         return result;
@@ -50,14 +39,7 @@ public class CreateUserForm {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        CreateUserForm other = (CreateUserForm) obj;
-        if (name == null) {
-            if (other.name != null) {
-                return false;
-            }
-        } else if (!name.equals(other.name)) {
-            return false;
-        }
+        ChangePasswordForm other = (ChangePasswordForm) obj;
         if (password == null) {
             if (other.password != null) {
                 return false;
@@ -70,7 +52,7 @@ public class CreateUserForm {
 
     @Override
     public String toString() {
-        return "CreateUserForm [name=" + name + ", password=" + password + "]";
+        return "ChangePasswordForm [password=" + password + "]";
     }
 
 }

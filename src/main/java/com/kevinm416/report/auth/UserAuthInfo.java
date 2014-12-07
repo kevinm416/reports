@@ -1,6 +1,7 @@
 package com.kevinm416.report.auth;
 
 import org.apache.shiro.authc.SaltedAuthenticationInfo;
+import org.apache.shiro.codec.Base64;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.apache.shiro.util.ByteSource;
@@ -23,7 +24,7 @@ public class UserAuthInfo implements SaltedAuthenticationInfo {
         return new UserAuthInfo(
                 new SimplePrincipalCollection(user, realmName),
                 saltedHashedPassword,
-                ByteSource.Util.bytes(salt));
+                ByteSource.Util.bytes(Base64.decode(salt)));
     }
 
     private UserAuthInfo(

@@ -21,16 +21,16 @@ var Resident = Backbone.Model.extend({
     urlRoot: '/api/residents',
 });
 
-var ResidentCoordinator = Backbone.Model.extend({
+var User = Backbone.Model.extend({
     defaults: {
         id: null,
         name: null,
     }
 });
 
-var ResidentCoordinatorCollection = Backbone.Collection.extend({
-    model: ResidentCoordinator,
-    url: '/api/residentCoordinators'
+var UserCollection = Backbone.Collection.extend({
+    model: User,
+    url: '/api/users'
 });
 
 var ResidentsCollection = Backbone.Collection.extend({
@@ -187,6 +187,7 @@ var AppRouter = Backbone.Router.extend({
         'shiftReport': 'createShiftReportRoute',
         'shiftReport/:shiftReportId': 'viewShiftReportRoute',
         'incidentReport': 'incidentReportRoute',
+        'account': 'accountRoute',
         '*all': 'defaultRoute'
     },
     defaultRoute: function() {
@@ -213,8 +214,8 @@ var AppRouter = Backbone.Router.extend({
     createShiftReportRoute: function() {
         var houses = new HousesCollection();
         var residents = new ResidentsCollection();
-        var residentCoordinators = new ResidentCoordinatorCollection();
-        $.when(houses.fetch(), residents.fetch(), residentCoordinators.fetch())
+        var users = new UserCollection();
+        $.when(houses.fetch(), residents.fetch(), users.fetch())
         .then(function() {
             var shiftReportModel = new CreateShiftReportModel({
                 residents: residents,
@@ -222,7 +223,7 @@ var AppRouter = Backbone.Router.extend({
             var createShiftReportView = new CreateShiftReportView({
                model: shiftReportModel, 
                residents: residents,
-               residentCoordinators: residentCoordinators,
+               residentCoordinators: users,
                houses: houses,
             });
             app.appRegion.show(createShiftReportView);    
@@ -237,6 +238,15 @@ var AppRouter = Backbone.Router.extend({
             model: shiftReportModel,
         });
         app.appRegion.show(shiftReportView);
+    },
+    accountRoute: function() {
+        var user = loadCurrentUser();
+        var model = new AccountModel({
+            user: user,
+        });
+        app.appRegion.show(new AccountView({
+            model: model,
+        }));
     },
 });
 

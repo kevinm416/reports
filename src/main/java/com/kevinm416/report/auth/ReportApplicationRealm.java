@@ -7,7 +7,6 @@ import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
-import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.apache.shiro.realm.Realm;
 
 import com.kevinm416.report.user.UserDAO;
@@ -20,8 +19,8 @@ public class ReportApplicationRealm implements Realm {
     private final CredentialsMatcher credentialsMatcher;
 
     public static ReportApplicationRealm create(UserDAO residentCoordinatorDAO) {
-        HashedCredentialsMatcher credentialsMatcher = new HashedCredentialsMatcher(Sha256Hash.ALGORITHM_NAME);
-        credentialsMatcher.setHashIterations(1024);
+        HashedCredentialsMatcher credentialsMatcher = new HashedCredentialsMatcher(PasswordHasher.ALGORITHM_NAME);
+        credentialsMatcher.setHashIterations(PasswordHasher.HASH_ITERATIONS);
         credentialsMatcher.setStoredCredentialsHexEncoded(false);
         return new ReportApplicationRealm(residentCoordinatorDAO, credentialsMatcher);
     }

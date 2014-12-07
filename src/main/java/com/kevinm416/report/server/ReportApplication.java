@@ -30,7 +30,7 @@ import com.kevinm416.report.resident.ResidentDAO;
 import com.kevinm416.report.resident.ResidentResource;
 import com.kevinm416.report.server.config.ReportServiceConfiguration;
 import com.kevinm416.report.shiftreport.ShiftReportResource;
-import com.kevinm416.report.user.ResidentCoordinatorResource;
+import com.kevinm416.report.user.UserResource;
 import com.kevinm416.report.user.User;
 import com.kevinm416.report.user.UserCache;
 import com.kevinm416.report.user.UserDAO;
@@ -77,7 +77,7 @@ public class ReportApplication extends Application<ReportServiceConfiguration> {
         ResidentResource residentResource = new ResidentResource(residentDAO, residentCache);
         environment.jersey().register(residentResource);
 
-        ResidentCoordinatorResource residentCoordinatorResource = new ResidentCoordinatorResource(residentCoordinatorDao);
+        UserResource residentCoordinatorResource = new UserResource(residentCoordinatorDao);
         environment.jersey().register(residentCoordinatorResource);
 
         HouseResource houseResource = new HouseResource(houseDAO);
