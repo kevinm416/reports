@@ -9,7 +9,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
 import com.kevinm416.report.common.cache.IdCache;
 import com.kevinm416.report.house.House;
-import com.kevinm416.report.resident.Resident;
+import com.kevinm416.report.resident.api.Resident;
 import com.kevinm416.report.shiftreport.db.ShiftReport;
 import com.kevinm416.report.shiftreport.db.ShiftReportDAO;
 import com.kevinm416.report.user.User;

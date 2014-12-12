@@ -19,7 +19,7 @@ import com.codahale.metrics.annotation.Timed;
 import com.kevinm416.report.auth.Auth;
 import com.kevinm416.report.common.cache.IdCache;
 import com.kevinm416.report.house.House;
-import com.kevinm416.report.resident.Resident;
+import com.kevinm416.report.resident.api.Resident;
 import com.kevinm416.report.shiftreport.api.CreateShiftReport;
 import com.kevinm416.report.user.User;
 

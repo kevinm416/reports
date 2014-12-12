@@ -1,4 +1,6 @@
-package com.kevinm416.report.resident;
+package com.kevinm416.report.resident.api;
+
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -7,6 +9,7 @@ import com.kevinm416.report.common.Identifiable;
 public class Resident implements Identifiable {
 
     private final long id;
+    @NotNull
     private final String name;
     private final long birthdate;
     private final long houseId;

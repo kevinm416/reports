@@ -6,6 +6,7 @@ import org.skife.jdbi.v2.Handle;
 
 import com.kevinm416.report.common.cache.CallableFactory;
 import com.kevinm416.report.common.cache.IdCache;
+import com.kevinm416.report.resident.api.Resident;
 
 public class ResidentCache {
 

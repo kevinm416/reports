@@ -2,6 +2,7 @@ package com.kevinm416.report.resident;
 
 import java.util.List;
 
+import javax.validation.Valid;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -17,6 +18,7 @@ import com.codahale.metrics.annotation.Timed;
 import com.kevinm416.report.auth.Auth;
 import com.kevinm416.report.common.cache.IdCache;
 import com.kevinm416.report.resident.api.CreateResidentForm;
+import com.kevinm416.report.resident.api.Resident;
 import com.kevinm416.report.user.User;
 
 @Path("/residents")
@@ -50,7 +52,7 @@ public class ResidentResource {
     public void updateResident(
             @Auth User user,
             @PathParam("id") long id,
-            Resident resident) {
+            @Valid Resident resident) {
         Validate.isTrue(id == resident.getId());
         residentDAO.updateResident(resident);
         residentCache.invalidate(resident.getId());

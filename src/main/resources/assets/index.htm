@@ -167,8 +167,6 @@
                 </select>
               </div>
             </div>
-            <button type='button' class='btn btn-danger delete-resident-button'>Delete</button>
-            <button type='button' class='btn btn-default save-resident-button'>Save</button>
           </fieldset>
         </form>
         {{else}}
@@ -421,9 +419,20 @@
     </script>
     
     <script id='admin-users' type='text/x-handlebars-template'>
-        <div class='admin-user-list'></div>
-        <div class='admin-user-details'></div>
-    </script>    
+        <div class='admin-user-list col-sm-3'></div>
+        <div class='admin-user-details col-sm-9'></div>
+    </script>
+    
+    <script id='admin-user-edit' type='text/x-handlebars-template'>
+        <div class='user-details'></div>
+        <div class='admin-user-edit'></div>
+          {{#if residentId}}
+            <button type='button' class='btn btn-danger delete-resident-button'>Delete</button>
+            <button type='button' class='btn btn-default save-resident-button'>Save</button>
+          {{/if}}
+        <div>
+    </script>
+    
 
     <script src="lib/jquery-1.11.1.min.js" type="text/javascript"></script>
     <script src="lib/bootstrap-3.3.1.min.js" type="text/javascript"></script>
