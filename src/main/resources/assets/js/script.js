@@ -65,12 +65,15 @@ var SelectedResidentTabView = Marionette.ItemView.extend({
     events: {
         'click': 'selectCurrentTab',
     },
+    onShow: function() {
+        this.updateSelectedTab();
+    },
     selectCurrentTab: function() {
         this.applicationModel.set('residentPanelState', this.model.get('tabState'));
         this.updateSelectedTab();
     },
     updateSelectedTab: function() {
-        this.$el.toggleClass('active', this.applicationModel.get('residentPanelState') == this.model.get('tabState'));
+        this.$el.toggleClass('active', this.applicationModel.get('residentPanelState') === this.model.get('tabState'));
     },
 });
 
