@@ -1,11 +1,17 @@
 
+var SelectedResidentModel = Backbone.Model.extend({
+    defaults: {
+        residentId: null,
+    }
+});
+
 var ResidentListItemView = Marionette.ItemView.extend({
     template: Handlebars.compile("{{name}}"),
     tagName: 'li',
     className: 'list-group-item',
     initialize: function() {
-        this.applicationModel = this.options.applicationModel;
-        this.listenTo(this.applicationModel, 'change:residentId', this.updateSelected);
+        this.selectedResidentModel = this.options.selectedResidentModel;
+        this.listenTo(this.selectedResidentModel, 'change:residentId', this.updateSelected);
         this.updateSelected();
     },
     events: {
@@ -18,10 +24,10 @@ var ResidentListItemView = Marionette.ItemView.extend({
         this.render();
     },
     onClick: function() {
-        this.applicationModel.set('residentId', this.model.id);
+        this.selectedResidentModel.set('residentId', this.model.id);
     },
     updateSelected: function() {
-        this.$el.toggleClass('active', this.applicationModel.get('residentId') == this.model.id);
+        this.$el.toggleClass('active', this.selectedResidentModel.get('residentId') == this.model.id);
     },
 });
 
@@ -81,10 +87,10 @@ var ResidentListViewWithFooter = Marionette.CompositeView.extend({
     childView: ResidentListItemView,
     initialize: function() {
         this.houses = this.options.houses;
-        this.applicationModel = this.options.applicationModel;
+        this.selectedResidentModel = this.options.selectedResidentModel;
     },
     childViewOptions: function() {
-        return { applicationModel: this.options.applicationModel};
+        return { selectedResidentModel: this.options.selectedResidentModel};
     },
     events: {
         'click .create-resident-btn': 'createResident',

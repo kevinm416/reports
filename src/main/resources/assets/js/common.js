@@ -1,4 +1,19 @@
 
+var Resident = Backbone.Model.extend({
+    defaults: {
+        id: null,
+        name: null,
+        birthdate: null,
+        houseId: null
+    },
+    urlRoot: '/api/residents',
+});
+
+var ResidentsCollection = Backbone.Collection.extend({
+    model: Resident,
+    url: '/api/residents',
+});
+
 var DateFormats = {
     day: 'MM/DD/YYYY',
     detail: 'MM/DD/YYYY h:mm a'

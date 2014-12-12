@@ -2,7 +2,6 @@
 var AdminModel = Backbone.Model.extend({
     defaults: {
         state: 'users',
-        displayName: 'Users',
     },
 });
 
@@ -16,12 +15,6 @@ var AdminTabModel = Backbone.Model.extend({
 var AdminTabsModel = Backbone.Collection.extend({
     model: AdminTabModel,
 });
-
-var adminTabs = new AdminTabsModel([
-    { tabState: 'users', tabStateDisplayName: 'Users' },
-    { tabState: 'houses', tabStateDisplayName: 'Houses' },
-    { tabState: 'residents', tabStateDisplayName: 'Residents'},
-]);
 
 var AdminTabView = Marionette.ItemView.extend({
     template: Handlebars.compile($('#admin-tab-template').html()),
@@ -60,19 +53,47 @@ var AdminUsersView = Marionette.LayoutView.extend({
     }
 });
 
+var adminTabs = new AdminTabsModel([
+    { tabState: 'users', tabStateDisplayName: 'Users' },
+    { tabState: 'houses', tabStateDisplayName: 'Houses' },
+    { tabState: 'residents', tabStateDisplayName: 'Residents'},
+]);
+var adminSelectedResidentModel = new SelectedResidentModel();
+
 var AdminView = Marionette.LayoutView.extend({
     template: Handlebars.compile($('#admin-template').html()),
+    initialize: function() {
+        this.residents = this.options.residents;
+        this.houses = this.options.houses;
+    },
     regions: {
         'adminTabsRegion': '.admin-tabs',
         'adminMainRegion': '.admin-main',
     },
+    modelEvents: {
+        'change:state': 'changeTab',
+    },
     onShow: function() {
-        var adminModel = new AdminModel();
         var adminTabsView = new AdminTabsView({
             collection: adminTabs,
-            adminModel: adminModel,
+            adminModel: this.model,
         });
         this.adminTabsRegion.show(adminTabsView);
-        this.adminMainRegion.show(new AdminUsersView());
+        this.changeTab();
+    },
+    changeTab: function() {
+        var that = this;
+        if (this.model.get('state') == 'residents') {
+            var residents = new ResidentsCollection();
+            var houses = new HousesCollection();
+            var selectedResidentModel = new SelectedResidentModel();
+            $.when(residents.fetch(), houses.fetch()).then(function() {
+                that.adminMainRegion.show(new ResidentListViewWithFooter({
+                    collection: residents,
+                    houses: houses,
+                    selectedResidentModel: adminSelectedResidentModel,
+                }));
+            });
+        }
     }
 });

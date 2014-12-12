@@ -11,16 +11,6 @@ var HousesCollection = Backbone.Collection.extend({
    url: '/api/houses'
 });
 
-var Resident = Backbone.Model.extend({
-    defaults: {
-        id: null,
-        name: null,
-        birthdate: null,
-        houseId: null
-    },
-    urlRoot: '/api/residents',
-});
-
 var User = Backbone.Model.extend({
     defaults: {
         id: null,
@@ -31,11 +21,6 @@ var User = Backbone.Model.extend({
 var UserCollection = Backbone.Collection.extend({
     model: User,
     url: '/api/users'
-});
-
-var ResidentsCollection = Backbone.Collection.extend({
-    model: Resident,
-    url: '/api/residents',
 });
 
 var SelectedResidentTab = Backbone.Model.extend({
@@ -86,17 +71,6 @@ var SelectedResidentTabsView = Marionette.CollectionView.extend({
    }
 });
 
-var ResidentsCollection = Backbone.Collection.extend({
-    model: Resident,
-    url: '/api/residents',
-    events: {
-       'all': 'test'
-    },
-    test: function(e) {
-       console.log('change in residents collection:', e);
-    }
-});
-
 var ApplicationModel = Backbone.Model.extend({
     defaults: {
         residentId: null,
@@ -109,6 +83,7 @@ var ApplicationView = Marionette.LayoutView.extend({
     initialize: function() {
         this.houses = this.options.houses;
         this.residents = this.options.residents;
+        this.selectedResidentModel = this.options.selectedResidentModel;
     },
     regions: {
         'residentList': '#resident-list-region',
@@ -122,7 +97,7 @@ var ApplicationView = Marionette.LayoutView.extend({
     onShow: function() {
         var residentListView = new ResidentListViewWithFooter({
             collection: this.residents,
-            applicationModel: this.model,
+            selectedResidentModel: this.model,
             houses: this.houses,
         });
         this.residentList.show(residentListView);
@@ -182,6 +157,8 @@ var app = new Marionette.Application({
 });
 
 var applicationModel = new ApplicationModel();
+var adminModel = new AdminModel();
+var applicationSelectedResidentModel = new SelectedResidentModel();
 
 var AppRouter = Backbone.Router.extend({
     routes: {
@@ -205,6 +182,7 @@ var AppRouter = Backbone.Router.extend({
                 model: applicationModel,
                 residents: residents,
                 houses: houses,
+                selectedResidentModel: applicationSelectedResidentModel,
             }));
         });
     },
@@ -244,7 +222,9 @@ var AppRouter = Backbone.Router.extend({
         app.appRegion.show(shiftReportView);
     },
     adminRoute: function() {
-        app.appRegion.show(new AdminView());
+        app.appRegion.show(new AdminView({
+            model: adminModel,
+        }));
     },
     accountRoute: function() {
         var user = loadCurrentUser();
