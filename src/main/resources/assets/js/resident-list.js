@@ -81,6 +81,13 @@ var CreateResidentModalView = Marionette.ItemView.extend({
     },
 });
 
+var ResidentListView = Marionette.CollectionView.extend({
+    childView: ResidentListItemView,
+    childViewOptions: function() {
+        return { selectedResidentModel: this.options.selectedResidentModel};
+    },
+});
+
 var ResidentListViewWithFooter = Marionette.CompositeView.extend({
     template: Handlebars.compile($('#resident-list-template').html()),
     childViewContainer: '.resident-list-top-region',

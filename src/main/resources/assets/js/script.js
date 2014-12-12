@@ -95,10 +95,9 @@ var ApplicationView = Marionette.LayoutView.extend({
         'change:residentPanelState': 'changeResident',
     },
     onShow: function() {
-        var residentListView = new ResidentListViewWithFooter({
+        var residentListView = new ResidentListView({
             collection: this.residents,
             selectedResidentModel: this.model,
-            houses: this.houses,
         });
         this.residentList.show(residentListView);
         this.createResidentTabs();
