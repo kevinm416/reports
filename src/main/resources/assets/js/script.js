@@ -121,7 +121,7 @@ var ApplicationView = Marionette.LayoutView.extend({
             collection: this.residents,
             applicationModel: this.model,
             houses: this.houses,
-        })
+        });
         this.residentList.show(residentListView);
         this.createResidentTabs();
         this.changeResident();
@@ -154,7 +154,7 @@ var ApplicationView = Marionette.LayoutView.extend({
         }
     },
     getSelectedResidentTabsView: function() {
-        return selectedResidentTabsView = new SelectedResidentTabsView({
+        return new SelectedResidentTabsView({
             collection: selectedResidentTabs,
             applicationModel: this.model,
         });
@@ -187,6 +187,7 @@ var AppRouter = Backbone.Router.extend({
         'shiftReport': 'createShiftReportRoute',
         'shiftReport/:shiftReportId': 'viewShiftReportRoute',
         'incidentReport': 'incidentReportRoute',
+        'admin': 'adminRoute',
         'account': 'accountRoute',
         '*all': 'defaultRoute'
     },
@@ -239,6 +240,9 @@ var AppRouter = Backbone.Router.extend({
         });
         app.appRegion.show(shiftReportView);
     },
+    adminRoute: function() {
+        app.appRegion.show(new AdminView());
+    },
     accountRoute: function() {
         var user = loadCurrentUser();
         var model = new AccountModel({
@@ -255,10 +259,10 @@ appRouter.on('route', function() {
     var navbarItems = $('ul.nav li');
     navbarItems.removeClass('active');
     var location = document.location;
-    var trailingLink = location.href.replace(location.origin + '/', "")
-    var trailingLinkItems = navbarItems.find('a[href="' + trailingLink + '"]')
+    var trailingLink = location.href.replace(location.origin + '/', "");
+    var trailingLinkItems = navbarItems.find('a[href="' + trailingLink + '"]');
     if (trailingLinkItems.length > 0) {
-        trailingLinkItems.parent().addClass('active')
+        trailingLinkItems.parent().addClass('active');
     } else {
         navbarItems.first().addClass('active');
     }

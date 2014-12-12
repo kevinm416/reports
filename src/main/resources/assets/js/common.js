@@ -2,7 +2,7 @@
 var DateFormats = {
     day: 'MM/DD/YYYY',
     detail: 'MM/DD/YYYY h:mm a'
-}
+};
 
 function getUnixTimestampForDay(s) {
     return moment(s, DateFormats.day).unix();

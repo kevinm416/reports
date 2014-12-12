@@ -1,0 +1,9 @@
+{
+    "name": "reports",
+    "version": "0.1.0",
+    "dependencies": {
+        "jquery": "1.11.1",
+        "bootstrap": "3.2.0",
+        "underscore": "1.7.0"
+    }
+}

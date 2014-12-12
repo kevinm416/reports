@@ -59,7 +59,7 @@ var CreateShiftReportView = Marionette.LayoutView.extend({
     initialize: function(){
         this.houses = this.options.houses;
         this.residents = this.options.residents;
-        this.residentCoordinators = this.options.residentCoordinators,
+        this.residentCoordinators = this.options.residentCoordinators;
         this.topModel = new ShiftReportTopModel({
             date: this.getToday(),
         });
@@ -137,7 +137,7 @@ var ShiftReportServerModel = Backbone.Model.extend({
         keysAccountedForReason: null,
         shiftReportResidents: null,
     }
-})
+});
 
 var ShiftReportTopModel = Backbone.Model.extend({
     defaults: {
@@ -154,7 +154,7 @@ var ShiftReportTopView = Marionette.ItemView.extend({
     template: Handlebars.compile($('#create-shift-report-top-template').html()),
     initialize: function() {
         this.houses = this.options.houses;
-        this.residentCoordinators = this.options.residentCoordinators,
+        this.residentCoordinators = this.options.residentCoordinators;
         this.today = this.options.today;
     },
     serializeData: function() {
@@ -162,7 +162,7 @@ var ShiftReportTopView = Marionette.ItemView.extend({
             'houses': this.houses.toJSON(),
             'residentCoordinators': this.residentCoordinators.toJSON(),
             'today': this.today,
-        }
+        };
     },
     events: {
         'change #date-input': 'changeDate',

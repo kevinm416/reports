@@ -17,7 +17,7 @@ var SelectedResidentInfoView = Marionette.ItemView.extend({
                 'resident': this.resident.toJSON(),
                 'selectedHouse': this.selectedHouse.toJSON(),
                 'houses': this.houses.toJSON()
-            }
+            };
         } else {
             return {};
         }

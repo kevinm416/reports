@@ -25,7 +25,7 @@ var AccountView = Marionette.ItemView.extend({
     template: Handlebars.compile($('#account-view-template').html()),
     serializeData: function() {
         ret = this.model.toJSON();
-        ret['user'] = this.model.get('user').toJSON();
+        ret.user = this.model.get('user').toJSON();
         return ret;
     },
     events: {
@@ -43,7 +43,7 @@ var AccountView = Marionette.ItemView.extend({
         this.model.set('newPassword', pw1);
         this.model.set('newPasswordConfirm', pw2);
         
-        var passwordsMatch = pw1 && pw2 && pw1.length >= 8 && pw1 == pw2
+        var passwordsMatch = pw1 && pw2 && pw1.length >= 8 && pw1 == pw2;
         
         this.model.set('passwordsMatch', passwordsMatch);
     },

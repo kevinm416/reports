@@ -21,3 +21,6 @@ psql \
 # create admin user w/ password password
 insert into users (name, pw_hash, salt) 
 values ('admin', 'T1U8KXcwPmcn5OZob8FpccztBqLMZmmnPZ84lCz0yu8=', '');
+
+# create some houses
+insert into houses (name) values ('house1'), ('house2'), ('house3');
