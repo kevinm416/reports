@@ -88,19 +88,24 @@ var ResidentListView = Marionette.CollectionView.extend({
     },
 });
 
-var ResidentListViewWithFooter = Marionette.CompositeView.extend({
-    template: Handlebars.compile($('#resident-list-template').html()),
-    childViewContainer: '.resident-list-top-region',
-    childView: ResidentListItemView,
+var ResidentListViewWithFooter = Marionette.LayoutView.extend({
+    template: Handlebars.compile($('#resident-list-with-create-template').html()),
     initialize: function() {
         this.houses = this.options.houses;
         this.selectedResidentModel = this.options.selectedResidentModel;
     },
-    childViewOptions: function() {
-        return { selectedResidentModel: this.options.selectedResidentModel};
+    regions: {
+        'residentListRegion': '.resident-list-top-region',
+        'createResidentRegion': '.resident-list-bottom-region',
     },
     events: {
         'click .create-resident-btn': 'createResident',
+    },
+    onShow: function() {
+        this.residentListRegion.show(new ResidentListView({
+            collection: this.collection,
+            selectedResidentModel: this.selectedResidentModel,
+        }));
     },
     createResident: function() {
         var createView = new CreateResidentModalView({
