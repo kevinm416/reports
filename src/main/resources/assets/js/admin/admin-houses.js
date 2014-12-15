@@ -59,8 +59,7 @@ var CreateHouseModalView = Marionette.ItemView.extend({
                 view.$('.modal').modal('hide');
             },
             error: function(m, r) {
-                view.$('.modal').modal('hide');
-                alert('error creating resident\n' + JSON.stringify(r));
+                alert('error creating resident\n' + _.escape(JSON.stringify(r)));
             },
             view: this,
         });

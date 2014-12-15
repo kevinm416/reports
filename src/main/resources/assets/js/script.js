@@ -16,7 +16,9 @@ var User = Backbone.Model.extend({
     defaults: {
         id: null,
         name: null,
-    }
+        admin: null,
+    },
+    urlRoot: '/api/users',
 });
 
 var UserCollection = Backbone.Collection.extend({

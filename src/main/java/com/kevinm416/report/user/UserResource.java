@@ -40,7 +40,12 @@ public class UserResource {
     public long createUser(
             @Auth User user,
             @Valid CreateUserForm form) {
-        return userDao.createUser(form);
+        HashedPassword hashedPassword = PasswordHasher.saltAndHashPassword(form.getPassword());
+        return userDao.createUser(
+                form.getName(),
+                hashedPassword.getHashedPassword(),
+                hashedPassword.getSalt(),
+                form.isAdmin());
     }
 
     @DELETE

@@ -3,13 +3,11 @@ package com.kevinm416.report.user;
 import java.util.List;
 
 import org.skife.jdbi.v2.sqlobject.Bind;
-import org.skife.jdbi.v2.sqlobject.BindBean;
 import org.skife.jdbi.v2.sqlobject.SqlQuery;
 import org.skife.jdbi.v2.sqlobject.SqlUpdate;
 import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapper;
 
 import com.kevinm416.report.auth.UserWithAuthInfo;
-import com.kevinm416.report.user.api.CreateUserForm;
 
 @RegisterMapper({
     UserDBMapper.class,
@@ -18,11 +16,27 @@ import com.kevinm416.report.user.api.CreateUserForm;
 public interface UserDAO {
 
     @SqlQuery(
-            " INSERT INTO users (name) " +
-            " VALUES (:name) " +
+            " INSERT INTO users (" +
+            "     name, " +
+            "     pw_hash, " +
+            "     salt, " +
+            "     admin, " +
+            "     deleted" +
+            " ) " +
+            " VALUES (" +
+            "     :name, " +
+            "     :passwordHash, " +
+            "     :salt, " +
+            "     :admin, " +
+            "     FALSE " +
+            " ) " +
             " RETURNING id "
     )
-    long createUser(@BindBean CreateUserForm form);
+    long createUser(
+            @Bind("name") String name,
+            @Bind("passwordHash") String passwordHash,
+            @Bind("salt") String salt,
+            @Bind("admin") boolean admin);
 
     @SqlUpdate(
             " UPDATE users " +
