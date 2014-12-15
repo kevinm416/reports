@@ -13,6 +13,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.codahale.metrics.annotation.Timed;
 import com.kevinm416.report.auth.Auth;
+import com.kevinm416.report.auth.AuthType;
 import com.kevinm416.report.auth.HashedPassword;
 import com.kevinm416.report.auth.PasswordHasher;
 import com.kevinm416.report.user.api.ChangePasswordForm;
@@ -38,7 +39,7 @@ public class UserResource {
     @POST
     @Timed
     public long createUser(
-            @Auth User user,
+            @Auth(AuthType.ADMIN) User user,
             @Valid CreateUserForm form) {
         HashedPassword hashedPassword = PasswordHasher.saltAndHashPassword(form.getPassword());
         return userDao.createUser(
@@ -52,7 +53,7 @@ public class UserResource {
     @Timed
     @Path("/{userId}")
     public void delete(
-            @Auth User user,
+            @Auth(AuthType.ADMIN) User user,
             @PathParam("userId") long userId) {
         userDao.deleteUser(userId);
     }

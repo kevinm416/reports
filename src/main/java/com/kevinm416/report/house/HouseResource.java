@@ -11,6 +11,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.codahale.metrics.annotation.Timed;
 import com.kevinm416.report.auth.Auth;
+import com.kevinm416.report.auth.AuthType;
 import com.kevinm416.report.house.api.CreateHouseForm;
 import com.kevinm416.report.user.User;
 
@@ -32,7 +33,9 @@ public class HouseResource {
 
     @POST
     @Timed
-    public long createHouse(@Auth User user, @Valid CreateHouseForm form) {
+    public long createHouse(
+            @Auth(AuthType.ADMIN) User user,
+            @Valid CreateHouseForm form) {
         return houseDAO.createHouse(form);
     }
 

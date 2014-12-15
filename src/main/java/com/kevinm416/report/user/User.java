@@ -8,13 +8,16 @@ public class User implements Identifiable {
 
     private final long id;
     private final String name;
+    private final boolean admin;
 
     @JsonCreator
     public User(
             @JsonProperty("id") long id,
-            @JsonProperty("name") String name) {
+            @JsonProperty("name") String name,
+            @JsonProperty("admin") boolean admin) {
         this.id = id;
         this.name = name;
+        this.admin = admin;
     }
 
     @Override
@@ -26,10 +29,15 @@ public class User implements Identifiable {
         return name;
     }
 
+    public boolean isAdmin() {
+        return admin;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
+        result = prime * result + (admin ? 1231 : 1237);
         result = prime * result + (int) (id ^ (id >>> 32));
         result = prime * result + ((name == null) ? 0 : name.hashCode());
         return result;
@@ -47,6 +55,9 @@ public class User implements Identifiable {
             return false;
         }
         User other = (User) obj;
+        if (admin != other.admin) {
+            return false;
+        }
         if (id != other.id) {
             return false;
         }
@@ -62,7 +73,7 @@ public class User implements Identifiable {
 
     @Override
     public String toString() {
-        return "ResidentCoordinator [id=" + id + ", name=" + name + "]";
+        return "User [id=" + id + ", name=" + name + ", admin=" + admin + "]";
     }
 
 }

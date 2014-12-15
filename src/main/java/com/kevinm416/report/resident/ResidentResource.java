@@ -16,6 +16,7 @@ import org.apache.commons.lang.Validate;
 
 import com.codahale.metrics.annotation.Timed;
 import com.kevinm416.report.auth.Auth;
+import com.kevinm416.report.auth.AuthType;
 import com.kevinm416.report.common.cache.IdCache;
 import com.kevinm416.report.resident.api.CreateResidentForm;
 import com.kevinm416.report.resident.api.Resident;
@@ -42,7 +43,9 @@ public class ResidentResource {
 
     @POST
     @Timed
-    public long createResident(@Auth User user, CreateResidentForm form) {
+    public long createResident(
+            @Auth(AuthType.ADMIN) User user,
+            @Valid CreateResidentForm form) {
         return residentDAO.createResident(form);
     }
 
@@ -50,7 +53,7 @@ public class ResidentResource {
     @Timed
     @Path("/{id}")
     public void updateResident(
-            @Auth User user,
+            @Auth(AuthType.ADMIN) User user,
             @PathParam("id") long id,
             @Valid Resident resident) {
         Validate.isTrue(id == resident.getId());
@@ -68,7 +71,9 @@ public class ResidentResource {
     @DELETE
     @Timed
     @Path("/{id}")
-    public void deleteResident(@Auth User user, @PathParam("id") long id) {
+    public void deleteResident(
+            @Auth(AuthType.ADMIN) User user,
+            @PathParam("id") long id) {
         residentDAO.deleteResident(id);
     }
 

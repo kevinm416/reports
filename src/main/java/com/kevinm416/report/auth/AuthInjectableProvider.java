@@ -15,8 +15,18 @@ public class AuthInjectableProvider implements InjectableProvider<Auth, Paramete
     private final Injectable<User> INJECTABLE = new Injectable<User>() {
         @Override
         public User getValue() {
-            User rc = (User) SecurityUtils.getSubject().getPrincipal();
-            return Preconditions.checkNotNull(rc);
+            User user = (User) SecurityUtils.getSubject().getPrincipal();
+            return Preconditions.checkNotNull(user);
+        }
+    };
+
+    private final Injectable<User> ADMIN_INJECTABLE = new Injectable<User>() {
+        @Override
+        public User getValue() {
+            User user = (User) SecurityUtils.getSubject().getPrincipal();
+            Preconditions.checkNotNull(user);
+            Preconditions.checkArgument(user.isAdmin());
+            return user;
         }
     };
 
@@ -28,7 +38,11 @@ public class AuthInjectableProvider implements InjectableProvider<Auth, Paramete
     @Override
     public Injectable<User> getInjectable(ComponentContext ic, Auth a, Parameter c) {
         if (c.getParameterClass() == User.class) {
-            return INJECTABLE;
+            if (a.value() == AuthType.ADMIN) {
+                return ADMIN_INJECTABLE;
+            } else {
+                return INJECTABLE;
+            }
         } else {
             throw new IllegalArgumentException(c.getParameterClass() + " does not match " + User.class);
         }
