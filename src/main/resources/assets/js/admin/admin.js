@@ -81,7 +81,7 @@ var AdminView = Marionette.LayoutView.extend({
             var houses = new HousesCollection();
             var selectedResidentModel = new SelectedResidentModel();
             $.when(residents.fetch(), houses.fetch()).then(function() {
-                that.adminMainRegion.show(new AdminUsersView({
+                that.adminMainRegion.show(new AdminResidentsView({
                     residents: residents,
                     houses: houses,
                     selectedResidentModel: adminSelectedResidentModel,

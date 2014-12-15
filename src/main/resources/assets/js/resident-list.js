@@ -36,7 +36,6 @@ var CreateResidentModalView = Marionette.ItemView.extend({
     initialize: function() {
         this.residents = this.options.residents;
         this.houses = this.options.houses;
-        this.applicationModel = this.options.applicationModel;
     },
     serializeData: function() {
         return {

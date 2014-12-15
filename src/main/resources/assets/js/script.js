@@ -1,14 +1,15 @@
 
 var House = Backbone.Model.extend({
-   defaults: {
-       id: null,
-       name: null
-   }
+    defaults: {
+        id: null,
+        name: null
+    },
+    urlRoot: '/api/houses',
 });
 
 var HousesCollection = Backbone.Collection.extend({
-   model: House,
-   url: '/api/houses'
+    model: House,
+    url: '/api/houses',
 });
 
 var User = Backbone.Model.extend({

@@ -54,7 +54,7 @@ var AdminResidentEditView = Marionette.LayoutView.extend({
     },
 });
 
-var AdminUsersView = Marionette.LayoutView.extend({
+var AdminResidentsView = Marionette.LayoutView.extend({
     template: Handlebars.compile($('#admin-main-template').html()),
     initialize: function() {
         this.residents = this.options.residents;
