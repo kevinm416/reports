@@ -95,6 +95,14 @@ var AdminView = Marionette.LayoutView.extend({
                     selectedHouseModel: adminSelectedHouseModel,
                 }));
             });
+        } else if (this.model.get('state') == 'users') {
+            var users = new UserCollection();
+            $.when(users.fetch()).then(function() {
+                that.adminMainRegion.show(new AdminUsersView({
+                    users: users,
+                    selectedUserModel: new SelectedUserModel(),
+                }));
+            });
         }
     }
 });

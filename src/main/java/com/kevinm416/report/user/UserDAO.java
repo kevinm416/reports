@@ -24,24 +24,32 @@ public interface UserDAO {
     )
     long createUser(@BindBean CreateUserForm form);
 
+    @SqlUpdate(
+            " UPDATE users " +
+            " SET deleted = TRUE " +
+            " WHERE id = :userId "
+    )
+    void deleteUser(@Bind("userId") long userId);
+
     @SqlQuery(
             " SELECT * FROM users " +
             " WHERE name = :name "
     )
-    User loadResidentCoordinatorByName(@Bind("name") String name);
+    User loadUserByName(@Bind("name") String name);
 
     @SqlQuery(
             " SELECT * FROM users " +
             " WHERE id = :id "
     )
-    User loadResidentCoordinatorById(@Bind("id") long id);
+    User loadUserById(@Bind("id") long id);
 
     @SqlQuery(
             " SELECT * " +
             " FROM users " +
+            " WHERE deleted = FALSE " +
             " ORDER BY name ASC "
     )
-    List<User> loadResidentCoordinators();
+    List<User> loadUsers();
 
     @SqlQuery(
             " SELECT * " +

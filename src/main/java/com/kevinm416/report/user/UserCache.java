@@ -29,7 +29,7 @@ public class UserCache {
             @Override
             public User call() throws Exception {
                 UserDAO residentCoordinatorDao = h.attach(UserDAO.class);
-                return residentCoordinatorDao.loadResidentCoordinatorById(id);
+                return residentCoordinatorDao.loadUserById(id);
             }
         };
     }

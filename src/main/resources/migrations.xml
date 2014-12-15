@@ -31,6 +31,12 @@
             <column name="salt" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
+            <column name="admin" type="boolean">
+                <constraints nullable="false" />
+            </column>
+            <column name="deleted" type="boolean">
+                <constraints nullable="false" />
+            </column>
         </createTable>
         
         <createTable tableName="residents">

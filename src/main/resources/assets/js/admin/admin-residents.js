@@ -1,6 +1,6 @@
 
 var AdminResidentEditView = Marionette.LayoutView.extend({
-    template: Handlebars.compile($('#admin-user-edit').html()),
+    template: Handlebars.compile($('#admin-resident-edit').html()),
     initialize: function() {
         this.resident = this.options.resident;
         this.houses = this.options.houses;
@@ -44,10 +44,10 @@ var AdminResidentEditView = Marionette.LayoutView.extend({
             success: function(m, r, options) {
                 var view = options.view;
                 view.selectedResidentModel.set('residentId', null);
-                alert("Resident " + m.get('name') + " deleted successfully");
+                alert("Resident " + _.escape(m.get('name')) + " deleted successfully");
             }, 
             error: function(m, r) {
-                alert("Error deleting resident\n" + JSON.stringify(r));
+                alert("Error deleting resident\n" + _.escape(JSON.stringify(r)));
             },
             view: this,
         });

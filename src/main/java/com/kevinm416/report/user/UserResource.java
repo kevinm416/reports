@@ -3,9 +3,11 @@ package com.kevinm416.report.user;
 import java.util.List;
 
 import javax.validation.Valid;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
@@ -30,7 +32,7 @@ public class UserResource {
     @GET
     @Timed
     public List<User> loadUsers(@Auth User user) {
-        return userDao.loadResidentCoordinators();
+        return userDao.loadUsers();
     }
 
     @POST
@@ -39,6 +41,15 @@ public class UserResource {
             @Auth User user,
             @Valid CreateUserForm form) {
         return userDao.createUser(form);
+    }
+
+    @DELETE
+    @Timed
+    @Path("/{userId}")
+    public void delete(
+            @Auth User user,
+            @PathParam("userId") long userId) {
+        userDao.deleteUser(userId);
     }
 
     @GET

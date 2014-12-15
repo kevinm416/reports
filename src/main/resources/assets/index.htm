@@ -298,8 +298,7 @@
     <script id='shift-report-list-with-footer-template' type='text/x-handlebars-template'>
         <div>
           <div id='shift-report-list'></div>
-          <p>
-          <p>
+          <p><p>
           <button id='shift-report-list-loading-button' 
                   type='button' 
                   data-loading-text='Loading...' 
@@ -423,7 +422,7 @@
         <div class='admin-item-details col-sm-9'></div>
     </script>
     
-    <script id='admin-user-edit' type='text/x-handlebars-template'>
+    <script id='admin-resident-edit' type='text/x-handlebars-template'>
         <div class='user-details'></div>
         <div class='admin-user-edit'></div>
           {{#if residentId}}
@@ -474,6 +473,15 @@
         </div>
     </script>
     
+    <script id='admin-edit-user-template' type='text/x-handlebars-template'>
+        <h1>Edit User</h1>
+        {{#if id}}
+          <button type='button' class='btn btn-danger delete-user-button'>Delete</button>
+        {{else}}
+          No resident
+        {{/if}}
+    </script>
+    
     <script src="lib/jquery-1.11.1.min.js" type="text/javascript"></script>
     <script src="lib/bootstrap-3.3.1.min.js" type="text/javascript"></script>
     <script src="lib/underscore-1.7.0.min.js" type="text/javascript"></script>
@@ -492,6 +500,7 @@
     <script src='js/shift-report-view.js' type='text/javascript'></script>
     <script src="js/admin/admin-houses.js" type="text/javascript"></script>
     <script src="js/admin/admin-residents.js" type="text/javascript"></script>
+    <script src="js/admin/admin-users.js" type="text/javascript"></script>
     <script src="js/admin/admin.js" type="text/javascript"></script>
     <script src="js/script.js" type="text/javascript"></script>
     

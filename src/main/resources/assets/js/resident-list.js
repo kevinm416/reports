@@ -20,7 +20,7 @@ var ResidentListItemView = Marionette.ItemView.extend({
     modelEvents: {
         'change': 'onChange'
     },
-    onChange: function(e) {
+    onChange: function() {
         this.render();
     },
     onClick: function() {

@@ -19,8 +19,8 @@ psql \
   -f seed.sql
 
 # create admin user w/ password password
-insert into users (name, pw_hash, salt) 
-values ('admin', 'T1U8KXcwPmcn5OZob8FpccztBqLMZmmnPZ84lCz0yu8=', '');
+insert into users (name, admin, deleted, pw_hash, salt) 
+values ('admin', TRUE, FALSE, 'T1U8KXcwPmcn5OZob8FpccztBqLMZmmnPZ84lCz0yu8=', '');
 
 # create some houses
 insert into houses (name) values ('house1'), ('house2'), ('house3');
