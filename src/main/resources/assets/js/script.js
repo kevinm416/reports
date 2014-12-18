@@ -12,20 +12,6 @@ var HousesCollection = Backbone.Collection.extend({
     url: '/api/houses',
 });
 
-var User = Backbone.Model.extend({
-    defaults: {
-        id: null,
-        name: null,
-        admin: null,
-    },
-    urlRoot: '/api/users',
-});
-
-var UserCollection = Backbone.Collection.extend({
-    model: User,
-    url: '/api/users'
-});
-
 var SelectedResidentTab = Backbone.Model.extend({
     defaults: {
         tabState: null,
@@ -154,8 +140,19 @@ var IncidentReportView = Marionette.ItemView.extend({
 
 var app = new Marionette.Application({
     regions: {
-        'appRegion': '#app-region'
+        'navbarRegion': '.navbar-region',
+        'appRegion': '.app-region',
     }
+});
+
+app.on('before:start', function() {
+    var user = loadCurrentUser();
+    var navbarModel = new NavbarModel({
+        admin: user.get('admin'),
+    });
+    app.navbarRegion.show(new NavbarView({
+        model: navbarModel,
+    }));
 });
 
 var applicationModel = new ApplicationModel();
@@ -241,7 +238,7 @@ var AppRouter = Backbone.Router.extend({
 
 var appRouter = new AppRouter();
 appRouter.on('route', function() {
-    var navbarItems = $('ul.nav li');
+    var navbarItems = $('.navbar-fixed-top li');
     navbarItems.removeClass('active');
     var location = document.location;
     var trailingLink = location.href.replace(location.origin + '/', "");

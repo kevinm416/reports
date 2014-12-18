@@ -22,10 +22,13 @@ var AdminTabView = Marionette.ItemView.extend({
     initialize: function() {
         this.adminModel = this.options.adminModel;
         this.listenTo(this.adminModel, 'change:state', this.updateSelectedTab);
+    },
+    onShow: function() {
         this.updateSelectedTab();
     },
     events: {
         'click': 'selectCurrentTab',
+        'change': 'test',
     },
     selectCurrentTab: function() {
         this.adminModel.set('state', this.model.get('tabState'));
@@ -33,7 +36,7 @@ var AdminTabView = Marionette.ItemView.extend({
     },
     updateSelectedTab: function() {
         this.$el.toggleClass('active', this.adminModel.get('state') == this.model.get('tabState'));
-    }
+    },
 });
 
 var AdminTabsView = Marionette.CollectionView.extend({

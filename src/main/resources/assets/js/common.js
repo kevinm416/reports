@@ -14,6 +14,32 @@ var ResidentsCollection = Backbone.Collection.extend({
     url: '/api/residents',
 });
 
+var User = Backbone.Model.extend({
+    defaults: {
+        id: null,
+        name: null,
+        admin: null,
+    },
+    urlRoot: '/api/users',
+});
+
+var UserCollection = Backbone.Collection.extend({
+    model: User,
+    url: '/api/users'
+});
+
+function loadCurrentUser() {
+    var currentUser;
+    $.ajax({
+        url: '/api/users/whoAmI',
+        async: false,
+        success: function(data) {
+            currentUser = new User(data);
+        }
+    });
+    return currentUser;
+}
+
 var DateFormats = {
     day: 'MM/DD/YYYY',
     detail: 'MM/DD/YYYY h:mm a'

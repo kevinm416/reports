@@ -1,16 +1,4 @@
 
-function loadCurrentUser() {
-    var currentUser;
-    $.ajax({
-        url: '/api/users/whoAmI',
-        async: false,
-        success: function(data) {
-            currentUser = new User(data);
-        }
-    });
-    return currentUser;
-}
-
 var AccountModel = Backbone.Model.extend({
     defaults: {
         user: null,

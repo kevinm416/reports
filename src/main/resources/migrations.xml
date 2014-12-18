@@ -63,18 +63,6 @@
                 baseColumnNames="house_id"  
                 referencedColumnNames="id"/>
         
-        <createTable tableName="resident_education_plan">
-            <column name="id" type="bigint" defaultValue="nextval('id_seq')">
-                <constraints unique="true" />
-            </column>
-            <column name="resident_id" type="bigint">
-                <constraints nullable="false"/>
-            </column>
-            <column name="education_plan" type="text">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-        
         <createTable tableName="shift_reports">
             <column name="id" type="bigint" defaultValue="nextval('id_seq')">
                 <constraints unique="true" />
