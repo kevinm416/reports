@@ -7,13 +7,13 @@ module.exports = function(grunt) {
             },
             dist: {
                 src: ['src/main/resources/assets/js/*.js'],
-                dest: 'dist/<%= pkg.name %>.js'
+                dest: 'src/main/resources/assets/<%= pkg.name %>.js'
             }
         },
         uglify: {
             dist: {
                 files: {
-                    'dist/<%= pkg.name %>.min.js': ['<%= concat.dist.dest %>']
+                    'src/main/resources/assets/<%= pkg.name %>.min.js': ['<%= concat.dist.dest %>']
                 }
             }
         },
@@ -31,14 +31,21 @@ module.exports = function(grunt) {
         watch: {
             files: ['<%= jshint.files %>'],
             tasks: ['jshint']
+        },
+        bower_concat: {
+            all: {
+                dest: 'src/main/resources/assets/bower.js',
+                cssDest: 'src/main/resources/assets/bower.css',
+            }
         }
     });
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-concat');
+    grunt.loadNpmTasks('grunt-bower-concat');
 
     grunt.registerTask('test', ['jshint']);
 
-    grunt.registerTask('default', ['jshint', 'concat', 'uglify']);
+    grunt.registerTask('default', ['jshint', 'concat', 'uglify', 'bower_concat', 'watch']);
 };
